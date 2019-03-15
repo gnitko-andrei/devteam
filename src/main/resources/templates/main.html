@@ -5,6 +5,10 @@
     <title>Main</title>
 </head>
 <body>
+<h1 th:inline="text">Hello [[${#httpServletRequest.remoteUser}]]!</h1>
+<form th:action="@{/logout}" method="post">
+    <input type="submit" value="Sign Out"/>
+</form>
 <div>
     <form method="post">
         <input type="text" name="name" placeholder="Введите имя проекта"/>
