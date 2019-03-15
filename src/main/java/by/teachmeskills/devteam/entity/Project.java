@@ -1,9 +1,6 @@
 package by.teachmeskills.devteam.entity;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Entity
 public class Project {
@@ -18,13 +15,22 @@ public class Project {
 
     private String status;
 
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "user_id")
+    private User customer;
+
     public Project() {
     }
 
-    public Project(String name, String specification, String status) {
+    public Project(String name, String specification, String status, User customer) {
         this.name = name;
         this.specification = specification;
         this.status = status;
+        this.customer = customer;
+    }
+
+    public String getCustomerName() {
+        return customer != null ? customer.getUsername() : "<none>";
     }
 
     public Long getId() {
@@ -57,5 +63,13 @@ public class Project {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public User getCustomer() {
+        return customer;
+    }
+
+    public void setCustomer(User customer) {
+        this.customer = customer;
     }
 }
