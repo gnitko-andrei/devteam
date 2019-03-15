@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Main</title>
+</head>
+<body>
+<div>
+    <form method="post">
+        <input type="text" name="name" placeholder="Введите имя проекта"/>
+        <input type="text" name="specification" placeholder="Введите ТЗ"/>
+        <input type="text" name="status" placeholder="Введите статус"/>
+        <button type="submit">Добавить</button>
+    </form>
+</div>
+<div>Список проектов</div>
+<form method="post" action="filter">
+    <input type="text" name="filter">
+    <button type="submit">Найти</button>
+</form>
+<ul th:each="project : ${projects}">
+
+    <li th:text="${project.id}"></li>
+    <li th:text="${project.name}"></li>
+    <li th:text="${project.specification}"></li>
+    <li th:text="${project.status}"></li>
+
+</ul>
+</body>
+</html>
