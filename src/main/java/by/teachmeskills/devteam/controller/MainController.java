@@ -16,12 +16,12 @@ public class MainController {
     private ProjectRepository projectRepository;
 
     @GetMapping("/home")
-    public String greeting(@RequestParam(name="name", required=false, defaultValue="World") String name, Model model) {
-        model.addAttribute("name", name);
+    public String home(Model model) {
+
         return "home";
     }
 
-    @GetMapping
+    @GetMapping("/main")
     public String main(Model model) {
         Iterable<Project> projects = projectRepository.findAll();
 
@@ -30,7 +30,7 @@ public class MainController {
         return "main";
     }
 
-    @PostMapping
+    @PostMapping("/main")
     public String add(@RequestParam String name, @RequestParam String specification,
                       @RequestParam String status, Model model) {
 
