@@ -1,0 +1,22 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+</head>
+<body>
+<div th:fragment="login (path, button_value)">
+    <form th:action="${path}" method="post">
+        <div><label> User Name : <input type="text" name="username"/> </label></div>
+        <div><label> Password: <input type="password" name="password"/> </label></div>
+        <div><input type="submit" th:value="${button_value}"/></div>
+        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>﻿
+    </form>
+</div>
+<div th:fragment="logout">
+    <form th:action="@{/logout}" method="post">
+        <p th:inline="text">Username: [[${#httpServletRequest.remoteUser}]]</p>
+        <input type="submit" value="Log Out"/>
+    </form>
+</div>
+</body>
+</html>
