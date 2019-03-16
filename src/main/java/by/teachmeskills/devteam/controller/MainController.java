@@ -24,10 +24,17 @@ public class MainController {
     }
 
     @GetMapping("/main")
-    public String main(Model model) {
+    public String main(@RequestParam(required = false, defaultValue = "") String filter, Model model) {
         Iterable<Project> projects = projectRepository.findAll();
 
+        if (filter != null && !filter.isEmpty()) {
+            projects = projectRepository.findByName(filter);
+        } else {
+            projects = projectRepository.findAll();
+        }
+
         model.addAttribute("projects", projects);
+        model.addAttribute("filter", filter);
 
         return "main";
     }
@@ -48,19 +55,4 @@ public class MainController {
 
         return "main";
     }
-
-    @PostMapping("filter")
-    public String filter(@RequestParam String filter, Model model) {
-        Iterable<Project> projects;
-
-        if (filter != null && !filter.isEmpty()) {
-            projects = projectRepository.findByName(filter);
-        } else {
-            projects = projectRepository.findAll();
-        }
-
-        model.addAttribute("projects", projects);
-        return "main";
-    }
-
 }

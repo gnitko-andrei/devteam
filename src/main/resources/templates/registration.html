@@ -1,19 +1,17 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
->
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>Registration page</title>
+    <th:block th:replace="fragments/common :: headerfiles"/>
 </head>
 <body>
+<div th:replace="fragments/common :: header"></div>
 <div th:if="${message}" th:inline="text">
     [[${message}]]
 </div>
 Add new user
-<form th:action="@{/registration}" method="post">
-    <div><label> User Name : <input type="text" name="username"/> </label></div>
-    <div><label> Password: <input type="password" name="password"/> </label></div>
-    <div><input type="submit" value="Sign Up"/></div>
-    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>﻿
-</form>
+<div th:replace="fragments/login :: login(path='/registration', button_value='Sign Up')"></div>
+<a href="/login">Log in, if you already have an account</a>
+<div th:replace="fragments/common :: footer"></div>
 </body>
 </html>
