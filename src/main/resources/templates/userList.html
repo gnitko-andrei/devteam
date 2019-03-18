@@ -20,7 +20,7 @@
     <tr th:each="user : ${users}">
         <td th:text="${user.username}">"</td>
         <td th:each="role : ${user.roles}">
-            <p th:text="${role}"></p>
+            <span th:text="${role}"></span>
         </td>
         <td><a th:href="@{'/user/' + ${user.id}}">edit</a></td>
     </tr>
@@ -28,5 +28,6 @@
 </table>
 
 <div th:replace="fragments/common :: footer"></div>
+<div th:replace="fragments/common :: imports"></div>
 </body>
 </html>
