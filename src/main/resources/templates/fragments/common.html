@@ -1,5 +1,5 @@
 <!DOCTYPE HTML>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head th:fragment="headerfiles">
     <meta charset="UTF-8"/>
     <link rel="stylesheet" href="/static/style.css">
@@ -11,10 +11,39 @@
 </head>
 <body>
 <div th:fragment="header">
-    <h1>Header</h1>
+    <nav class="navbar navbar-expand-lg  navbar-dark bg-dark">
+        <a class="navbar-brand mb-0 h1" href="/">
+            <img src="https://image.flaticon.com/icons/svg/306/306281.svg" width="30" height="30"
+                 class="d-inline-block align-top" alt="">
+            DevTeam
+        </a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+                aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item">
+                    <a sec:authorize="hasAuthority('USER')" class="nav-link" href="/main">Проекты<span class="sr-only">(current)</span></a>
+                </li>
+                <li class="nav-item">
+                    <a sec:authorize="hasAuthority('ADMIN')" class="nav-link" href="/user">Панель администратора</a>
+                </li>
+            </ul>
+            <form sec:authorize="!isAuthenticated()" class="form-inline">
+                <a href="/login" class="btn btn-primary btn-sm mx-1" role="button">Войти</a>
+                <a href="/registration" class="btn btn-secondary btn-sm mx-1" role="button">Регистрация</a>
+            </form>
+            <form sec:authorize="isAuthenticated()" class="form-inline" th:action="@{/logout}" method="post">
+                <div class="navbar-text text-light" th:inline="text">[[${#httpServletRequest.remoteUser}]]</div>
+                <button class="btn btn-light btn-sm mx-2" type="submit" id="logout">Выйти</button>
+            </form>
+        </div>
+    </nav>
 </div>
 <footer th:fragment="footer">
-    <h1>Footer</h1>
+    <h5>Footer</h5>
 </footer>
 <th:block th:fragment="imports">
     <!-- Optional JavaScript -->

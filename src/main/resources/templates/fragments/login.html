@@ -4,19 +4,27 @@
     <meta charset="UTF-8"/>
 </head>
 <body>
-<div th:fragment="login (path, button_value)">
+
+<div class="form-group" th:fragment="login (path, button_value)">
     <form th:action="${path}" method="post">
-        <div><label> User Name : <input type="text" name="username"/> </label></div>
-        <div><label> Password: <input type="password" name="password"/> </label></div>
-        <div><input type="submit" th:value="${button_value}"/></div>
+        <div class="form-group row">
+            <label class="col-sm-2 col-form-label"> User Name :</label>
+            <div class="col-sm-6">
+                <input type="text" name="username" class="form-control" placeholder="Логин"/>
+            </div>
+        </div>
+        <div class="form-group row">
+            <label class="col-sm-2 col-form-label"> Password:</label>
+            <div class="col-sm-6">
+                <input type="password" name="password" class="form-control" placeholder="Пароль"/>
+            </div>
+        </div>
+        <div>
+            <button class="btn btn-primary" type="submit" th:text="${button_value}"/>
+        </div>
         <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
     </form>
 </div>
-<div th:fragment="logout">
-    <form th:action="@{/logout}" method="post">
-        <p th:inline="text">Username: [[${#httpServletRequest.remoteUser}]]</p>
-        <input type="submit" value="Log Out"/>
-    </form>
-</div>
+
 </body>
 </html>
