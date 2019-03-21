@@ -6,7 +6,7 @@
 </head>
 <body>
 <div th:replace="fragments/common :: header"></div>
-<div class="container">
+<div class="container mt-3">
     <div>Список проектов</div>
     <form method="get" action="/projects">
         <input type="text" name="filter" th:value="${filter}">
@@ -34,8 +34,6 @@
         </form>
     </div>
 </div>
-
-
 <div th:replace="fragments/common :: footer"></div>
 <div th:replace="fragments/common :: imports"></div>
 </body>
