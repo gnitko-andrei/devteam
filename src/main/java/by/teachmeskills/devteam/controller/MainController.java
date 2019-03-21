@@ -23,7 +23,7 @@ public class MainController {
         return "home";
     }
 
-    @GetMapping("/main")
+    @GetMapping("/projects")
     public String main(@RequestParam(required = false, defaultValue = "") String filter, Model model) {
         Iterable<Project> projects = projectRepository.findAll();
 
@@ -36,10 +36,10 @@ public class MainController {
         model.addAttribute("projects", projects);
         model.addAttribute("filter", filter);
 
-        return "main";
+        return "projects";
     }
 
-    @PostMapping("/main")
+    @PostMapping("/projects")
     public String add(
             @AuthenticationPrincipal User user,
             @RequestParam String name,
@@ -53,6 +53,6 @@ public class MainController {
         Iterable<Project> projects = projectRepository.findAll();
         model.addAttribute("projects", projects);
 
-        return "main";
+        return "projects";
     }
 }

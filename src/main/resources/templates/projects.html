@@ -1,14 +1,14 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Main</title>
+    <title>Проекты</title>
     <th:block th:replace="fragments/common :: headerfiles"/>
 </head>
 <body>
 <div th:replace="fragments/common :: header"></div>
 <div class="container">
     <div>Список проектов</div>
-    <form method="get" action="/main">
+    <form method="get" action="/projects">
         <input type="text" name="filter" th:value="${filter}">
         <button type="submit">Найти</button>
     </form>
