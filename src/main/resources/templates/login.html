@@ -6,8 +6,10 @@
 </head>
 <body>
 <div th:replace="fragments/common :: header"></div>
-<div th:replace="fragments/login :: login(path='/login', button_value='Log In')"></div>
-<a href="/registration">Add new user</a>
+<div class="container mt-5">
+    <div th:replace="fragments/login :: login(path='/login', button_value='Войти')"></div>
+</div>
 <div th:replace="fragments/common :: footer"></div>
+<div th:replace="fragments/common :: imports"></div>
 </body>
 </html>

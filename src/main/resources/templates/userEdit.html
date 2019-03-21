@@ -6,7 +6,6 @@
 </head>
 <body>
 <div th:replace="fragments/common :: header"></div>
-<div th:replace="fragments/login :: logout"></div>
 <h1>User editor</h1>
 <form action="/user" $ method="post">
     <input type="text" name="username" th:value="${user.username}">
@@ -21,5 +20,6 @@
     <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
 </form>
 <div th:replace="fragments/common :: footer"></div>
+<div th:replace="fragments/common :: imports"></div>
 </body>
 </html>
