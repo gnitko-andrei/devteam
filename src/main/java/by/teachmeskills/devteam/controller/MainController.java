@@ -17,7 +17,7 @@ public class MainController {
     @Autowired
     private ProjectRepository projectRepository;
 
-    @GetMapping("/home")
+    @GetMapping("/")
     public String home(Model model) {
 
         return "home";
