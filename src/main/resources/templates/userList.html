@@ -1,30 +1,36 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>User List</title>
+    <title>Панель администратора</title>
     <th:block th:replace="fragments/common :: headerfiles"/>
 </head>
 <body>
 <div th:replace="fragments/common :: header"></div>
-<h1>List of users</h1>
-<table>
-    <thead>
-    <tr>
-        <th>Name</th>
-        <th>Roles</th>
-        <th></th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr th:each="user : ${users}">
-        <td th:text="${user.username}">"</td>
-        <td th:each="role : ${user.roles}">
-            <span th:text="${role}"></span>
-        </td>
-        <td><a th:href="@{'/user/' + ${user.id}}">edit</a></td>
-    </tr>
-    </tbody>
-</table>
+<div class="container">
+    <h1>List of users</h1>
+    <div class="container">
+        <table class="table table-borderless col-3">
+            <thead>
+            <tr>
+                <th scope="col">Name</th>
+                <th scope="col">Roles</th>
+                <th scope="col"></th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="user : ${users}">
+                <td th:text="${user.username}">"</td>
+                <td>
+                    <span th:each="role : ${user.roles}">
+                        <span th:text="${role}"></span>
+                    </span>
+                </td>
+                <td><a class="btn btn-primary" th:href="@{'/user/' + ${user.id}}" role="button">edit</a></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
 <div th:replace="fragments/common :: footer"></div>
 <div th:replace="fragments/common :: imports"></div>
 </body>
