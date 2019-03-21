@@ -1,24 +1,35 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>User Editor</title>
+    <title>Редактор пользователя</title>
     <th:block th:replace="fragments/common :: headerfiles"/>
 </head>
 <body>
 <div th:replace="fragments/common :: header"></div>
-<h1>User editor</h1>
-<form action="/user" $ method="post">
-    <input type="text" name="username" th:value="${user.username}">
-    <td th:each="role : ${roles}">
-        <div>
-            <label th:inline="text"><input type="checkbox" th:name="${role}" th:checked="${user.roles.contains(role)}">
-                [[${role}]]</label>
-        </div>
-    </td>
-    <input type="hidden" name="userId" th:value="${user.id}">
-    <button type="submit">Save</button>
-    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
-</form>
+<div class="container">
+    <h1>Изменение настроек пользователя</h1>
+    <div class="container">
+        <form action="/user" $ method="post">
+            <div class="form-group">
+                <label for="changeUsername">Новый логин</label>
+                <input type="text" class="form-control col-4" id="changeUsername" th:value="${user.username}">
+            </div>
+            <td th:each="role : ${roles}">
+                <div>
+                    <input class="form-check-input" type="checkbox" id="roleCheckbox" th:name="${role}"
+                           th:checked="${user.roles.contains(role)}">
+                    <label th:inline="text" class="form-check-label" for="roleCheckbox">
+                        [[${role}]]
+                    </label>
+                </div>
+            </td>
+            <input type="hidden" name="userId" th:value="${user.id}">
+            <button class="btn btn-primary" type="submit">Save</button>
+            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+        </form>
+    </div>
+</div>
+
 <div th:replace="fragments/common :: footer"></div>
 <div th:replace="fragments/common :: imports"></div>
 </body>
