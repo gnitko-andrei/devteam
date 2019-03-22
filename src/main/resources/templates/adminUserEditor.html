@@ -9,10 +9,11 @@
 <div class="container">
     <h1>Изменение настроек пользователя</h1>
     <div class="container">
-        <form action="/user" $ method="post">
+        <form action="/admin" $ method="post">
             <div class="form-group">
                 <label for="changeUsername">Новый логин</label>
-                <input type="text" class="form-control col-4" id="changeUsername" th:value="${user.username}">
+                <input type="text" name="username" class="form-control col-4" id="changeUsername"
+                       th:value="${user.username}">
             </div>
             <td th:each="role : ${roles}">
                 <div>
