@@ -29,6 +29,10 @@
                             class="sr-only">(current)</span></a>
                 </li>
                 <li class="nav-item">
+                    <a sec:authorize="hasAuthority('USER')" class="nav-link" href="/user">Профиль пользователя<span
+                            class="sr-only">(current)</span></a>
+                </li>
+                <li class="nav-item">
                     <a sec:authorize="hasAuthority('ADMIN')" class="nav-link" href="/admin">Панель администратора</a>
                 </li>
             </ul>

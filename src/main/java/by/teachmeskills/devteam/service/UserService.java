@@ -69,4 +69,18 @@ public class UserService implements UserDetailsService {
         user.setRoles(roles);
         save(user);
     }
+
+    public String getUserAppRoleName(User user) {
+        Set<Role> roles = user.getRoles();
+        if (roles.contains(Role.CUSTOMER)) {
+            return "Заказчик";
+        }
+        if (roles.contains(Role.MANAGER)) {
+            return "Менеджер";
+        }
+        if (roles.contains(Role.DEVELOPER)) {
+            return "Разработчик";
+        }
+        return null;
+    }
 }

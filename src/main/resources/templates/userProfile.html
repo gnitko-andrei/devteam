@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Профиль пользователя</title>
+    <th:block th:replace="fragments/common :: headerfiles"/>
+</head>
+<body>
+<div th:replace="fragments/common :: header"></div>
+<div class="container m-5" th:value="${user}">
+    <dl class="row">
+        <dt class="col-sm-3">Логин</dt>
+        <dd class="col-sm-9" th:text="${user.username}"></dd>
+    </dl>
+    <dl class="row">
+        <dt class="col-sm-3">Роль</dt>
+        <dd class="col-sm-9" th:text="${appRole}"></dd>
+    </dl>
+    <dl class="row">
+        <dt class="col-sm-3">Имя</dt>
+        <dd class="col-sm-9" th:text="${user.firstName}"></dd>
+    </dl>
+    <dl class="row">
+        <dt class="col-sm-3">Фамилия</dt>
+        <dd class="col-sm-9" th:text="${user.lastName}"></dd>
+    </dl>
+    <dl class="row">
+        <dt class="col-sm-3">Электроная почта</dt>
+        <dd class="col-sm-9" th:text="${user.email}"></dd>
+    </dl>
+    <dl class="row">
+        <dt class="col-sm-3">Дополнительные контактные данные</dt>
+        <dd class="col-sm-9" th:text="${user.contacts}"></dd>
+    </dl>
+</div>
+<div th:replace="fragments/common :: footer"></div>
+<div th:replace="fragments/common :: imports"></div>
+</body>
+</html>
