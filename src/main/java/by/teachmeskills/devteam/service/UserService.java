@@ -83,4 +83,26 @@ public class UserService implements UserDetailsService {
         }
         return null;
     }
+
+    public boolean updateProfile(User user, Map<String, String> formData) {
+        String currentPassword = formData.get("currentPassword");
+        if (currentPassword == "" || !currentPassword.equals(user.getPassword())) {
+            return false;
+        }
+
+
+        if (formData.get("password") == "") {
+            user.setPassword(currentPassword);
+        } else {
+            user.setPassword(formData.get("password"));
+        }
+        user.setFirstName(formData.get("firstName"));
+        user.setLastName(formData.get("lastName"));
+        user.setEmail(formData.get("email"));
+        user.setContacts(formData.get("contacts"));
+        save(user);
+        return true;
+        //{username=manager, currentPassword=cp, password=np, firstName=manager, lastName=1,
+        // email=manager@email, contacts=11111, userId=28, _csrf=a9801d4f-83ff-4875-891f-a6a47a969ff2}
+    }
 }

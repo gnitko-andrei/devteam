@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Редактор профиля</title>
+    <th:block th:replace="fragments/common :: headerfiles"/>
+</head>
+<body>
+<div th:replace="fragments/common :: header"></div>
+
+<div class="container m-3">
+    <div class="text-danger m-3" th:if="${message}" th:inline="text">
+        [[${message}]]
+    </div>
+    <form th:action="@{/user}" method="post">
+        <div class="form-group">
+            <label for="currentPassword">Текущий пароль</label>
+            <input type="password" name="currentPassword" class="form-control col-4" id="currentPassword">
+        </div>
+        <div class="form-group">
+            <label for="newPassword">Новый пароль</label>
+            <input type="password" name="password" class="form-control col-4" id="newPassword">
+        </div>
+        <div class="form-group">
+            <label for="newFirstName">Имя</label>
+            <input type="text" name="firstName" class="form-control col-4" id="newFirstName"
+                   th:value="${user.firstName}">
+        </div>
+        <div class="form-group">
+            <label for="newLastName">Фамилия</label>
+            <input type="text" name="lastName" class="form-control col-4" id="newLastName"
+                   th:value="${user.lastName}">
+        </div>
+        <div class="form-group">
+            <label for="newEmail">Электроная почта</label>
+            <input type="email" name="email" class="form-control col-4" id="newEmail"
+                   th:value="${user.email}">
+        </div>
+        <div class="form-group">
+            <label for="newContacts">Дополнительные контактные данные</label>
+            <input type="text" name="contacts" class="form-control col-4" id="newContacts"
+                   th:value="${user.contacts}">
+        </div>
+        <button class="btn btn-primary" type="submit">Сохранить</button>
+        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+    </form>
+</div>
+<div th:replace="fragments/common :: footer"></div>
+<div th:replace="fragments/common :: imports"></div>
+</body>
+</html>

@@ -7,7 +7,11 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+
+import java.util.Map;
 
 @Controller
 @RequestMapping("/user")
@@ -23,5 +27,27 @@ public class UserController {
         model.addAttribute("appRole", userAppRole);
         return "userProfile";
     }
+
+    @GetMapping("/userEditor")
+    public String editUserForm(Model model, @AuthenticationPrincipal User user) {
+        model.addAttribute("user", user);
+        return "userEditor";
+    }
+
+    @PostMapping
+    public String updateProfile(@AuthenticationPrincipal User user,
+                                @RequestParam Map<String, String> formData,
+                                Model model) {
+        boolean status = userService.updateProfile(user, formData);
+        if (!status) {
+            model.addAttribute("user", user);
+            model.addAttribute("message", "Неверный текущий пароль!");
+            return "userEditor";
+        }
+
+
+        return "redirect:/user";
+    }
+
 
 }

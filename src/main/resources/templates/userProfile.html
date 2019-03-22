@@ -31,6 +31,7 @@
         <dt class="col-sm-3">Дополнительные контактные данные</dt>
         <dd class="col-sm-9" th:text="${user.contacts}"></dd>
     </dl>
+    <a href="/user/userEditor" class="btn btn-primary btn-sm mx-1" role="button">Редактировать профиль</a>
 </div>
 <div th:replace="fragments/common :: footer"></div>
 <div th:replace="fragments/common :: imports"></div>
