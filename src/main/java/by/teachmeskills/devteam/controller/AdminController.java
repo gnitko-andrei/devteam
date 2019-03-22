@@ -15,9 +15,9 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 @Controller
-@RequestMapping("/user")
+@RequestMapping("/admin")
 @PreAuthorize("hasAuthority('ADMIN')")
-public class UserController {
+public class AdminController {
 
     @Autowired
     UserRepository userRepository;
@@ -25,7 +25,7 @@ public class UserController {
     @GetMapping
     public String userList(Model model) {
         model.addAttribute("users", userRepository.findAll());
-        return "userList";
+        return "adminPanel";
     }
 
     @GetMapping("{user}")
@@ -34,7 +34,7 @@ public class UserController {
         model.addAttribute("user", user);
         model.addAttribute("roles", Role.values());
 
-        return "userEdit";
+        return "adminUserRditor";
     }
 
     @PostMapping
@@ -59,6 +59,6 @@ public class UserController {
 
         userRepository.save(user);
 
-        return "redirect:/user";
+        return "redirect:/admin";
     }
 }
