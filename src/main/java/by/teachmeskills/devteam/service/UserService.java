@@ -105,4 +105,8 @@ public class UserService implements UserDetailsService {
         //{username=manager, currentPassword=cp, password=np, firstName=manager, lastName=1,
         // email=manager@email, contacts=11111, userId=28, _csrf=a9801d4f-83ff-4875-891f-a6a47a969ff2}
     }
+
+    public void delete(User user) {
+        userRepository.delete(user);
+    }
 }

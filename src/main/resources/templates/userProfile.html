@@ -31,7 +31,10 @@
         <dt class="col-sm-3">Дополнительные контактные данные</dt>
         <dd class="col-sm-9" th:text="${user.contacts}"></dd>
     </dl>
-    <a href="/user/userEditor" class="btn btn-primary btn-sm mx-1" role="button">Редактировать профиль</a>
+    <a href="/user/userEditor" class="btn btn-primary btn-sm" role="button">Редактировать профиль</a>
+    <form class="form-inline my-2" th:action="@{/user}" th:method="delete">
+        <button class="btn btn-danger btn-sm" type="submit" id="deleteUser">Удалить аккаунт</button>
+    </form>
 </div>
 <div th:replace="fragments/common :: footer"></div>
 <div th:replace="fragments/common :: imports"></div>
