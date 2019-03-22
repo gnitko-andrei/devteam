@@ -12,7 +12,8 @@
         <form action="/user" $ method="post">
             <div class="form-group">
                 <label for="changeUsername">Новый логин</label>
-                <input type="text" class="form-control col-4" id="changeUsername" th:value="${user.username}">
+                <input type="text" name="username" class="form-control col-4" id="changeUsername"
+                       th:value="${user.username}">
             </div>
             <td th:each="role : ${roles}">
                 <div>
