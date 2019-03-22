@@ -9,10 +9,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -30,7 +27,7 @@ public class UserService implements UserDetailsService {
         return userRepository.findAll();
     }
 
-    public void saveUser(User user, String username, Map<String, String> form) {
+    public void saveUserByAdmin(User user, String username, Map<String, String> form) {
         user.setUsername(username);
 
         Set<String> roles = Arrays.stream(Role.values())
@@ -46,5 +43,30 @@ public class UserService implements UserDetailsService {
         }
 
         userRepository.save(user);
+    }
+
+    public User findByUsername(String username) {
+        return userRepository.findByUsername(username);
+    }
+
+    public void save(User user) {
+        userRepository.save(user);
+    }
+
+    public void saveNewUser(User user, Map<String, String> formRoles) {
+        user.setActive(true);
+        Set<Role> roles = new HashSet<>();
+        roles.add(Role.USER);
+        if (formRoles.get("inlineRadioOptions").equals("option1")) {
+            roles.add(Role.CUSTOMER);
+        }
+        if (formRoles.get("inlineRadioOptions").equals("option2")) {
+            roles.add(Role.MANAGER);
+        }
+        if (formRoles.get("inlineRadioOptions").equals("option3")) {
+            roles.add(Role.DEVELOPER);
+        }
+        user.setRoles(roles);
+        save(user);
     }
 }
