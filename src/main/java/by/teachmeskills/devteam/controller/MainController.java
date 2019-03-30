@@ -44,10 +44,9 @@ public class MainController {
             @AuthenticationPrincipal User user,
             @RequestParam String name,
             @RequestParam String specification,
-            @RequestParam String status,
             Model model) {
 
-        Project project = new Project(name, specification, status, user);
+        Project project = new Project(name, specification, "ожидание обработки менеджером", user);
         projectRepository.save(project);
 
         Iterable<Project> projects = projectRepository.findAll();
