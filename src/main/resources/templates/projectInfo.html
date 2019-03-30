@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title th:inline="text">[[${project.name}]]</title>
+    <th:block th:replace="fragments/common :: headerfiles"/>
+</head>
+<body>
+<div th:replace="fragments/common :: header"></div>
+<div class="container">
+    <br>
+    <h1 th:text="${project.name}"></h1>
+    <h3>Статус</h3>
+    <p class="font-weight-normal" th:text="${project.status}"></p>
+    <h3>Техническое задание</h3>
+    <p class="font-weight-normal" th:text="${project.name}"></p>
+    <h3>Заказчик</h3>
+    <p class="font-weight-normal" th:text="${project.customer.firstName} + ' ' + ${project.customer.lastName}"></p>
+    <p class="font-weight-normal" th:text="${project.customer.email}"></p>
+    <p class="font-weight-normal" th:text="${project.customer.contacts}"></p>
+</div>
+
+<div th:replace="fragments/common :: footer"></div>
+<div th:replace="fragments/common :: imports"></div>
+</body>
+</html>
