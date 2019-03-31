@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <title th:inline="text">[[${project.name}]]</title>
     <th:block th:replace="fragments/common :: headerfiles"/>
@@ -17,8 +17,17 @@
     <p class="font-weight-normal" th:text="${project.customer.firstName} + ' ' + ${project.customer.lastName}"></p>
     <p class="font-weight-normal" th:text="${project.customer.email}"></p>
     <p class="font-weight-normal" th:text="${project.customer.contacts}"></p>
+    <div class="my-2 row justify-content-start">
+        <a sec:authorize="hasAnyAuthority('CUSTOMER', 'MANAGER')" role="button"
+           th:href="@{'/projects/edit/' + ${project.id}}"
+           class="btn btn-info btn-sm col-2">Редактировать</a>
+        <form sec:authorize="hasAnyAuthority('CUSTOMER', 'MANAGER')" class="form-inline col-5"
+              th:action="@{/projects}" th:method="delete">
+            <input type="hidden" th:name="id" th:value="${project.id}"/>
+            <button class="btn btn-danger btn-sm" type="submit" id="deleteProject">Удалить</button>
+        </form>
+    </div>
 </div>
-
 <div th:replace="fragments/common :: footer"></div>
 <div th:replace="fragments/common :: imports"></div>
 </body>

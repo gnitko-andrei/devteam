@@ -4,13 +4,17 @@ import by.teachmeskills.devteam.entity.Project;
 import by.teachmeskills.devteam.entity.User;
 import by.teachmeskills.devteam.service.ProjectService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Map;
+
 @Controller
 @RequestMapping("/projects")
+@PreAuthorize("hasAnyAuthority('CUSTOMER', 'DEVELOPER', 'MANAGER')")
 public class ProjectController {
 
     @Autowired
@@ -39,9 +43,7 @@ public class ProjectController {
             @RequestParam String specification,
             Model model) {
 
-        specification = specification.replaceAll("\n", "<br>");
-        Project project = new Project(name, specification, "ожидание обработки менеджером", user);
-        projectService.save(project);
+        projectService.addNewProject(name, specification, user);
 
         Iterable<Project> projects = projectService.findAll();
         model.addAttribute("projects", projects);
@@ -63,5 +65,29 @@ public class ProjectController {
     public String delete(@RequestParam Long id) {
         projectService.deleteById(id);
         return "redirect:/projects";
+    }
+
+    @GetMapping("/edit/{projectId}")
+    @PreAuthorize("hasAnyAuthority('CUSTOMER', 'MANAGER')")
+    public String editProject(@PathVariable Long projectId, Model model) {
+
+
+        Project project = projectService.findById(projectId);
+        model.addAttribute("project", project);
+        String specification = projectService.replaceBrOnHyphenation(project.getSpecification());
+        model.addAttribute("specification", specification);
+
+        return "projectEditor";
+    }
+
+    @PostMapping("/edit/{projectId}")
+    public String updateProject(@PathVariable Long projectId,
+                                @RequestParam Map<String, String> formData,
+                                Model model) {
+        System.out.println(formData);
+
+        projectService.updateProject(projectId, formData);
+
+        return "redirect:/projects/{projectId}";
     }
 }
