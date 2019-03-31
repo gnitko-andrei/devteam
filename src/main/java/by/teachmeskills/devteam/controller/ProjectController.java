@@ -10,7 +10,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Map;
+
+import static by.teachmeskills.devteam.util.TextUtils.replaceBrOnHyphenation;
 
 @Controller
 @RequestMapping("/projects")
@@ -19,6 +22,7 @@ public class ProjectController {
 
     @Autowired
     private ProjectService projectService;
+
 
     @GetMapping
     public String main(@RequestParam(required = false, defaultValue = "") String filter, Model model) {
@@ -30,8 +34,11 @@ public class ProjectController {
             projects = projectService.findAll();
         }
 
+        List<User> managers = projectService.getAllManagers();
+
         model.addAttribute("projects", projects);
         model.addAttribute("filter", filter);
+        model.addAttribute("managers", managers);
 
         return "projects";
     }
@@ -41,9 +48,10 @@ public class ProjectController {
             @AuthenticationPrincipal User user,
             @RequestParam String name,
             @RequestParam String specification,
+            @RequestParam Long managerId,
             Model model) {
 
-        projectService.addNewProject(name, specification, user);
+        projectService.addNewProject(name, specification, user, managerId);
 
         Iterable<Project> projects = projectService.findAll();
         model.addAttribute("projects", projects);
@@ -73,9 +81,14 @@ public class ProjectController {
 
 
         Project project = projectService.findById(projectId);
+
+        String specification = replaceBrOnHyphenation(project.getSpecification());
+
+        List<User> managers = projectService.getAllManagers();
+
         model.addAttribute("project", project);
-        String specification = projectService.replaceBrOnHyphenation(project.getSpecification());
         model.addAttribute("specification", specification);
+        model.addAttribute("managers", managers);
 
         return "projectEditor";
     }

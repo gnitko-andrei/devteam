@@ -109,4 +109,8 @@ public class UserService implements UserDetailsService {
     public void delete(User user) {
         userRepository.delete(user);
     }
+
+    public User findById(Long id) {
+        return userRepository.findById(id).get();
+    }
 }

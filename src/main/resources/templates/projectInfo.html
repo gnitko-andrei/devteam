@@ -14,9 +14,10 @@
     <h3>Техническое задание</h3>
     <div class="font-weight-normal" th:utext="${project.specification}"></div>
     <h3>Заказчик</h3>
-    <p class="font-weight-normal" th:text="${project.customer.firstName} + ' ' + ${project.customer.lastName}"></p>
-    <p class="font-weight-normal" th:text="${project.customer.email}"></p>
-    <p class="font-weight-normal" th:text="${project.customer.contacts}"></p>
+    <div class="font-weight-normal" th:utext="${project.customerInfo}"></div>
+    <h3>Менеджер</h3>
+    <div class="font-weight-normal" th:utext="${project.managerInfo}"></div>
+
     <div class="my-2 row justify-content-start">
         <a sec:authorize="hasAnyAuthority('CUSTOMER', 'MANAGER')" role="button"
            th:href="@{'/projects/edit/' + ${project.id}}"
