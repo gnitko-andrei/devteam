@@ -39,6 +39,7 @@ public class ProjectController {
             @RequestParam String specification,
             Model model) {
 
+        specification = specification.replaceAll("\n", "<br>");
         Project project = new Project(name, specification, "ожидание обработки менеджером", user);
         projectService.save(project);
 

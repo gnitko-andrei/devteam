@@ -1,5 +1,7 @@
 package by.teachmeskills.devteam.entity;
 
+import org.hibernate.annotations.Type;
+
 import javax.persistence.*;
 
 @Entity
@@ -11,6 +13,7 @@ public class Project {
 
     private String name;
 
+    @Type(type = "text")
     private String specification;
 
     private String status;

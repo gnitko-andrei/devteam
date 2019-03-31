@@ -12,7 +12,7 @@
     <h3>Статус</h3>
     <p class="font-weight-normal" th:text="${project.status}"></p>
     <h3>Техническое задание</h3>
-    <p class="font-weight-normal" th:text="${project.name}"></p>
+    <div class="font-weight-normal" th:utext="${project.specification}"></div>
     <h3>Заказчик</h3>
     <p class="font-weight-normal" th:text="${project.customer.firstName} + ' ' + ${project.customer.lastName}"></p>
     <p class="font-weight-normal" th:text="${project.customer.email}"></p>
