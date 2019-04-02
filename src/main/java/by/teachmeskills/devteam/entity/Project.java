@@ -3,7 +3,9 @@ package by.teachmeskills.devteam.entity;
 import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 
 import static by.teachmeskills.devteam.util.TextUtils.replaceHyphenationOnBr;
 
@@ -31,6 +33,14 @@ public class Project {
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "manager_id")
     private User manager;
+
+    @ManyToMany
+    @JoinTable(
+            name = "developer_project",
+            joinColumns = {@JoinColumn(name = "project_id")},
+            inverseJoinColumns = {@JoinColumn(name = "developer_id")}
+    )
+    private Set<User> developers = new HashSet<>();
 
     public Project() {
     }
@@ -114,6 +124,14 @@ public class Project {
 
     public void setManager(User manager) {
         this.manager = manager;
+    }
+
+    public Set<User> getDevelopers() {
+        return developers;
+    }
+
+    public void setDevelopers(Set<User> developers) {
+        this.developers = developers;
     }
 
     @Override

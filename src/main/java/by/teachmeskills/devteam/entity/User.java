@@ -5,8 +5,11 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
+
+import static by.teachmeskills.devteam.util.TextUtils.replaceHyphenationOnBr;
 
 @Entity
 @Table(name = "user")
@@ -25,6 +28,14 @@ public class User implements UserDetails {
     private String email;
     private String contacts;
     private Integer price; //only for developers
+
+    @ManyToMany
+    @JoinTable(
+            name = "developer_project",
+            joinColumns = {@JoinColumn(name = "developer_id")},
+            inverseJoinColumns = {@JoinColumn(name = "project_id")}
+    )
+    private Set<Project> projects = new HashSet<>();
 
     @ElementCollection(targetClass = Role.class, fetch = FetchType.EAGER)
     @CollectionTable(name = "user_role", joinColumns = @JoinColumn(name = "user_id"))
@@ -126,6 +137,29 @@ public class User implements UserDetails {
 
     public void setRoles(Set<Role> roles) {
         this.roles = roles;
+    }
+
+    public String getUserInfo() {
+        String info = getFirstName() + " " + getLastName()
+                + "\n" + getEmail()
+                + "\n" + getContacts();
+        return replaceHyphenationOnBr(info);
+    }
+
+    public Integer getPrice() {
+        return price;
+    }
+
+    public void setPrice(Integer price) {
+        this.price = price;
+    }
+
+    public Set<Project> getProjects() {
+        return projects;
+    }
+
+    public void setProjects(Set<Project> projects) {
+        this.projects = projects;
     }
 
     @Override

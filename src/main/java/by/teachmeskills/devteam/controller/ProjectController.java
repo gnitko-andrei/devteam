@@ -85,21 +85,24 @@ public class ProjectController {
         String specification = replaceBrOnHyphenation(project.getSpecification());
 
         List<User> managers = projectService.getAllManagers();
+        List<User> developers = projectService.getAllDevelopers();
 
         model.addAttribute("project", project);
         model.addAttribute("specification", specification);
         model.addAttribute("managers", managers);
+        model.addAttribute("developers", developers);
 
         return "projectEditor";
     }
 
     @PostMapping("/edit/{projectId}")
-    public String updateProject(@PathVariable Long projectId,
+    public String updateProject(@AuthenticationPrincipal User user,
+                                @PathVariable Long projectId,
                                 @RequestParam Map<String, String> formData,
                                 Model model) {
         System.out.println(formData);
 
-        projectService.updateProject(projectId, formData);
+        projectService.updateProject(user, projectId, formData);
 
         return "redirect:/projects/{projectId}";
     }

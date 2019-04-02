@@ -8,17 +8,20 @@
 <div th:replace="fragments/common :: header"></div>
 <div class="container">
     <br>
-    <h1 th:text="${project.name}"></h1>
-    <h3>Статус</h3>
+    <h1 class="my-2" th:text="${project.name}"></h1>
+    <h3 class="my-2">Статус</h3>
     <p class="font-weight-normal" th:text="${project.status}"></p>
-    <h3>Техническое задание</h3>
+    <h3 class="my-2">Техническое задание</h3>
     <div class="font-weight-normal" th:utext="${project.specification}"></div>
-    <h3>Заказчик</h3>
+    <h3 class="my-2">Заказчик</h3>
     <div class="font-weight-normal" th:utext="${project.customerInfo}"></div>
-    <h3>Менеджер</h3>
+    <h3 class="my-2">Менеджер</h3>
     <div class="font-weight-normal" th:utext="${project.managerInfo}"></div>
-
-    <div class="my-2 row justify-content-start">
+    <h3 class="my-2" th:if="${!project.developers.isEmpty()}">Разработчики</h3>
+    <div th:each="developer : ${project.developers}">
+        <div class="font-weight-normal my-3" th:utext="${developer.userInfo}"></div>
+    </div>
+    <div class="my-2 mt-4 row justify-content-start">
         <a sec:authorize="hasAnyAuthority('CUSTOMER', 'MANAGER')" role="button"
            th:href="@{'/projects/edit/' + ${project.id}}"
            class="btn btn-info btn-sm col-2">Редактировать</a>
