@@ -18,6 +18,7 @@
     <h3 class="my-2">Менеджер</h3>
     <div class="font-weight-normal" th:utext="${project.managerInfo}"></div>
     <h3 class="my-2" th:if="${!project.developers.isEmpty()}">Разработчики</h3>
+    <h3 th:unless="${!project.developers.isEmpty()}">Разработчики не назначены</h3>
     <div th:each="developer : ${project.developers}">
         <div class="font-weight-normal my-3" th:utext="${developer.userInfo}"></div>
     </div>

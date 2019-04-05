@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Разработчики</title>
+    <th:block th:replace="fragments/common :: headerfiles"/>
+</head>
+<body>
+<div th:replace="fragments/common :: header"></div>
+<div class="mx-3">
+    <h1 class="my-3">Список разработчиков</h1>
+    <div class="card-deck">
+        <div class="my-3" th:if="${!developers.isEmpty()}" th:each="developer : ${developers}">
+            <div class="card" style="width: 18rem;">
+                <h5 class="card-header" th:text="${developer.firstName} + ' ' + ${developer.lastName}"></h5>
+                <div class="card-body">
+                    <div class="card-text">
+                        <strong>Email</strong>
+                        <div th:text="${developer.email}"></div>
+                        <strong>Контактные данные</strong>
+                        <div th:text="${developer.contacts}"></div>
+                        <strong>Профессиональные навыки</strong>
+                        <div th:if="${developer.skills} != null" th:text="${developer.skills}"></div>
+                        <div th:unless="${developer.skills} != null">не заполнены</div>
+                        <strong>Оплата</strong>
+                        <div th:text="${developer.price} + ' $/час'"></div>
+                    </div>
+                </div>
+                <div class="card-footer text-muted">
+                    <strong>Изменить оплату</strong>
+                    <form class="form-inline" th:action="@{/developers}" method="post">
+                        <input type="text" name="price" class="form-control col-5 mx-2" id="newPrice"
+                               th:value="${developer.price}">
+                        <button class="btn btn-primary btn-sm col-5 mx-2" type="submit">Сохранить</button>
+                        <input type="hidden" th:name="id" th:value="${developer.id}"/>
+                        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+                    </form>
+                </div>
+                <div class="card-footer text-muted">
+                    <form class="form-inline" th:action="@{/developers}" th:method="delete">
+                        <button class="btn btn-danger btn-sm col-6 mx-2" type="submit">Удалить</button>
+                        <input type="hidden" th:name="id" th:value="${developer.id}"/>
+                        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div th:replace="fragments/common :: footer"></div>
+<div th:replace="fragments/common :: imports"></div>
+</body>
+</html>

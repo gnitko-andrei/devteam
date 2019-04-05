@@ -28,6 +28,7 @@ public class User implements UserDetails {
     private String email;
     private String contacts;
     private Integer price; //only for developers
+    private String skills; //only for developers
 
     @ManyToMany
     @JoinTable(
@@ -160,6 +161,14 @@ public class User implements UserDetails {
 
     public void setProjects(Set<Project> projects) {
         this.projects = projects;
+    }
+
+    public String getSkills() {
+        return skills;
+    }
+
+    public void setSkills(String skills) {
+        this.skills = skills;
     }
 
     @Override
