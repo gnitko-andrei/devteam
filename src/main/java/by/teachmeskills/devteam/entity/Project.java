@@ -1,6 +1,13 @@
 package by.teachmeskills.devteam.entity;
 
+import org.hibernate.annotations.Type;
+
 import javax.persistence.*;
+import java.util.HashSet;
+import java.util.Objects;
+import java.util.Set;
+
+import static by.teachmeskills.devteam.util.TextUtils.replaceHyphenationOnBr;
 
 @Entity
 public class Project {
@@ -9,28 +16,66 @@ public class Project {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
+    @Column(nullable = false)
     private String name;
 
+    @Type(type = "text")
     private String specification;
 
+    @Column(nullable = false)
     private String status;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "customer_id")
     private User customer;
+
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "manager_id")
+    private User manager;
+
+    @ManyToMany
+    @JoinTable(
+            name = "developer_project",
+            joinColumns = {@JoinColumn(name = "project_id")},
+            inverseJoinColumns = {@JoinColumn(name = "developer_id")}
+    )
+    private Set<User> developers = new HashSet<>();
 
     public Project() {
     }
 
-    public Project(String name, String specification, String status, User customer) {
+    public Project(String name, String specification, String status, User customer, User manager) {
         this.name = name;
         this.specification = specification;
         this.status = status;
         this.customer = customer;
+        this.manager = manager;
     }
 
     public String getCustomerName() {
-        return customer != null ? customer.getUsername() : "<none>";
+        return customer != null ? customer.getFirstName() + " " + customer.getLastName() : "none";
+    }
+
+    public String getCustomerInfo() {
+        String info = customer.getFirstName() + " " + customer.getLastName()
+                + "\n" + customer.getEmail()
+                + "\n" + customer.getContacts();
+        return customer != null ? replaceHyphenationOnBr(info) : "none";
+    }
+
+    public String getManagerName() {
+        return manager != null ? manager.getFirstName() + " " + manager.getLastName() : "none";
+    }
+
+    public String getManagerInfo() {
+        if (manager != null) {
+            String info = manager.getFirstName() + " " + manager.getLastName()
+                    + "\n" + manager.getEmail()
+                    + "\n" + manager.getContacts();
+            return replaceHyphenationOnBr(info);
+        }
+        return "none";
     }
 
     public Long getId() {
@@ -71,5 +116,34 @@ public class Project {
 
     public void setCustomer(User customer) {
         this.customer = customer;
+    }
+
+    public User getManager() {
+        return manager;
+    }
+
+    public void setManager(User manager) {
+        this.manager = manager;
+    }
+
+    public Set<User> getDevelopers() {
+        return developers;
+    }
+
+    public void setDevelopers(Set<User> developers) {
+        this.developers = developers;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Project project = (Project) o;
+        return id.equals(project.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
     }
 }

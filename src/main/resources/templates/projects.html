@@ -1,37 +1,81 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <title>Проекты</title>
     <th:block th:replace="fragments/common :: headerfiles"/>
 </head>
 <body>
 <div th:replace="fragments/common :: header"></div>
-<div class="container mt-3">
-    <div>Список проектов</div>
-    <form method="get" action="/projects">
-        <input type="text" name="filter" th:value="${filter}">
-        <button type="submit">Найти</button>
-    </form>
-    <div th:if="!${#lists.isEmpty(projects)}">
-        <ul th:each="project : ${projects}">
-            <b th:text="${project.id}"></b>
-            <span th:text="${project.name}"></span>
-            <span th:text="${project.specification}"></span>
-            <i th:text="${project.status}"></i>
-            <strong th:text="${project.customerName}"></strong>
-        </ul>
+<div class="container m-3">
+    <button sec:authorize="hasAuthority('CUSTOMER')" class="btn btn-primary mb-3" type="button" data-toggle="collapse"
+            data-target="#addProject"
+            aria-expanded="false" aria-controls="addProject">
+        Создать новый проект
+    </button>
+    <div class="collapse" id="addProject">
+        <div class="card card-body">
+            <div class="form-group">
+                <form method="post">
+                    <div class="form-group my-2">
+                        <input type="text" class="form-control" name="name" placeholder="Введите название проекта"/>
+                    </div>
+                    <div class="form-group my-2">
+                        <label for="specification">Техническое задание</label>
+                        <textarea class="form-control" name="specification" id="specification"
+                                  rows="5"> </textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="manager">Менеджер</label>
+                        <select class="form-control" id="manager" th:name="managerId">
+                            <option th:each="manager : ${managers}"
+                                    th:text="${manager.firstName} + ' ' + ${manager.lastName}"
+                                    th:value="${manager.id}"></option>
+                        </select>
+                    </div>
+                    <button type="submit" class="btn btn-primary mt-3">Добавить</button>
+                    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="my-3">
+        <h5>Список проектов</h5>
+        <form class="form-inline" method="get" action="/projects">
+            <div class="form-group mx-sm-3">
+                <input type="text" class="form-control" name="filter" th:value="${filter}">
+            </div>
+            <button class="btn btn-dark" type="submit">Найти</button>
+        </form>
+    </div>
+    <div class="card-deck" th:if="!${#lists.isEmpty(projects)}">
+        <div th:each="project : ${projects}">
+            <div class="card my-2">
+                <h5 class="card-header" th:text="${project.name}"></h5>
+                <div class="card-body">
+                    <strong>Статус:</strong>
+                    <div th:text="${project.status}"></div>
+                    <strong>Заказчик:</strong>
+                    <div th:text="${project.customerName}"></div>
+                    <strong>Менеджер:</strong>
+                    <div th:text="${project.managerName}"></div>
+                </div>
+                <div class="card-footer">
+                    <div class="my-2 form-inline">
+                        <a role="button" th:href="@{'/projects/' + ${project.id}}"
+                           class="btn btn-info btn-sm mx-1">Больше
+                            информации</a>
+                        <form sec:authorize="hasAnyAuthority('CUSTOMER', 'MANAGER')" class="form-inline mx-1"
+                              th:action="@{/projects}" th:method="delete">
+                            <input type="hidden" th:name="id" th:value="${project.id}"/>
+                            <button class="btn btn-danger btn-sm" type="submit" id="deleteProject">Удалить</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
     <div th:if="${#lists.isEmpty(projects)}">
         No projects
-    </div>
-    <div>
-        <form method="post">
-            <input type="text" name="name" placeholder="Введите имя проекта"/>
-            <input type="text" name="specification" placeholder="Введите ТЗ"/>
-            <input type="text" name="status" placeholder="Введите статус"/>
-            <button type="submit">Добавить</button>
-            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
-        </form>
     </div>
 </div>
 <div th:replace="fragments/common :: footer"></div>

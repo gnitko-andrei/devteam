@@ -90,7 +90,6 @@ public class UserService implements UserDetailsService {
             return false;
         }
 
-
         if (formData.get("password") == "") {
             user.setPassword(currentPassword);
         } else {
@@ -100,6 +99,7 @@ public class UserService implements UserDetailsService {
         user.setLastName(formData.get("lastName"));
         user.setEmail(formData.get("email"));
         user.setContacts(formData.get("contacts"));
+        user.setSkills(formData.get("skills"));
         save(user);
         return true;
         //{username=manager, currentPassword=cp, password=np, firstName=manager, lastName=1,
@@ -108,5 +108,31 @@ public class UserService implements UserDetailsService {
 
     public void delete(User user) {
         userRepository.delete(user);
+    }
+
+    public void deleteById(Long userId) {
+        User user = findById(userId);
+        userRepository.delete(user);
+    }
+
+    public User findById(Long id) {
+        return userRepository.findById(id).get();
+    }
+
+    public Set<User> getAllDevelopers() {
+        List<User> allUsers = userRepository.findAll();
+        Set<User> allDevelopers = new HashSet<>();
+        for (User user : allUsers) {
+            if (user.getRoles().contains(Role.DEVELOPER)) {
+                allDevelopers.add(user);
+            }
+        }
+        return allDevelopers;
+    }
+
+    public void updatePrice(Long id, Integer price) {
+        User user = findById(id);
+        user.setPrice(price);
+        save(user);
     }
 }

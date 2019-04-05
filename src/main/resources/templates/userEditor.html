@@ -40,6 +40,11 @@
             <input type="text" name="contacts" class="form-control col-4" id="newContacts"
                    th:value="${user.contacts}">
         </div>
+        <div class="form-group">
+            <label for="newSkills">Профессиональные навыки</label>
+            <input type="text" name="skills" class="form-control col-4" id="newSkills"
+                   th:value="${user.skills}">
+        </div>
         <button class="btn btn-primary" type="submit">Сохранить</button>
         <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
     </form>
