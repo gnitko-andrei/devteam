@@ -45,7 +45,8 @@
             <label for="developers">Разработчики</label>
             <td th:each="developer : ${developers}" id="developers">
                 <div>
-                    <input class="form-check-input" type="checkbox" id="developerCheckbox" th:name="${developer.id}">
+                    <input class="form-check-input" type="checkbox" id="developerCheckbox" th:name="${developer.id}"
+                           th:checked="${project.developers.contains(developer)}">
                     <!--th:checked="${project.developers.contains(role)}"-->
                     <label th:inline="text" class="form-check-label" for="developerCheckbox">
                         [[${developer.firstName} + ' ' + ${developer.lastName}]]
