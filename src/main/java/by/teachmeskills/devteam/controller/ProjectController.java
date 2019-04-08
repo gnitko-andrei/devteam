@@ -24,7 +24,6 @@ public class ProjectController {
     @Autowired
     private ProjectService projectService;
 
-
     @GetMapping
     public String main(@AuthenticationPrincipal User user, @RequestParam(required = false, defaultValue = "") String filter, Model model) {
         Iterable<Project> projects = projectService.findAll();
@@ -73,9 +72,7 @@ public class ProjectController {
     @GetMapping("{projectId}")
     public String projectInfo(@AuthenticationPrincipal User user, @PathVariable Long projectId, Model model) {
 
-
         Project project = projectService.findById(projectId);
-
 
         model.addAttribute("project", project);
 

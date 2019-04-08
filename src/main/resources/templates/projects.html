@@ -58,6 +58,8 @@
                     <div th:text="${project.customerName}"></div>
                     <strong>Менеджер:</strong>
                     <div th:text="${project.managerName}"></div>
+                    <strong>Текущая стоимость:</strong>
+                    <div th:text="${project.projectPrice} + ' $'"></div>
                 </div>
                 <div class="card-footer">
                     <div class="my-2 form-inline">
@@ -75,7 +77,7 @@
         </div>
     </div>
     <div th:if="${#lists.isEmpty(projects)}">
-        No projects
+        Нет доступных проектов
     </div>
 </div>
 <div th:replace="fragments/common :: footer"></div>

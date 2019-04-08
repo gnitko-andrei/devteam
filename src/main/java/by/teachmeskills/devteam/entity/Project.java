@@ -3,9 +3,7 @@ package by.teachmeskills.devteam.entity;
 import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
-import java.util.HashSet;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 
 import static by.teachmeskills.devteam.util.TextUtils.replaceHyphenationOnBr;
 
@@ -42,6 +40,11 @@ public class Project {
     )
     private Set<User> developers = new HashSet<>();
 
+
+    @OneToMany(fetch = FetchType.LAZY)
+    @JoinColumn(name = "project_id")
+    private List<Task> tasks = new ArrayList<>();
+
     public Project() {
     }
 
@@ -77,6 +80,15 @@ public class Project {
         }
         return "none";
     }
+
+    public Integer getProjectPrice() {
+        Integer projectPrice = 0;
+        for (Task task : tasks) {
+            projectPrice += task.getPrice();
+        }
+        return projectPrice;
+    }
+
 
     public Long getId() {
         return id;
@@ -132,6 +144,14 @@ public class Project {
 
     public void setDevelopers(Set<User> developers) {
         this.developers = developers;
+    }
+
+    public List<Task> getTasks() {
+        return tasks;
+    }
+
+    public void setTasks(List<Task> tasks) {
+        this.tasks = tasks;
     }
 
     @Override
