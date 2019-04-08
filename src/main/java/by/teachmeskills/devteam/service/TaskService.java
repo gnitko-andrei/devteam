@@ -9,6 +9,8 @@ import by.teachmeskills.devteam.repository.TaskRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 @Service
@@ -29,8 +31,15 @@ public class TaskService {
         taskRepository.save(task);
     }
 
-    public Iterable<Task> findAll() {
-        return taskRepository.findAll();
+    public List<Task> findAll(Long projectId) {
+        Iterable<Task> allTasks = taskRepository.findAll();
+        List<Task> currentProjectTasks = new ArrayList<>();
+        for (Task task : allTasks) {
+            if (task.getProject().equals(projectRepository.findById(projectId).get())) {
+                currentProjectTasks.add(task);
+            }
+        }
+        return currentProjectTasks;
     }
 
     public void deleteById(Long id) {

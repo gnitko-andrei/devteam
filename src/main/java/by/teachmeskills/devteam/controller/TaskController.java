@@ -12,6 +12,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Map;
 
 @Controller
@@ -29,7 +30,7 @@ public class TaskController {
     public String tasks(@AuthenticationPrincipal User user, @PathVariable Long projectId, Model model) {
 
         Project project = projectService.findById(projectId);
-        Iterable<Task> tasks = taskService.findAll();
+        List<Task> tasks = taskService.findAll(projectId);
 
         model.addAttribute("project", project);
         model.addAttribute("tasks", tasks);
