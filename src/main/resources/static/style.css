@@ -1,16 +1,60 @@
+@import url(https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css);
+
 html {
     position: relative;
     min-height: 100%;
 }
+
 body {
     /* Margin bottom by footer height */
 
     margin-bottom: 40px;
 }
+
 footer {
     position: absolute;
     bottom: -100px;
     width: 100%;
     /* Set the fixed height of the footer here */
     height: 40px;
+}
+
+.social a {
+    text-align: center;
+    width: 46px;
+    height: 46px;
+    float: left;
+    background: #fff;
+    border: 1px solid #ccc;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15), inset 0 0 50px rgba(0, 0, 0, 0.1);
+    border-radius: 46px;
+    margin: 0 10px 10px 0;
+    padding: 6px;
+    color: #000;
+}
+
+.github a:hover {
+    background: #191919;
+    color: #fff;
+}
+
+.skype a:hover {
+    background: #00aff0;
+    color: #fff;
+}
+
+.linkedin a:hover {
+    background: #0e76a8;
+    color: #fff;
+}
+
+.telegram a:hover {
+    background: #249bd7;
+    color: #fff;
+}
+
+/*https://inter-net.pro/css/knopki-sotssetej-dlya-sajta*/
+
+.stack-image {
+    font-size: 30px;
 }

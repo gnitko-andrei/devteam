@@ -10,7 +10,7 @@
     <form th:action="@{'/projects/edit/' + ${project.id}}" method="post">
         <div class="form-group">
             <label for="newName">Название</label>
-            <input type="text" name="name" class="form-control col-4" id="newName"
+            <input type="text" name="name" class="form-control col-8" id="newName"
                    th:value="${project.name}">
         </div>
         <div class="form-group">
@@ -18,7 +18,7 @@
             <textarea name="specification" class="form-control col-8" id="newSpecification" rows="5"
                       th:text="${specification}"></textarea>
         </div>
-        <div class="form-group">
+        <div class="form-group col-8">
             <label for="manager">Менеджер</label>
             <select class="form-control" id="manager" th:name="managerId">
                 <option th:each="manager : ${managers}"

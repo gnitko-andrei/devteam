@@ -11,4 +11,16 @@ public class MainController {
 
         return "home";
     }
+
+    @GetMapping("/info/project")
+    public String projectInfo(Model model) {
+
+        return "homeMoreInfo";
+    }
+
+    @GetMapping("/info/stack")
+    public String stackInfo(Model model) {
+
+        return "stackMoreInfo";
+    }
 }
