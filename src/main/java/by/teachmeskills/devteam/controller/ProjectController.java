@@ -71,7 +71,7 @@ public class ProjectController {
         Iterable<Project> projects = projectService.findAll();
         model.addAttribute("projects", projects);
 
-        return "projects";
+        return "redirect:/projects";
     }
 
     @GetMapping("{projectId}")
