@@ -10,6 +10,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -23,27 +24,41 @@ public class ProjectController {
     @Autowired
     private ProjectService projectService;
 
-
     @GetMapping
-    public String main(@RequestParam(required = false, defaultValue = "") String filter, Model model) {
+    public String main(@AuthenticationPrincipal User user,
+                       @RequestParam(required = false, defaultValue = "") String nameFilter,
+                       @RequestParam(required = false, defaultValue = "") String statusFilter,
+                       Model model) {
         Iterable<Project> projects = projectService.findAll();
 
-        if (filter != null && !filter.isEmpty()) {
-            projects = projectService.findByName(filter);
+        List<Project> userProjects = new ArrayList<>();
+
+        if (nameFilter != null && !nameFilter.isEmpty()) {
+            projects = projectService.findByName(nameFilter);
+        } else if (statusFilter != null && !statusFilter.isEmpty()) {
+            projects = projectService.findByStatus(statusFilter);
         } else {
             projects = projectService.findAll();
         }
 
+        for (Project project : projects) {
+            if (project.getCustomer().equals(user) || project.getManager().equals(user) || project.getDevelopers().contains(user)) {
+
+                userProjects.add(project);
+            }
+        }
+
         List<User> managers = projectService.getAllManagers();
 
-        model.addAttribute("projects", projects);
-        model.addAttribute("filter", filter);
+        model.addAttribute("projects", userProjects);
+        model.addAttribute("nameFilter", nameFilter);
         model.addAttribute("managers", managers);
 
         return "projects";
     }
 
     @PostMapping
+    @PreAuthorize("hasAnyAuthority('CUSTOMER')")
     public String add(
             @AuthenticationPrincipal User user,
             @RequestParam String name,
@@ -60,16 +75,20 @@ public class ProjectController {
     }
 
     @GetMapping("{projectId}")
-    public String projectInfo(@PathVariable Long projectId, Model model) {
-
+    public String projectInfo(@AuthenticationPrincipal User user, @PathVariable Long projectId, Model model) {
 
         Project project = projectService.findById(projectId);
+
         model.addAttribute("project", project);
 
-        return "projectInfo";
+        if (project.getCustomer().equals(user) || project.getManager().equals(user) || project.getDevelopers().contains(user)) {
+            return "projectInfo";
+        }
+        return "/error";
     }
 
     @DeleteMapping
+    @PreAuthorize("hasAnyAuthority('CUSTOMER', 'MANAGER')")
     public String delete(@RequestParam Long id) {
         projectService.deleteById(id);
         return "redirect:/projects";
@@ -77,7 +96,7 @@ public class ProjectController {
 
     @GetMapping("/edit/{projectId}")
     @PreAuthorize("hasAnyAuthority('CUSTOMER', 'MANAGER')")
-    public String editProject(@PathVariable Long projectId, Model model) {
+    public String editProject(@AuthenticationPrincipal User user, @PathVariable Long projectId, Model model) {
 
 
         Project project = projectService.findById(projectId);
@@ -92,10 +111,14 @@ public class ProjectController {
         model.addAttribute("managers", managers);
         model.addAttribute("developers", developers);
 
-        return "projectEditor";
+        if (project.getCustomer().equals(user) || project.getManager().equals(user) || project.getDevelopers().contains(user)) {
+            return "projectEditor";
+        }
+        return "/error";
     }
 
     @PostMapping("/edit/{projectId}")
+    @PreAuthorize("hasAnyAuthority('CUSTOMER', 'MANAGER')")
     public String updateProject(@AuthenticationPrincipal User user,
                                 @PathVariable Long projectId,
                                 @RequestParam Map<String, String> formData,

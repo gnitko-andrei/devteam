@@ -2,6 +2,7 @@ package by.teachmeskills.devteam.service;
 
 import by.teachmeskills.devteam.entity.Project;
 import by.teachmeskills.devteam.entity.Role;
+import by.teachmeskills.devteam.entity.Task;
 import by.teachmeskills.devteam.entity.User;
 import by.teachmeskills.devteam.repository.ProjectRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -105,5 +106,17 @@ public class ProjectService {
         return usersByRole;
     }
 
+    public Integer getProjectPrice(Long id) {
+        Project project = findById(id);
+        List<Task> tasks = project.getTasks();
+        Integer projectPrice = 0;
+        for (Task task : tasks) {
+            projectPrice += task.getPrice();
+        }
+        return projectPrice;
+    }
 
+    public Iterable<Project> findByStatus(String status) {
+        return projectRepository.findByStatus(status);
+    }
 }

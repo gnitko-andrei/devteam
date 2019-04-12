@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <title>Профиль пользователя</title>
     <th:block th:replace="fragments/common :: headerfiles"/>
@@ -35,7 +35,10 @@
         <dt class="col-sm-3">Профессиональные навыки</dt>
         <dd class="col-sm-9" th:if="${user.skills} != null" th:text="${user.skills}"></dd>
         <dd class="col-sm-9" th:unless="${user.skills} != null" th:text="не + ' ' + заполнены"></dd>
-
+    </dl>
+    <dl class="row" sec:authorize="hasAuthority('DEVELOPER')">
+        <dt class="col-sm-3">Оплата</dt>
+        <dd class="col-sm-9" th:text="${user.price} + ' $/час'"></dd>
     </dl>
     <a href="/user/userEditor" class="btn btn-primary btn-sm" role="button">Редактировать профиль</a>
     <form class="form-inline my-2" th:action="@{/user}" th:method="delete">
