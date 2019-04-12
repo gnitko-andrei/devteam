@@ -67,10 +67,14 @@
                 <div class="card-body">
                     <strong>Статус:</strong>
                     <div th:text="${project.status}"></div>
-                    <strong>Заказчик:</strong>
-                    <div th:text="${project.customerName}"></div>
-                    <strong>Менеджер:</strong>
-                    <div th:text="${project.managerName}"></div>
+                    <div sec:authorize="hasAnyAuthority('DEVELOPER', 'MANAGER')">
+                        <strong>Заказчик:</strong>
+                        <div th:text="${project.customerName}"></div>
+                    </div>
+                    <div sec:authorize="hasAnyAuthority('CUSTOMER', 'DEVELOPER')">
+                        <strong>Менеджер:</strong>
+                        <div th:text="${project.managerName}"></div>
+                    </div>
                     <strong>Текущая стоимость:</strong>
                     <div th:text="${project.projectPrice} + ' $'"></div>
                 </div>
