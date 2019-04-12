@@ -27,13 +27,20 @@ public class TaskController {
 
     @GetMapping
     @PreAuthorize("hasAnyAuthority('DEVELOPER', 'MANAGER')")
-    public String tasks(@AuthenticationPrincipal User user, @PathVariable Long projectId, Model model) {
+    public String tasks(@AuthenticationPrincipal User user, @PathVariable Long projectId, Model model, @RequestParam(required = false, defaultValue = "") String filter) {
 
         Project project = projectService.findById(projectId);
-        List<Task> tasks = taskService.findAll(projectId);
+        List<Task> tasks;
+
+        if (filter != null && !filter.isEmpty()) {
+            tasks = taskService.findByStatus(filter);
+        } else {
+            tasks = taskService.findAll(projectId);
+        }
 
         model.addAttribute("project", project);
         model.addAttribute("tasks", tasks);
+        model.addAttribute("filter", filter);
 
         if (project.getManager().equals(user) || project.getDevelopers().contains(user)) {
             return "tasksList";

@@ -42,9 +42,22 @@
         <h5>Список проектов</h5>
         <form class="form-inline" method="get" action="/projects">
             <div class="form-group mx-sm-3">
-                <input type="text" class="form-control" name="filter" th:value="${filter}">
+                <input type="text" class="form-control" name="nameFilter" th:value="${nameFilter}">
             </div>
             <button class="btn btn-dark" type="submit">Найти</button>
+        </form>
+    </div>
+    <div class="container">
+        <form sec:authorize="hasAnyAuthority('CUSTOMER', 'MANAGER')" class="form-inline" method="get"
+              action="/projects">
+            <div class="btn-group" role="group" aria-label="statusFilter">
+                <button class="btn btn-dark" type="submit" name="statusFilter" value="">Все проекты</button>
+                <button class="btn btn-dark" type="submit" name="statusFilter" value="ожидание обработки менеджером">
+                    Ожидание обработки менеджером
+                </button>
+                <button class="btn btn-dark" type="submit" name="statusFilter" value="в разработке">В разаработке
+                </button>
+            </div>
         </form>
     </div>
     <div class="card-deck" th:if="!${#lists.isEmpty(projects)}">

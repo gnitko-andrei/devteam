@@ -25,13 +25,18 @@ public class ProjectController {
     private ProjectService projectService;
 
     @GetMapping
-    public String main(@AuthenticationPrincipal User user, @RequestParam(required = false, defaultValue = "") String filter, Model model) {
+    public String main(@AuthenticationPrincipal User user,
+                       @RequestParam(required = false, defaultValue = "") String nameFilter,
+                       @RequestParam(required = false, defaultValue = "") String statusFilter,
+                       Model model) {
         Iterable<Project> projects = projectService.findAll();
 
         List<Project> userProjects = new ArrayList<>();
 
-        if (filter != null && !filter.isEmpty()) {
-            projects = projectService.findByName(filter);
+        if (nameFilter != null && !nameFilter.isEmpty()) {
+            projects = projectService.findByName(nameFilter);
+        } else if (statusFilter != null && !statusFilter.isEmpty()) {
+            projects = projectService.findByStatus(statusFilter);
         } else {
             projects = projectService.findAll();
         }
@@ -46,7 +51,7 @@ public class ProjectController {
         List<User> managers = projectService.getAllManagers();
 
         model.addAttribute("projects", userProjects);
-        model.addAttribute("filter", filter);
+        model.addAttribute("nameFilter", nameFilter);
         model.addAttribute("managers", managers);
 
         return "projects";

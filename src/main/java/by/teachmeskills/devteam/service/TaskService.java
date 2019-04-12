@@ -76,4 +76,8 @@ public class TaskService {
         task.setStatus(formData.get("status"));
         taskRepository.save(task);
     }
+
+    public List<Task> findByStatus(String status) {
+        return taskRepository.findByStatus(status);
+    }
 }

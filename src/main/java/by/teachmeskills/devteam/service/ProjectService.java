@@ -116,4 +116,7 @@ public class ProjectService {
         return projectPrice;
     }
 
+    public Iterable<Project> findByStatus(String status) {
+        return projectRepository.findByStatus(status);
+    }
 }
