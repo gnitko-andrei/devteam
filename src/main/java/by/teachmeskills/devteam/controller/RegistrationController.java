@@ -30,7 +30,6 @@ public class RegistrationController {
             model.addAttribute("message", "User already exists!");
             return "registration";
         }
-        user.setPrice(3);
         userService.saveNewUser(user, formRoles);
 
         return "redirect:/login";

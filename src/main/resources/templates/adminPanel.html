@@ -12,8 +12,8 @@
         <table class="table table-borderless col-3">
             <thead>
             <tr>
-                <th scope="col">Name</th>
-                <th scope="col">Roles</th>
+                <th scope="col">Логин</th>
+                <th scope="col">Роли</th>
                 <th scope="col"></th>
             </tr>
             </thead>
@@ -25,7 +25,7 @@
                         <span th:text="${role}"></span>
                     </span>
                 </td>
-                <td><a class="btn btn-primary" th:href="@{'/admin/' + ${user.id}}" role="button">edit</a></td>
+                <td><a class="btn btn-primary" th:href="@{'/admin/' + ${user.id}}" role="button">Редактировать</a></td>
             </tr>
             </tbody>
         </table>

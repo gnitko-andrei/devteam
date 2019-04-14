@@ -7,6 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCrypt;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -17,6 +19,9 @@ public class UserService implements UserDetailsService {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -55,6 +60,7 @@ public class UserService implements UserDetailsService {
 
     public void saveNewUser(User user, Map<String, String> formRoles) {
         user.setActive(true);
+        user.setPrice(3);
         Set<Role> roles = new HashSet<>();
         roles.add(Role.USER);
         if (formRoles.get("inlineRadioOptions").equals("option1")) {
@@ -66,6 +72,7 @@ public class UserService implements UserDetailsService {
         if (formRoles.get("inlineRadioOptions").equals("option3")) {
             roles.add(Role.DEVELOPER);
         }
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
         user.setRoles(roles);
         save(user);
     }
@@ -86,14 +93,14 @@ public class UserService implements UserDetailsService {
 
     public boolean updateProfile(User user, Map<String, String> formData) {
         String currentPassword = formData.get("currentPassword");
-        if (currentPassword == "" || !currentPassword.equals(user.getPassword())) {
+        if (currentPassword == "" || !BCrypt.checkpw(currentPassword, user.getPassword())) {
             return false;
         }
 
         if (formData.get("password") == "") {
-            user.setPassword(currentPassword);
+            user.setPassword(passwordEncoder.encode(currentPassword));
         } else {
-            user.setPassword(formData.get("password"));
+            user.setPassword(passwordEncoder.encode(formData.get("password")));
         }
         user.setFirstName(formData.get("firstName"));
         user.setLastName(formData.get("lastName"));
