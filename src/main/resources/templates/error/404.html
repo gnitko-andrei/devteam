@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Ошибка</title>
+    <th:block th:replace="fragments/common :: headerfiles"/>
+</head>
+<body>
+<div th:replace="fragments/common :: header"></div>
+<h1 class="text-center mt-5">Такой страницы не существует, вернитесь на <a
+        href="/">главную</a></h1>
+<div th:replace="fragments/common :: footer"></div>
+<div th:replace="fragments/common :: imports"></div>
+</body>
+</html>
