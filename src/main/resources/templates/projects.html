@@ -7,11 +7,11 @@
 <body>
 <div th:replace="fragments/common :: header"></div>
 <div class="container m-3">
-    <button sec:authorize="hasAuthority('CUSTOMER')" class="btn btn-primary mb-3" type="button" data-toggle="collapse"
-            data-target="#addProject"
-            aria-expanded="false" aria-controls="addProject">
+    <a sec:authorize="hasAuthority('CUSTOMER')" class="btn btn-primary mb-3" role="button" data-toggle="collapse"
+       href="#addProject"
+       aria-expanded="false" aria-controls="addProject">
         Создать новый проект
-    </button>
+    </a>
     <div class="collapse" id="addProject">
         <div class="card card-body">
             <div class="form-group">
