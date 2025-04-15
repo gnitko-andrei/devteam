@@ -12,11 +12,11 @@
         <br>
         Задачи
     </h1>
-    <button sec:authorize="hasAuthority('MANAGER')" class="btn btn-primary mb-3" type="button" data-toggle="collapse"
-            data-target="#addTask"
-            aria-expanded="false" aria-controls="addTask">
+    <a sec:authorize="hasAuthority('MANAGER')" class="btn btn-primary mb-3" role="button" data-toggle="collapse"
+       href="#addTask"
+       aria-expanded="false" aria-controls="addTask">
         Создать новую задачу
-    </button>
+    </a>
     <div class="collapse" id="addTask">
         <div class="card card-body">
             <div class="form-group">
