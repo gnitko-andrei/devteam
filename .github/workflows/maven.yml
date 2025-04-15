@@ -21,14 +21,23 @@ jobs:
 
     steps:
     - uses: actions/checkout@v4
-    - name: Set up JDK 17
+    - name: Set up JDK
       uses: actions/setup-java@v4
       with:
         java-version: '17'
         distribution: 'temurin'
         cache: maven
-    - name: Build with Maven
-      run: mvn -B package --file pom.xml
+
+    - name: Build & Test
+      run: mvn clean test
+
+    - name: Report test results
+      if: always() # run even if tests fail
+      uses: dorny/test-reporter@v1
+      with:
+        name: Unit Tests
+        path: target/surefire-reports/*.xml
+        reporter: java-junit
 
     # Optional: Uploads the full dependency graph to GitHub to improve the quality of Dependabot alerts this repository can receive
     - name: Update dependency graph
