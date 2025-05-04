@@ -10,7 +10,7 @@
     </parent>
     <groupId>by.teachmeskills</groupId>
     <artifactId>devteam</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>1.0.0-SNAPSHOT</version>
     <name>devteam</name>
     <description>Graduation project for the courses Teach Me Skills "Development team"</description>
 

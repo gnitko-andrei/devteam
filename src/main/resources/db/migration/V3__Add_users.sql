@@ -4,7 +4,7 @@
 insert into user (id, username, password, active, first_name, last_name, email, contacts)
 values (2,
         'customer',
-        '$2a$08$5GEDISDmjH1.agxI75qTf.lxMcJWMzq1bdy59hHlv9/3i4a/TOzGG',
+        '$2a$08$5GEDISDmjH1.agxI75qTf.lxMcJWMzq1bdy59hHlv9/3i4a/TOzGG', -- password 1
         true,
         'customerFirstName',
         'customerLastName',
@@ -18,7 +18,7 @@ values (2, 'USER'),
 insert into user (id, username, password, active, first_name, last_name, email, contacts)
 values (3,
         'customer1',
-        '$2a$08$5GEDISDmjH1.agxI75qTf.lxMcJWMzq1bdy59hHlv9/3i4a/TOzGG',
+        '$2a$08$5GEDISDmjH1.agxI75qTf.lxMcJWMzq1bdy59hHlv9/3i4a/TOzGG', -- password 1
         true,
         'customer1FirstName',
         'customer1LastName',
@@ -32,7 +32,7 @@ values (3, 'USER'),
 insert into user (id, username, password, active, first_name, last_name, email, contacts)
 values (4,
         'customer2',
-        '$2a$08$5GEDISDmjH1.agxI75qTf.lxMcJWMzq1bdy59hHlv9/3i4a/TOzGG',
+        '$2a$08$5GEDISDmjH1.agxI75qTf.lxMcJWMzq1bdy59hHlv9/3i4a/TOzGG', -- password 1
         true,
         'customer2FirstName',
         'customer2LastName',
@@ -49,7 +49,7 @@ values (4, 'USER'),
 insert into user (id, username, password, active, first_name, last_name, email, contacts, price, skills)
 values (5,
         'developer',
-        '$2a$08$5GEDISDmjH1.agxI75qTf.lxMcJWMzq1bdy59hHlv9/3i4a/TOzGG',
+        '$2a$08$5GEDISDmjH1.agxI75qTf.lxMcJWMzq1bdy59hHlv9/3i4a/TOzGG', -- password 1
         true,
         'developerFirstName',
         'developerLastName',
@@ -65,7 +65,7 @@ values (5, 'USER'),
 insert into user (id, username, password, active, first_name, last_name, email, contacts, price, skills)
 values (6,
         'developer1',
-        '$2a$08$5GEDISDmjH1.agxI75qTf.lxMcJWMzq1bdy59hHlv9/3i4a/TOzGG',
+        '$2a$08$5GEDISDmjH1.agxI75qTf.lxMcJWMzq1bdy59hHlv9/3i4a/TOzGG', -- password 1
         true,
         'developer1FirstName',
         'developer1LastName',
@@ -81,7 +81,7 @@ values (6, 'USER'),
 insert into user (id, username, password, active, first_name, last_name, email, contacts, price, skills)
 values (7,
         'developer2',
-        '$2a$08$5GEDISDmjH1.agxI75qTf.lxMcJWMzq1bdy59hHlv9/3i4a/TOzGG',
+        '$2a$08$5GEDISDmjH1.agxI75qTf.lxMcJWMzq1bdy59hHlv9/3i4a/TOzGG', -- password 1
         true,
         'developer2FirstName',
         'developer2LastName',
@@ -97,7 +97,7 @@ values (7, 'USER'),
 insert into user (id, username, password, active, first_name, last_name, email, contacts, price, skills)
 values (8,
         'developer3',
-        '$2a$08$5GEDISDmjH1.agxI75qTf.lxMcJWMzq1bdy59hHlv9/3i4a/TOzGG',
+        '$2a$08$5GEDISDmjH1.agxI75qTf.lxMcJWMzq1bdy59hHlv9/3i4a/TOzGG', -- password 1
         true,
         'developer3FirstName',
         'developer3LastName',
@@ -113,7 +113,7 @@ values (8, 'USER'),
 insert into user (id, username, password, active, first_name, last_name, email, contacts, price, skills)
 values (9,
         'developer4',
-        '$2a$08$5GEDISDmjH1.agxI75qTf.lxMcJWMzq1bdy59hHlv9/3i4a/TOzGG',
+        '$2a$08$5GEDISDmjH1.agxI75qTf.lxMcJWMzq1bdy59hHlv9/3i4a/TOzGG', -- password 1
         true,
         'developer4FirstName',
         'developer4LastName',
@@ -129,7 +129,7 @@ values (9, 'USER'),
 insert into user (id, username, password, active, first_name, last_name, email, contacts, price, skills)
 values (10,
         'developer5',
-        '$2a$08$5GEDISDmjH1.agxI75qTf.lxMcJWMzq1bdy59hHlv9/3i4a/TOzGG',
+        '$2a$08$5GEDISDmjH1.agxI75qTf.lxMcJWMzq1bdy59hHlv9/3i4a/TOzGG', -- password 1
         true,
         'developer5FirstName',
         'developer5LastName',
@@ -148,7 +148,7 @@ values (10, 'USER'),
 insert into user (id, username, password, active, first_name, last_name, email, contacts)
 values (11,
         'manager',
-        '$2a$08$5GEDISDmjH1.agxI75qTf.lxMcJWMzq1bdy59hHlv9/3i4a/TOzGG',
+        '$2a$08$5GEDISDmjH1.agxI75qTf.lxMcJWMzq1bdy59hHlv9/3i4a/TOzGG', -- password 1
         true,
         'managerFirstName',
         'managerLastName',
@@ -162,7 +162,7 @@ values (11, 'USER'),
 insert into user (id, username, password, active, first_name, last_name, email, contacts)
 values (12,
         'manager1',
-        '$2a$08$5GEDISDmjH1.agxI75qTf.lxMcJWMzq1bdy59hHlv9/3i4a/TOzGG',
+        '$2a$08$5GEDISDmjH1.agxI75qTf.lxMcJWMzq1bdy59hHlv9/3i4a/TOzGG', -- password 1
         true,
         'manager1FirstName',
         'manager1LastName',
@@ -176,7 +176,7 @@ values (12, 'USER'),
 insert into user (id, username, password, active, first_name, last_name, email, contacts)
 values (13,
         'manager2',
-        '$2a$08$5GEDISDmjH1.agxI75qTf.lxMcJWMzq1bdy59hHlv9/3i4a/TOzGG',
+        '$2a$08$5GEDISDmjH1.agxI75qTf.lxMcJWMzq1bdy59hHlv9/3i4a/TOzGG', -- password 1
         true,
         'manager2FirstName',
         'manager2LastName',
