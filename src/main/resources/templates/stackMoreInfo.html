@@ -2,12 +2,12 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>Команда разработчиков</title>
-    <th:block th:replace="fragments/common :: headerfiles"/>
+    <th:block th:replace="~{fragments/common :: headerfiles}"/>
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css"
           integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
 </head>
 <body>
-<div th:replace="fragments/common :: header"></div>
+<div th:replace="~{fragments/common :: header}"></div>
 <div class="container">
     <h1>Команда разработчиков</h1>
     <h2>Стек используемых технологий</h2>
@@ -39,7 +39,7 @@
         </ul>
     </div>
 </div>
-<div th:replace="fragments/common :: footer"></div>
-<div th:replace="fragments/common :: imports"></div>
+<div th:replace="~{fragments/common :: footer}"></div>
+<div th:replace="~{fragments/common :: imports}"></div>
 </body>
 </html>

@@ -2,10 +2,10 @@
 <html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <title>Профиль пользователя</title>
-    <th:block th:replace="fragments/common :: headerfiles"/>
+    <th:block th:replace="~{fragments/common :: headerfiles}"/>
 </head>
 <body>
-<div th:replace="fragments/common :: header"></div>
+<div th:replace="~{fragments/common :: header}"></div>
 <div class="container m-5" th:value="${user}">
     <dl class="row">
         <dt class="col-sm-3">Логин</dt>
@@ -45,7 +45,7 @@
         <button class="btn btn-danger btn-sm" type="submit" id="deleteUser">Удалить аккаунт</button>
     </form>
 </div>
-<div th:replace="fragments/common :: footer"></div>
-<div th:replace="fragments/common :: imports"></div>
+<div th:replace="~{fragments/common :: footer}"></div>
+<div th:replace="~{fragments/common :: imports}"></div>
 </body>
 </html>

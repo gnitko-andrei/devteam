@@ -2,10 +2,10 @@
 <html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <title>Проекты</title>
-    <th:block th:replace="fragments/common :: headerfiles"/>
+    <th:block th:replace="~{fragments/common :: headerfiles}"/>
 </head>
 <body>
-<div th:replace="fragments/common :: header"></div>
+<div th:replace="~{fragments/common :: header}"></div>
 <div class="container m-3">
     <a sec:authorize="hasAuthority('CUSTOMER')" class="btn btn-primary mb-3" role="button" data-toggle="collapse"
        href="#addProject"
@@ -97,7 +97,7 @@
         Нет доступных проектов
     </div>
 </div>
-<div th:replace="fragments/common :: footer"></div>
-<div th:replace="fragments/common :: imports"></div>
+<div th:replace="~{fragments/common :: footer}"></div>
+<div th:replace="~{fragments/common :: imports}"></div>
 </body>
 </html>

@@ -2,10 +2,10 @@
 <html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <title th:inline="text">[[${project.name}]] edit</title>
-    <th:block th:replace="fragments/common :: headerfiles"/>
+    <th:block th:replace="~{fragments/common :: headerfiles}"/>
 </head>
 <body>
-<div th:replace="fragments/common :: header"></div>
+<div th:replace="~{fragments/common :: header}"></div>
 <div sec:authorize="hasAuthority('CUSTOMER')" class="container my-3">
     <form th:action="@{'/projects/edit/' + ${project.id}}" method="post">
         <div class="form-group">
@@ -58,7 +58,7 @@
         <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
     </form>
 </div>
-<div th:replace="fragments/common :: footer"></div>
-<div th:replace="fragments/common :: imports"></div>
+<div th:replace="~{fragments/common :: footer}"></div>
+<div th:replace="~{fragments/common :: imports}"></div>
 </body>
 </html>

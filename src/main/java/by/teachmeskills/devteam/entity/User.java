@@ -3,7 +3,7 @@ package by.teachmeskills.devteam.entity;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Objects;
@@ -16,7 +16,8 @@ import static by.teachmeskills.devteam.util.TextUtils.replaceHyphenationOnBr;
 public class User implements UserDetails {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "hibernate_seq")
+    @SequenceGenerator(name = "hibernate_seq", sequenceName = "hibernate_sequence")
     private Long id;
     @Column(unique = true, nullable = false)
     private String username;
