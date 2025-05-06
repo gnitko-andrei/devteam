@@ -54,7 +54,7 @@
                 <a href="/registration" class="btn btn-secondary btn-sm mx-1" role="button">Регистрация</a>
             </form>
             <form sec:authorize="isAuthenticated()" class="form-inline" th:action="@{/logout}" method="post">
-                <div class="navbar-text text-light" th:inline="text">[[${#httpServletRequest.remoteUser}]]</div>
+                <div class="navbar-text text-light" th:inline="text">[[${#authentication.name}]]</div>
                 <button class="btn btn-light btn-sm mx-2" type="submit" id="logout">Выйти</button>
             </form>
         </div>

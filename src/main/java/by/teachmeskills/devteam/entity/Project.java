@@ -1,8 +1,7 @@
 package by.teachmeskills.devteam.entity;
 
-import org.hibernate.annotations.Type;
+import jakarta.persistence.*;
 
-import javax.persistence.*;
 import java.util.*;
 
 import static by.teachmeskills.devteam.util.TextUtils.replaceHyphenationOnBr;
@@ -11,13 +10,14 @@ import static by.teachmeskills.devteam.util.TextUtils.replaceHyphenationOnBr;
 public class Project {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "hibernate_seq")
+    @SequenceGenerator(name = "hibernate_seq", sequenceName = "hibernate_sequence")
     private Long id;
 
     @Column(nullable = false)
     private String name;
 
-    @Type(type = "text")
+    @Lob
     private String specification;
 
     @Column(nullable = false)

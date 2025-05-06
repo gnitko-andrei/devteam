@@ -2,10 +2,10 @@
 <html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <title th:inline="text">[[${project.name}]] задачи</title>
-    <th:block th:replace="fragments/common :: headerfiles"/>
+    <th:block th:replace="~{fragments/common :: headerfiles}"/>
 </head>
 <body>
-<div th:replace="fragments/common :: header"></div>
+<div th:replace="~{fragments/common :: header}"></div>
 <div class="container">
     <h1 th:inline="text">
         Проект [[${project.name}]]
@@ -100,7 +100,7 @@
         Нет задач
     </div>
 </div>
-<div th:replace="fragments/common :: footer"></div>
-<div th:replace="fragments/common :: imports"></div>
+<div th:replace="~{fragments/common :: footer}"></div>
+<div th:replace="~{fragments/common :: imports}"></div>
 </body>
 </html>

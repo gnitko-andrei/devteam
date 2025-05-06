@@ -1,20 +1,19 @@
 package by.teachmeskills.devteam.entity;
 
-import org.hibernate.annotations.Type;
-
-import javax.persistence.*;
+import jakarta.persistence.*;
 
 @Entity
 public class Task {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "hibernate_seq")
+    @SequenceGenerator(name = "hibernate_seq", sequenceName = "hibernate_sequence")
     private Long id;
 
     @Column(nullable = false)
     private String name;
 
-    @Type(type = "text")
+    @Lob
     private String description;
 
     @Column(nullable = false)
