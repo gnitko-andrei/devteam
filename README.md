@@ -1,13 +1,26 @@
-<h1>Docker</h1>
+<h1>Run as Java Application</h1>
+Preconditions:
 
-build the docker image
+- local MySql database setup
 
-<code>
-docker build . -t hnitsan/devteam
-</code>
+Run `DevteamApplication.java`
 
-run the container
+<h1>Run Standalone App Container with local MySql DB</h1>
 
-<code>
-docker run -d -p 8080:8080 hnitsan/devteam
-</code>
+Preconditions:
+
+- local MySql database setup
+  <br>
+
+Build the docker image
+
+`docker build . -t devteam-app`
+
+Run the container
+
+`docker run -d -p 8080:8080 devteam-app`
+
+<h1>Run App with Docker Compose</h1>
+
+`docker compose up -d`
+

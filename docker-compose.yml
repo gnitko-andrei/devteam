@@ -1,0 +1,27 @@
+services:
+  devteam:
+    image: "devteam-app"
+    container_name: "devteam"
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - 8080:8080
+    restart: unless-stopped
+    depends_on:
+      - mysql
+    secrets:
+      - mysql_env
+
+  mysql:
+    image: mysql:8.4.5
+    restart: always
+    ports:
+      - "3306:3306"
+    secrets:
+      - mysql_env
+    entrypoint: [ "sh", "-c", "set -a && . /run/secrets/mysql_env && set +a && exec docker-entrypoint.sh mysqld" ]
+
+secrets:
+  mysql_env:
+    file: ./secrets/mysql.env
