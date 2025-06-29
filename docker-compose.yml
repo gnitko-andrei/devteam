@@ -9,7 +9,8 @@ services:
       - 8080:8080
     restart: unless-stopped
     depends_on:
-      - mysql
+      mysql:
+        condition: service_healthy
     secrets:
       - mysql_env
 
@@ -18,10 +19,24 @@ services:
     restart: always
     ports:
       - "3306:3306"
+    volumes:
+      - type: volume
+        source: mysql_data
+        target: /var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: root
     secrets:
       - mysql_env
+    healthcheck:
+      test: ["CMD-SHELL", "mysql -uroot -p$$MYSQL_ROOT_PASSWORD -e 'SELECT 1' || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
     entrypoint: [ "sh", "-c", "set -a && . /run/secrets/mysql_env && set +a && exec docker-entrypoint.sh mysqld" ]
 
 secrets:
   mysql_env:
     file: ./secrets/mysql.env
+
+volumes:
+  mysql_data:
