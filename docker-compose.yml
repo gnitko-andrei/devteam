@@ -18,6 +18,10 @@ services:
     restart: always
     ports:
       - "3306:3306"
+    volumes:
+      - type: volume
+        source: mysql_data
+        target: /var/lib/mysql
     secrets:
       - mysql_env
     entrypoint: [ "sh", "-c", "set -a && . /run/secrets/mysql_env && set +a && exec docker-entrypoint.sh mysqld" ]
@@ -25,3 +29,6 @@ services:
 secrets:
   mysql_env:
     file: ./secrets/mysql.env
+
+volumes:
+  mysql_data:
