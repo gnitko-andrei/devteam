@@ -1,26 +1,14 @@
-<h1>Run as Java Application</h1>
-Preconditions:
+## Run Application Locally
 
-- local MySql database setup
+**Preconditions:**
+- Docker must be installed and running
 
-Run `DevteamApplication.java`
+Run [`DevteamApplication.java`](src/main/java/by/teachmeskills/devteam/DevteamApplication.java)  
+The application will automatically start `docker-compose` with a `mysql` container via Spring Boot's Docker Compose integration.
 
-<h1>Run Standalone App Container with local MySql DB</h1>
+---
 
-Preconditions:
+## Build Docker Image
 
-- local MySql database setup
-  <br>
-
-Build the docker image
-
-`docker build . -t devteam-app`
-
-Run the container
-
-`docker run -d -p 8080:8080 devteam-app`
-
-<h1>Run App with Docker Compose</h1>
-
-`docker compose up -d`
-
+```bash
+./mvnw spring-boot:build-image
