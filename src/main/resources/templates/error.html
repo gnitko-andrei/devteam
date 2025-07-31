@@ -1,13 +1,13 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" lang="ru">
 <head>
     <title>Ошибка</title>
     <th:block th:replace="~{fragments/common :: headerfiles}"/>
 </head>
 <body>
-<div th:replace="~{fragments/common :: header}"></div>
+<th:block th:replace="~{fragments/common :: header}"/>
 <h1 class="text-center mt-5">Что-то пошло не так</h1>
-<div th:replace="~{fragments/common :: footer}"></div>
-<div th:replace="~{fragments/common :: imports}"></div>
+<th:block th:replace="~{fragments/common :: footer}"/>
+<th:block th:replace="~{fragments/common :: imports}"/>
 </body>
 </html>

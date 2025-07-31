@@ -1,18 +1,18 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security" lang="ru">
 <head>
     <title th:inline="text">[[${project.name}]] задачи</title>
     <th:block th:replace="~{fragments/common :: headerfiles}"/>
 </head>
 <body>
-<div th:replace="~{fragments/common :: header}"></div>
+<th:block th:replace="~{fragments/common :: header}"/>
 <div class="container">
     <h1 th:inline="text">
         Проект [[${project.name}]]
         <br>
         Задачи
     </h1>
-    <a sec:authorize="hasAuthority('MANAGER')" class="btn btn-primary mb-3" role="button" data-toggle="collapse"
+    <a sec:authorize="hasAuthority('MANAGER')" class="btn btn-primary mb-3" data-toggle="collapse"
        href="#addTask"
        aria-expanded="false" aria-controls="addTask">
         Создать новую задачу
@@ -37,19 +37,19 @@
     </div>
     <div class="container">
         <form class="form-inline" method="get" th:action="@{'/projects/' + ${project.id} + '/tasks'}">
-            <div class="btn-group" role="group" aria-label="filter">
+            <fieldset class="btn-group" role="group" aria-label="filter">
                 <button class="btn btn-dark" type="submit" name="filter" value="">Все задания</button>
                 <button class="btn btn-dark" type="submit" name="filter" value="Ожидание выполнения">Новые задания
                 </button>
                 <button class="btn btn-dark" type="submit" name="filter" value="Выполняется">Начатые задания</button>
                 <button class="btn btn-dark" type="submit" name="filter" value="Выполнена">Завершённые задания</button>
-            </div>
+            </fieldset>
         </form>
     </div>
     <div class="card-deck" th:if="!${#lists.isEmpty(tasks)}">
         <div th:each="task : ${tasks}">
             <div class="card my-2">
-                <h5 class="card-header" th:text="${task.name}"></h5>
+                <h5 class="card-header" th:text="${task.name}">Task name</h5>
                 <div class="card-body">
                     <strong>Описание:</strong>
                     <div th:text="${task.description}"></div>
@@ -100,7 +100,7 @@
         Нет задач
     </div>
 </div>
-<div th:replace="~{fragments/common :: footer}"></div>
-<div th:replace="~{fragments/common :: imports}"></div>
+<th:block th:replace="~{fragments/common :: footer}"/>
+<th:block th:replace="~{fragments/common :: imports}"/>
 </body>
 </html>

@@ -21,15 +21,20 @@ import static by.teachmeskills.devteam.util.TextUtils.replaceBrOnHyphenation;
 @PreAuthorize("hasAnyAuthority('CUSTOMER', 'DEVELOPER', 'MANAGER')")
 public class ProjectController {
 
+    private final ProjectService projectService;
+
     @Autowired
-    private ProjectService projectService;
+    public ProjectController(ProjectService projectService) {
+        this.projectService = projectService;
+    }
 
     @GetMapping
     public String main(@AuthenticationPrincipal User user,
                        @RequestParam(required = false, defaultValue = "") String nameFilter,
                        @RequestParam(required = false, defaultValue = "") String statusFilter,
                        Model model) {
-        Iterable<Project> projects = projectService.findAll();
+
+        Iterable<Project> projects;
 
         List<Project> userProjects = new ArrayList<>();
 
@@ -50,7 +55,7 @@ public class ProjectController {
 
         List<User> managers = projectService.getAllManagers();
 
-        model.addAttribute("projects", userProjects);
+        model.addAttribute("userProjectsList", userProjects);
         model.addAttribute("nameFilter", nameFilter);
         model.addAttribute("managers", managers);
 
@@ -69,7 +74,7 @@ public class ProjectController {
         projectService.addNewProject(name, specification, user, managerId);
 
         Iterable<Project> projects = projectService.findAll();
-        model.addAttribute("projects", projects);
+        model.addAttribute("userProjectsList", projects);
 
         return "redirect:/projects";
     }
@@ -123,7 +128,7 @@ public class ProjectController {
                                 @PathVariable Long projectId,
                                 @RequestParam Map<String, String> formData,
                                 Model model) {
-        System.out.println(formData);
+        // System.out.println(formData); TODO add logger
 
         projectService.updateProject(user, projectId, formData);
 

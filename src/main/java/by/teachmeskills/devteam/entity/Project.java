@@ -61,10 +61,13 @@ public class Project {
     }
 
     public String getCustomerInfo() {
-        String info = customer.getFirstName() + " " + customer.getLastName()
+        return customer != null ? replaceHyphenationOnBr(buildCustomerInfo(customer)) : "none";
+    }
+
+    private String buildCustomerInfo(User customer) {
+        return customer.getFirstName() + " " + customer.getLastName()
                 + "\n" + customer.getEmail()
                 + "\n" + customer.getContacts();
-        return customer != null ? replaceHyphenationOnBr(info) : "none";
     }
 
     public String getManagerName() {

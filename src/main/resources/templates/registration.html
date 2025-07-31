@@ -1,11 +1,11 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" lang="ru">
 <head>
     <title>Registration page</title>
     <th:block th:replace="~{fragments/common :: headerfiles}"/>
 </head>
 <body>
-<div th:replace="~{fragments/common :: header}"></div>
+<th:block th:replace="~{fragments/common :: header}"/>
 <div class="container mt-5">
     <div th:if="${message}" th:inline="text">
         [[${message}]]
@@ -14,15 +14,15 @@
     <div class="form-group">
         <form th:action="@{/registration}" method="post">
             <div class="form-group row">
-                <label class="col-sm-2 col-form-label">Логин</label>
+                <label for="username-input" class="col-sm-2 col-form-label">Логин</label>
                 <div class="col-sm-6">
-                    <input type="text" name="username" class="form-control" placeholder="Логин"/>
+                    <input type="text" id="username-input" name="username" class="form-control" placeholder="Логин"/>
                 </div>
             </div>
             <div class="form-group row">
-                <label class="col-sm-2 col-form-label">Пароль</label>
+                <label for="password-input" class="col-sm-2 col-form-label">Пароль</label>
                 <div class="col-sm-6">
-                    <input type="password" name="password" class="form-control" placeholder="Пароль"/>
+                    <input type="password" id="password-input" name="password" class="form-control" placeholder="Пароль"/>
                 </div>
             </div>
 
@@ -47,33 +47,33 @@
                 </label>
             </div>
             <div class="form-group row">
-                <label class="col-sm-2 col-form-label">Имя</label>
+                <label for="first-name-input" class="col-sm-2 col-form-label">Имя</label>
                 <div class="col-sm-6">
-                    <input type="text" name="firstName" class="form-control" placeholder="Имя"/>
+                    <input type="text" id="first-name-input" name="firstName" class="form-control" placeholder="Имя"/>
                 </div>
             </div>
             <div class="form-group row">
-                <label class="col-sm-2 col-form-label">Фамилия</label>
+                <label for="last-name-input" class="col-sm-2 col-form-label">Фамилия</label>
                 <div class="col-sm-6">
-                    <input type="text" name="lastName" class="form-control" placeholder="Фамилия"/>
+                    <input type="text" id="last-name-input" name="lastName" class="form-control" placeholder="Фамилия"/>
                 </div>
             </div>
             <div class="form-group row">
-                <label class="col-sm-2 col-form-label">Электронная почта</label>
+                <label for="email-input" class="col-sm-2 col-form-label">Электронная почта</label>
                 <div class="col-sm-6">
-                    <input type="email" name="email" class="form-control" placeholder="Email"/>
+                    <input type="email" id="email-input" name="email" class="form-control" placeholder="Email"/>
                 </div>
             </div>
             <div class="form-group row">
-                <label class="col-sm-2 col-form-label">Дополнительные контактные данные</label>
+                <label for="contacts-input" class="col-sm-2 col-form-label">Дополнительные контактные данные</label>
                 <div class="col-sm-6">
-                    <input type="text" name="contacts" class="form-control" placeholder="Контактные данные"/>
+                    <input type="text" id="contacts-input" name="contacts" class="form-control" placeholder="Контактные данные"/>
                 </div>
             </div>
             <div class="form-group row">
-                <label class="col-sm-2 col-form-label">Профессиональные навыки (обязательно для разработчиков)</label>
+                <label for="skills-input" class="col-sm-2 col-form-label">Профессиональные навыки (обязательно для разработчиков)</label>
                 <div class="col-sm-6">
-                    <input type="text" name="skills" class="form-control" placeholder="Профессиональные навыки"/>
+                    <input type="text" id="skills-input" name="skills" class="form-control" placeholder="Профессиональные навыки"/>
                 </div>
             </div>
             <div>
@@ -83,7 +83,7 @@
         </form>
     </div>
 </div>
-<div th:replace="~{fragments/common :: footer}"></div>
-<div th:replace="~{fragments/common :: imports}"></div>
+<th:block th:replace="~{fragments/common :: footer}"/>
+<th:block th:replace="~{fragments/common :: imports}"/>
 </body>
 </html>

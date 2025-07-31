@@ -5,9 +5,9 @@ services:
       MYSQL_DATABASE: devteam
       MYSQL_ROOT_PASSWORD: verysecret
       MYSQL_USER: dev-docker
-      MYSQL_PASSWORD: root
+      MYSQL_PASSWORD: 1111
     ports:
-      - '3306'
+      - "3306:3306"
     volumes:
       - type: volume
         source: mysql_data

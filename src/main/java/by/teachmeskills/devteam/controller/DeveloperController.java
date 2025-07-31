@@ -15,8 +15,12 @@ import java.util.Set;
 @PreAuthorize("hasAuthority('MANAGER')")
 public class DeveloperController {
 
+    private final UserService userService;
+
     @Autowired
-    private UserService userService;
+    public DeveloperController(UserService userService) {
+        this.userService = userService;
+    }
 
     @GetMapping
     public String getDevelopers(Model model) {
