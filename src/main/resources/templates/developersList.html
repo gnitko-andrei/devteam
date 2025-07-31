@@ -1,17 +1,17 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" lang="ru">
 <head>
     <title>Разработчики</title>
     <th:block th:replace="~{fragments/common :: headerfiles}"/>
 </head>
 <body>
-<div th:replace="~{fragments/common :: header}"></div>
+<th:block th:replace="~{fragments/common :: header}"/>
 <div class="mx-3">
     <h1 class="my-3">Список разработчиков</h1>
     <div class="card-deck">
         <div class="my-3" th:if="${!developers.isEmpty()}" th:each="developer : ${developers}">
             <div class="card" style="width: 18rem;">
-                <h5 class="card-header" th:text="${developer.firstName} + ' ' + ${developer.lastName}"></h5>
+                <h5 class="card-header" th:text="${developer.firstName} + ' ' + ${developer.lastName}">Developer Name</h5>
                 <div class="card-body">
                     <div class="card-text">
                         <strong>Email</strong>
@@ -46,7 +46,7 @@
         </div>
     </div>
 </div>
-<div th:replace="~{fragments/common :: footer}"></div>
-<div th:replace="~{fragments/common :: imports}"></div>
+<th:block th:replace="~{fragments/common :: footer}"/>
+<th:block th:replace="~{fragments/common :: imports}"/>
 </body>
 </html>

@@ -1,11 +1,11 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security" lang="ru">
 <head>
     <title>Профиль пользователя</title>
     <th:block th:replace="~{fragments/common :: headerfiles}"/>
 </head>
 <body>
-<div th:replace="~{fragments/common :: header}"></div>
+<th:block th:replace="~{fragments/common :: header}"/>
 <div class="container m-5" th:value="${user}">
     <dl class="row">
         <dt class="col-sm-3">Логин</dt>
@@ -40,12 +40,12 @@
         <dt class="col-sm-3">Оплата</dt>
         <dd class="col-sm-9" th:text="${user.price} + ' $/час'"></dd>
     </dl>
-    <a href="/user/userEditor" class="btn btn-primary btn-sm" role="button">Редактировать профиль</a>
+    <a href="/user/userEditor" class="btn btn-primary btn-sm">Редактировать профиль</a>
     <form class="form-inline my-2" th:action="@{/user}" th:method="delete">
         <button class="btn btn-danger btn-sm" type="submit" id="deleteUser">Удалить аккаунт</button>
     </form>
 </div>
-<div th:replace="~{fragments/common :: footer}"></div>
-<div th:replace="~{fragments/common :: imports}"></div>
+<th:block th:replace="~{fragments/common :: footer}"/>
+<th:block th:replace="~{fragments/common :: imports}"/>
 </body>
 </html>

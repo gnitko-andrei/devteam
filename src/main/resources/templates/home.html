@@ -1,5 +1,5 @@
 <!DOCTYPE HTML>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" lang="ru">
 <head>
     <title>DevTeam</title>
     <th:block th:replace="~{fragments/common :: headerfiles}"/>
@@ -7,7 +7,7 @@
           integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
 </head>
 <body>
-<div th:replace="~{fragments/common :: header}"></div>
+<th:block th:replace="~{fragments/common :: header}"/>
 <div class="jumbotron">
     <div class="container">
         <h1>Команда разработчиков</h1>
@@ -54,7 +54,7 @@
         </div>
     </div>
 </div>
-<div th:replace="~{fragments/common :: footer}"></div>
-<div th:replace="~{fragments/common :: imports}"></div>
+<th:block th:replace="~{fragments/common :: footer}"/>
+<th:block th:replace="~{fragments/common :: imports}"/>
 </body>
 </html>

@@ -20,10 +20,14 @@ import java.util.Map;
 @PreAuthorize("hasAnyAuthority('CUSTOMER', 'DEVELOPER', 'MANAGER')")
 public class TaskController {
 
+    private final TaskService taskService;
+    private final ProjectService projectService;
+
     @Autowired
-    private TaskService taskService;
-    @Autowired
-    private ProjectService projectService;
+    public TaskController(TaskService taskService, ProjectService projectService) {
+        this.taskService = taskService;
+        this.projectService = projectService;
+    }
 
     @GetMapping
     @PreAuthorize("hasAnyAuthority('DEVELOPER', 'MANAGER')")

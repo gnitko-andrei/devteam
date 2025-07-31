@@ -15,8 +15,12 @@ import java.util.Map;
 @RequestMapping("/user")
 public class UserController {
 
+    private final UserService userService;
+
     @Autowired
-    private UserService userService;
+    public UserController(UserService userService) {
+        this.userService = userService;
+    }
 
     @GetMapping
     public String userInfo(Model model, @AuthenticationPrincipal User user) {

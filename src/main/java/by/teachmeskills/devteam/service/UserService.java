@@ -17,11 +17,16 @@ import java.util.stream.Collectors;
 @Service
 public class UserService implements UserDetailsService {
 
-    @Autowired
-    private UserRepository userRepository;
+    public static final String ROLE_SELECTION_FORM = "inlineRadioOptions";
+
+    private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
 
     @Autowired
-    private PasswordEncoder passwordEncoder;
+    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder) {
+        this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
+    }
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -63,13 +68,13 @@ public class UserService implements UserDetailsService {
         user.setPrice(3);
         Set<Role> roles = new HashSet<>();
         roles.add(Role.USER);
-        if (formRoles.get("inlineRadioOptions").equals("option1")) {
+        if (formRoles.get(ROLE_SELECTION_FORM).equals("option1")) {
             roles.add(Role.CUSTOMER);
         }
-        if (formRoles.get("inlineRadioOptions").equals("option2")) {
+        if (formRoles.get(ROLE_SELECTION_FORM).equals("option2")) {
             roles.add(Role.MANAGER);
         }
-        if (formRoles.get("inlineRadioOptions").equals("option3")) {
+        if (formRoles.get(ROLE_SELECTION_FORM).equals("option3")) {
             roles.add(Role.DEVELOPER);
         }
         user.setPassword(passwordEncoder.encode(user.getPassword()));
@@ -93,11 +98,11 @@ public class UserService implements UserDetailsService {
 
     public boolean updateProfile(User user, Map<String, String> formData) {
         String currentPassword = formData.get("currentPassword");
-        if (currentPassword == "" || !BCrypt.checkpw(currentPassword, user.getPassword())) {
+        if (currentPassword.isBlank() || !BCrypt.checkpw(currentPassword, user.getPassword())) {
             return false;
         }
 
-        if (formData.get("password") == "") {
+        if (formData.get("password").isBlank()) {
             user.setPassword(passwordEncoder.encode(currentPassword));
         } else {
             user.setPassword(passwordEncoder.encode(formData.get("password")));
@@ -109,8 +114,6 @@ public class UserService implements UserDetailsService {
         user.setSkills(formData.get("skills"));
         save(user);
         return true;
-        //{username=manager, currentPassword=cp, password=np, firstName=manager, lastName=1,
-        // email=manager@email, contacts=11111, userId=28, _csrf=a9801d4f-83ff-4875-891f-a6a47a969ff2}
     }
 
     public void delete(User user) {
@@ -123,7 +126,7 @@ public class UserService implements UserDetailsService {
     }
 
     public User findById(Long id) {
-        return userRepository.findById(id).get();
+        return userRepository.findById(id).orElseThrow(() -> new IllegalStateException(String.format("User id:%s not found", id)));
     }
 
     public Set<User> getAllDevelopers() {

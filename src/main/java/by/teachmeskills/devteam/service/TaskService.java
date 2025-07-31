@@ -16,16 +16,22 @@ import java.util.Map;
 @Service
 public class TaskService {
 
-    @Autowired
-    ProjectRepository projectRepository;
-    @Autowired
-    TaskRepository taskRepository;
+    private static final String PROJECT_NOT_FOUND_ERROR_MSG = "Project with id %s not found";
+    private static final String TASK_NOT_FOUND_ERROR_MSG = "Task with id %s not found";
 
+    private final ProjectRepository projectRepository;
+    private final TaskRepository taskRepository;
+
+    @Autowired
+    public TaskService(ProjectRepository projectRepository, TaskRepository taskRepository) {
+        this.projectRepository = projectRepository;
+        this.taskRepository = taskRepository;
+    }
 
     public void addNewTask(Long projectId, Map<String, String> formData) {
         String name = formData.get("name");
         String description = formData.get("description");
-        Project project = projectRepository.findById(projectId).get();
+        Project project = projectRepository.findById(projectId).orElseThrow(() -> new IllegalStateException(String.format(PROJECT_NOT_FOUND_ERROR_MSG, projectId)));
 
         Task task = new Task(name, description, project);
         taskRepository.save(task);
@@ -34,8 +40,9 @@ public class TaskService {
     public List<Task> findAll(Long projectId) {
         Iterable<Task> allTasks = taskRepository.findAll();
         List<Task> currentProjectTasks = new ArrayList<>();
+        Project project = projectRepository.findById(projectId).orElseThrow(() -> new IllegalStateException(String.format(PROJECT_NOT_FOUND_ERROR_MSG, projectId)));
         for (Task task : allTasks) {
-            if (task.getProject().equals(projectRepository.findById(projectId).get())) {
+            if (task.getProject().equals(project)) {
                 currentProjectTasks.add(task);
             }
         }
@@ -62,7 +69,10 @@ public class TaskService {
     }
 
     private void updateTime(User user, Map<String, String> formData) {
-        Task task = taskRepository.findById(Long.parseLong(formData.get("id"))).get();
+
+        long taskId = Long.parseLong(formData.get("id"));
+        Task task = taskRepository.findById(taskId)
+                .orElseThrow(() -> new IllegalStateException(String.format(TASK_NOT_FOUND_ERROR_MSG, taskId)));
         Integer formTime = Integer.parseInt(formData.get("time"));
         Integer time = task.getTime() + formTime;
         task.setTime(time);
@@ -72,7 +82,9 @@ public class TaskService {
     }
 
     private void updateStatus(Map<String, String> formData) {
-        Task task = taskRepository.findById(Long.parseLong(formData.get("id"))).get();
+        long taskId = Long.parseLong(formData.get("id"));
+        Task task = taskRepository.findById(taskId)
+                .orElseThrow(() -> new IllegalStateException(String.format(TASK_NOT_FOUND_ERROR_MSG, taskId)));
         task.setStatus(formData.get("status"));
         taskRepository.save(task);
     }

@@ -15,13 +15,17 @@ import static by.teachmeskills.devteam.util.TextUtils.replaceHyphenationOnBr;
 @Service
 public class ProjectService {
 
+    private final ProjectRepository projectRepository;
+    private final UserService userService;
+
     @Autowired
-    ProjectRepository projectRepository;
-    @Autowired
-    UserService userService;
+    public ProjectService(ProjectRepository projectRepository, UserService userService) {
+        this.projectRepository = projectRepository;
+        this.userService = userService;
+    }
 
     public Project findById(Long id) {
-        return projectRepository.findById(id).get();
+        return projectRepository.findById(id).orElseThrow(() -> new IllegalStateException(String.format("Project id:%s not found", id)));
     }
 
     public Iterable<Project> findAll() {
@@ -54,20 +58,26 @@ public class ProjectService {
 
     public void updateProject(User user, Long id, Map<String, String> formData) {
         if (user.getRoles().contains(Role.CUSTOMER)) {
-            customerUpdateProject(user, id, formData);
+            customerUpdateProject(id, formData);
         } else if (user.getRoles().contains(Role.MANAGER)) {
-            managerUpdateProject(user, id, formData);
+            managerUpdateProject(id, formData);
         }
 
     }
 
-    private void managerUpdateProject(User user, Long id, Map<String, String> formData) {
-        Project project = projectRepository.findById(id).get();
+    private void managerUpdateProject(Long id, Map<String, String> formData) {
+        Project project = findById(id);
         Set<User> developers = new HashSet<>();
 
-        for (String key : formData.keySet()) {
-            if (formData.get(key).equals("on")) {
-                developers.add(userService.findById(Long.parseLong(key)));
+        for (var entry : formData.entrySet()) {
+            if (formData.get(entry.getKey()).equals("on")) {
+                developers.add(userService.findById(Long.parseLong(entry.getKey())));
+            }
+        }
+
+        for (var entry : formData.entrySet()) {
+            if (formData.get(entry.getKey()).equals("on")) {
+                developers.add(userService.findById(Long.parseLong(entry.getKey())));
             }
         }
 
@@ -76,8 +86,8 @@ public class ProjectService {
         projectRepository.save(project);
     }
 
-    private void customerUpdateProject(User user, Long id, Map<String, String> formData) {
-        Project project = projectRepository.findById(id).get();
+    private void customerUpdateProject(Long id, Map<String, String> formData) {
+        Project project = findById(id);
         User manager = userService.findById(Long.parseLong(formData.get("managerId")));
 
         project.setName(formData.get("name"));

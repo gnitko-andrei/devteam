@@ -16,12 +16,16 @@ import java.util.Map;
 @PreAuthorize("hasAuthority('ADMIN')")
 public class AdminController {
 
+    private final UserService userService;
+
     @Autowired
-    private UserService userService;
+    public AdminController(UserService userService) {
+        this.userService = userService;
+    }
 
     @GetMapping
     public String userList(Model model) {
-        model.addAttribute("users", userService.findAll());
+        model.addAttribute("usersList", userService.findAll());
         return "adminPanel";
     }
 

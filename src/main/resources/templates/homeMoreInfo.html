@@ -1,11 +1,11 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" lang="ru">
 <head>
     <title>Команда разработчиков</title>
     <th:block th:replace="~{fragments/common :: headerfiles}"/>
 </head>
 <body>
-<div th:replace="~{fragments/common :: header}"></div>
+<th:block th:replace="~{fragments/common :: header}"/>
 <div class="container">
     <h1>Команда разработчиков</h1>
     <h2>Описание проекта</h2>
@@ -74,7 +74,7 @@
         </ul>
     </div>
 </div>
-<div th:replace="~{fragments/common :: footer}"></div>
-<div th:replace="~{fragments/common :: imports}"></div>
+<th:block th:replace="~{fragments/common :: footer}"/>
+<th:block th:replace="~{fragments/common :: imports}"/>
 </body>
 </html>
