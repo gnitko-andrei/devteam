@@ -2,7 +2,7 @@ package by.teachmeskills.devteam.controller;
 
 import by.teachmeskills.devteam.dto.task.TaskCreationDto;
 import by.teachmeskills.devteam.dto.task.UpdateTaskDto;
-import by.teachmeskills.devteam.entity.TaskStatus;
+import by.teachmeskills.devteam.entity.attributes.task.TaskStatus;
 import by.teachmeskills.devteam.service.ProjectService;
 import by.teachmeskills.devteam.service.TaskService;
 import lombok.RequiredArgsConstructor;

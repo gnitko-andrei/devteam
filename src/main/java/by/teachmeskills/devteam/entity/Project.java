@@ -1,7 +1,6 @@
 package by.teachmeskills.devteam.entity;
 
 import by.teachmeskills.devteam.entity.attributes.project.ProjectStatus;
-import by.teachmeskills.devteam.entity.attributes.task.Task;
 import jakarta.persistence.*;
 import lombok.*;
 

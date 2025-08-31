@@ -1,4 +1,4 @@
-package by.teachmeskills.devteam.entity;
+package by.teachmeskills.devteam.entity.attributes.task;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
