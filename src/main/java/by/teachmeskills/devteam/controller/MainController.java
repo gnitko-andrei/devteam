@@ -1,26 +1,22 @@
 package by.teachmeskills.devteam.controller;
 
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
 @Controller
 public class MainController {
     @GetMapping("/")
-    public String home(Model model) {
-
+    public String getHomePage() {
         return "home";
     }
 
     @GetMapping("/info/project")
-    public String projectInfo(Model model) {
-
+    public String getProjectInfoPage() {
         return "homeMoreInfo";
     }
 
     @GetMapping("/info/stack")
-    public String stackInfo(Model model) {
-
+    public String getProjectStackInfo() {
         return "stackMoreInfo";
     }
 }

@@ -1,30 +1,23 @@
 package by.teachmeskills.devteam.controller;
 
-import by.teachmeskills.devteam.entity.User;
 import by.teachmeskills.devteam.service.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Set;
-
 @Controller
 @RequestMapping("/developers")
 @PreAuthorize("hasAuthority('MANAGER')")
+@RequiredArgsConstructor
 public class DeveloperController {
 
     private final UserService userService;
 
-    @Autowired
-    public DeveloperController(UserService userService) {
-        this.userService = userService;
-    }
-
     @GetMapping
     public String getDevelopers(Model model) {
-        Set<User> developers = userService.getAllDevelopers();
+        var developers = userService.getAllDevelopers();
 
         model.addAttribute("developers", developers);
 
@@ -33,8 +26,7 @@ public class DeveloperController {
 
     @PostMapping
     public String updateSalary(@RequestParam Long id, @RequestParam Integer price) {
-
-        userService.updatePrice(id, price);
+        userService.updateDeveloperRate(id, price);
 
         return "redirect:/developers";
     }
@@ -42,6 +34,7 @@ public class DeveloperController {
     @DeleteMapping
     public String deleteDeveloper(@RequestParam Long id) {
         userService.deleteById(id);
+
         return "redirect:/developers";
     }
 }

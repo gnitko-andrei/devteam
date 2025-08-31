@@ -1,70 +1,63 @@
 package by.teachmeskills.devteam.controller;
 
-import by.teachmeskills.devteam.entity.Project;
-import by.teachmeskills.devteam.entity.Task;
-import by.teachmeskills.devteam.entity.User;
+import by.teachmeskills.devteam.dto.task.TaskCreationDto;
+import by.teachmeskills.devteam.dto.task.UpdateTaskDto;
+import by.teachmeskills.devteam.entity.attributes.task.TaskStatus;
 import by.teachmeskills.devteam.service.ProjectService;
 import by.teachmeskills.devteam.service.TaskService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-import java.util.Map;
-
 @Controller
 @RequestMapping("/projects/{projectId}/tasks")
 @PreAuthorize("hasAnyAuthority('CUSTOMER', 'DEVELOPER', 'MANAGER')")
+@RequiredArgsConstructor
 public class TaskController {
 
+    public static final String REDIRECT_PROJECTS_PROJECT_ID_TASKS = "redirect:/projects/{projectId}/tasks";
     private final TaskService taskService;
     private final ProjectService projectService;
 
-    @Autowired
-    public TaskController(TaskService taskService, ProjectService projectService) {
-        this.taskService = taskService;
-        this.projectService = projectService;
-    }
-
     @GetMapping
     @PreAuthorize("hasAnyAuthority('DEVELOPER', 'MANAGER')")
-    public String tasks(@AuthenticationPrincipal User user, @PathVariable Long projectId, Model model, @RequestParam(required = false, defaultValue = "") String filter) {
+    public String getAllProjectTasks(@PathVariable Long projectId,
+            Model model,
+            TaskStatus statusFilter) {
+        var tasks = taskService.findByProjectIdAndStatus(projectId, statusFilter);
+        var project = projectService.findById(projectId);
 
-        Project project = projectService.findById(projectId);
-        List<Task> tasks;
-
-        if (filter != null && !filter.isEmpty()) {
-            tasks = taskService.findByStatus(filter);
-        } else {
-            tasks = taskService.findAll(projectId);
-        }
-
+        model.addAttribute("taskStatuses", TaskStatus.values());
         model.addAttribute("project", project);
         model.addAttribute("tasks", tasks);
-        model.addAttribute("filter", filter);
+        model.addAttribute("statusFilter", statusFilter);
 
-        if (project.getManager().equals(user) || project.getDevelopers().contains(user)) {
-            return "tasksList";
-        }
-        return "/error";
+        return "tasksList";
     }
 
     @PostMapping
     @PreAuthorize("hasAnyAuthority('DEVELOPER', 'MANAGER')")
-    public String addTask(@AuthenticationPrincipal User user, @PathVariable Long projectId, @RequestParam Map<String, String> formData, Model model) {
+    public String createNewTask(@ModelAttribute TaskCreationDto taskCreationData) {
+        taskService.addNewTask(taskCreationData);
 
-        taskService.postTask(user, projectId, formData);
+        return REDIRECT_PROJECTS_PROJECT_ID_TASKS;
+    }
 
-        return "redirect:/projects/{projectId}/tasks";
+    @PostMapping("{taskId}")
+    @PreAuthorize("hasAnyAuthority('DEVELOPER')")
+    public String updateTask(@PathVariable Long taskId,
+                             @ModelAttribute UpdateTaskDto updateTaskData) {
+        updateTaskData.setId(taskId);
+        taskService.updateTask(updateTaskData);
+        return REDIRECT_PROJECTS_PROJECT_ID_TASKS;
     }
 
     @DeleteMapping
     @PreAuthorize("hasAnyAuthority('MANAGER')")
     public String deleteTask(@RequestParam Long id) {
         taskService.deleteById(id);
-        return "redirect:/projects/{projectId}/tasks";
+        return REDIRECT_PROJECTS_PROJECT_ID_TASKS;
     }
 }

@@ -1,62 +1,63 @@
 package by.teachmeskills.devteam.controller;
 
-import by.teachmeskills.devteam.entity.User;
+import by.teachmeskills.devteam.dto.user.UserProfileUpdateDto;
+import by.teachmeskills.devteam.exception.WrongPasswordException;
 import by.teachmeskills.devteam.service.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.Map;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 @RequestMapping("/user")
+@RequiredArgsConstructor
 public class UserController {
 
     private final UserService userService;
 
-    @Autowired
-    public UserController(UserService userService) {
-        this.userService = userService;
-    }
-
     @GetMapping
-    public String userInfo(Model model, @AuthenticationPrincipal User user) {
-        String userAppRole = userService.getUserAppRoleName(user);
-        model.addAttribute("user", user);
-        model.addAttribute("appRole", userAppRole);
+    public String getUserInfo(@AuthenticationPrincipal(expression = "id") Long userId,
+                              Model model) {
+        var userData = userService.findById(userId);
+        var userAppRoles = userData.getRolesDescription();
+
+        model.addAttribute("currentUser", userData);
+        model.addAttribute("appRoles", userAppRoles);
+
         return "userProfile";
     }
 
     @GetMapping("/userEditor")
-    public String editUserForm(Model model, @AuthenticationPrincipal User user) {
-        model.addAttribute("user", user);
+    public String getUserEditor(@AuthenticationPrincipal(expression = "id") Long userId,
+                                Model model) {
+        var userData = userService.findById(userId);
+
+        model.addAttribute("user", userData);
+
         return "userEditor";
     }
 
     @PostMapping
-    public String updateProfile(@AuthenticationPrincipal User user,
-                                @RequestParam Map<String, String> formData,
-                                Model model) {
-        boolean status = userService.updateProfile(user, formData);
-        if (!status) {
-            model.addAttribute("user", user);
-            model.addAttribute("message", "Неверный текущий пароль!");
-            return "userEditor";
+    public String updateUserData(@AuthenticationPrincipal(expression = "id") Long userId,
+                                 @ModelAttribute UserProfileUpdateDto userProfileUpdateData,
+                                 RedirectAttributes redirectAttributes) {
+        try {
+            userService.updateUserProfile(userId, userProfileUpdateData);
+            return "redirect:/user";
+        } catch (WrongPasswordException e) {
+            redirectAttributes.addFlashAttribute("errorMessage", "Неверный текущий пароль!");
+            return "redirect:/user/userEditor";
         }
-
-
-        return "redirect:/user";
     }
 
     @DeleteMapping
-    public String deleteUser(@AuthenticationPrincipal User user) {
-        userService.delete(user);
+    public String deleteUser(@AuthenticationPrincipal(expression = "id") Long userId) {
+        userService.deleteById(userId);
         SecurityContextHolder.getContext().getAuthentication().setAuthenticated(false);
+
         return "redirect:/login";
     }
-
-
 }

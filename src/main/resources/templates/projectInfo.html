@@ -6,36 +6,40 @@
 </head>
 <body>
 <th:block th:replace="~{fragments/common :: header}"/>
-<div class="container">
-    <br>
-    <h1 class="my-2" th:text="${project.name}">Project name</h1>
-    <h3 class="my-2">Статус</h3>
-    <p class="font-weight-normal" th:text="${project.status}"></p>
-    <h3 class="my-2">Техническое задание</h3>
-    <div class="font-weight-normal" th:utext="${project.specification}"></div>
-    <h3 class="my-2">Текущая стоимость</h3>
-    <div class="font-weight-normal" th:utext="${project.projectPrice  + ' $'}"></div>
-    <h3 class="my-2">Заказчик</h3>
-    <div class="font-weight-normal" th:utext="${project.customerInfo}"></div>
-    <h3 class="my-2">Менеджер</h3>
-    <div class="font-weight-normal" th:utext="${project.managerInfo}"></div>
-    <h3 class="my-2" th:if="${!project.developers.isEmpty()}">Разработчики</h3>
-    <h3 th:unless="${!project.developers.isEmpty()}">Разработчики не назначены</h3>
-    <div th:each="developer : ${project.developers}">
-        <div class="font-weight-normal my-3" th:utext="${developer.userInfo}"></div>
+<div class="container m-5">
+    <div class="row">
+        <h1 class="my-2" th:text="${project.name}">Project name</h1>
+        <h3 class="my-2">Статус</h3>
+        <p class="font-weight-normal" th:text="${project.status}"></p>
+        <h3 class="my-2">Техническое задание</h3>
+        <div class="font-weight-normal" th:utext="${project.specification}"></div>
+        <h3 class="my-2">Текущая стоимость</h3>
+        <div class="font-weight-normal" th:utext="${project.projectPrice  + ' $'}"></div>
+        <h3 class="my-2">Заказчик</h3>
+        <div class="font-weight-normal" th:utext="${project.customerInfo}"></div>
+        <h3 class="my-2">Менеджер</h3>
+        <div class="font-weight-normal" th:utext="${project.managerInfo}"></div>
+        <h3 class="my-2" th:if="${!project.developers.isEmpty()}">Разработчики</h3>
+        <h3 th:unless="${!project.developers.isEmpty()}">Разработчики не назначены</h3>
+        <div th:each="developer : ${project.developers}">
+            <div class="font-weight-normal my-3" th:utext="${developer.userInfo}"></div>
+        </div>
     </div>
-    <div class="my-2 mt-4 row justify-content-start">
-        <a sec:authorize="hasAnyAuthority('DEVELOPER', 'MANAGER')"
-           th:href="@{'/projects/' + ${project.id} + '/tasks'}"
-           class="btn btn-info btn-sm col-2 mx-2">Список задач</a>
-        <a sec:authorize="hasAnyAuthority('CUSTOMER', 'MANAGER')"
-           th:href="@{'/projects/edit/' + ${project.id}}"
-           class="btn btn-info btn-sm col-2 ml-2">Редактировать</a>
-        <form sec:authorize="hasAnyAuthority('CUSTOMER', 'MANAGER')" class="form-inline col-4"
-              th:action="@{/projects}" th:method="delete">
-            <input type="hidden" th:name="id" th:value="${project.id}"/>
-            <button class="btn btn-danger btn-sm" type="submit" id="deleteProject">Удалить</button>
-        </form>
+    <div class="row">
+        <div class="d-flex justify-content-start">
+            <a sec:authorize="hasAnyAuthority('DEVELOPER', 'MANAGER')"
+               th:href="@{'/projects/' + ${project.id} + '/tasks'}"
+               class="btn btn-info btn-sm me-1">Список задач</a>
+            <a sec:authorize="hasAnyAuthority('CUSTOMER', 'MANAGER')"
+               th:href="@{'/projects/edit/' + ${project.id}}"
+               class="btn btn-primary btn-sm mx-1">Редактировать</a>
+            <form sec:authorize="hasAnyAuthority('CUSTOMER', 'MANAGER')" class="form-inline col-4"
+                  th:action="@{/projects}" th:method="post">
+                <input type="hidden" name="_method" value="delete"/>
+                <input type="hidden" th:name="projectId" th:value="${project.id}"/>
+                <button class="btn btn-danger btn-sm mx-1" type="submit" id="deleteProject">Удалить</button>
+            </form>
+        </div>
     </div>
 </div>
 <th:block th:replace="~{fragments/common :: footer}"/>

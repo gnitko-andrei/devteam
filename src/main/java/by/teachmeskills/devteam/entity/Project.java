@@ -1,12 +1,20 @@
 package by.teachmeskills.devteam.entity;
 
+import by.teachmeskills.devteam.entity.attributes.project.ProjectStatus;
 import jakarta.persistence.*;
+import lombok.*;
 
-import java.util.*;
-
-import static by.teachmeskills.devteam.util.TextUtils.replaceHyphenationOnBr;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
 
 @Entity
+@EqualsAndHashCode
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
+@Data
 public class Project {
 
     @Id
@@ -21,7 +29,8 @@ public class Project {
     private String specification;
 
     @Column(nullable = false)
-    private String status;
+    @Enumerated(EnumType.STRING)
+    private ProjectStatus status;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "customer_id")
@@ -38,135 +47,39 @@ public class Project {
             joinColumns = {@JoinColumn(name = "project_id")},
             inverseJoinColumns = {@JoinColumn(name = "developer_id")}
     )
-    private Set<User> developers = new HashSet<>();
+    private List<User> developers = new ArrayList<>();
 
 
     @OneToMany(fetch = FetchType.LAZY)
     @JoinColumn(name = "project_id")
     private List<Task> tasks = new ArrayList<>();
 
-    public Project() {
-    }
-
-    public Project(String name, String specification, String status, User customer, User manager) {
+    public Project(String name, String specification, ProjectStatus status, User customer, User manager) {
         this.name = name;
         this.specification = specification;
         this.status = status;
         this.customer = customer;
         this.manager = manager;
+    }
+
+    public boolean isVisibleForUser(Long userId) {
+        var users = new ArrayList<User>();
+        Optional.ofNullable(developers).ifPresent(users::addAll);
+        Optional.ofNullable(manager).ifPresent(users::add);
+        Optional.ofNullable(customer).ifPresent(users::add);
+        return users.stream()
+                .anyMatch(user -> Objects.equals(user.getId(), userId));
     }
 
     public String getCustomerName() {
         return customer != null ? customer.getFirstName() + " " + customer.getLastName() : "none";
     }
 
-    public String getCustomerInfo() {
-        return customer != null ? replaceHyphenationOnBr(buildCustomerInfo(customer)) : "none";
-    }
-
-    private String buildCustomerInfo(User customer) {
-        return customer.getFirstName() + " " + customer.getLastName()
-                + "\n" + customer.getEmail()
-                + "\n" + customer.getContacts();
-    }
-
     public String getManagerName() {
         return manager != null ? manager.getFirstName() + " " + manager.getLastName() : "none";
     }
 
-    public String getManagerInfo() {
-        if (manager != null) {
-            String info = manager.getFirstName() + " " + manager.getLastName()
-                    + "\n" + manager.getEmail()
-                    + "\n" + manager.getContacts();
-            return replaceHyphenationOnBr(info);
-        }
-        return "none";
-    }
-
     public Integer getProjectPrice() {
-        Integer projectPrice = 0;
-        for (Task task : tasks) {
-            projectPrice += task.getPrice();
-        }
-        return projectPrice;
-    }
-
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getSpecification() {
-        return specification;
-    }
-
-    public void setSpecification(String specification) {
-        this.specification = specification;
-    }
-
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
-    }
-
-    public User getCustomer() {
-        return customer;
-    }
-
-    public void setCustomer(User customer) {
-        this.customer = customer;
-    }
-
-    public User getManager() {
-        return manager;
-    }
-
-    public void setManager(User manager) {
-        this.manager = manager;
-    }
-
-    public Set<User> getDevelopers() {
-        return developers;
-    }
-
-    public void setDevelopers(Set<User> developers) {
-        this.developers = developers;
-    }
-
-    public List<Task> getTasks() {
-        return tasks;
-    }
-
-    public void setTasks(List<Task> tasks) {
-        this.tasks = tasks;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Project project = (Project) o;
-        return id.equals(project.id);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id);
+        return tasks.stream().map(Task::getPrice).mapToInt(Integer::valueOf).sum();
     }
 }

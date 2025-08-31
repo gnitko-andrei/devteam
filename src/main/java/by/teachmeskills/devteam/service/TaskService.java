@@ -1,95 +1,54 @@
 package by.teachmeskills.devteam.service;
 
-import by.teachmeskills.devteam.entity.Project;
-import by.teachmeskills.devteam.entity.Role;
+import by.teachmeskills.devteam.dto.task.TaskCreationDto;
+import by.teachmeskills.devteam.dto.task.TaskDto;
+import by.teachmeskills.devteam.dto.task.UpdateTaskDto;
 import by.teachmeskills.devteam.entity.Task;
-import by.teachmeskills.devteam.entity.User;
+import by.teachmeskills.devteam.entity.attributes.task.TaskStatus;
+import by.teachmeskills.devteam.exception.ProjectNotFoundException;
+import by.teachmeskills.devteam.exception.TaskNotFoundException;
+import by.teachmeskills.devteam.mapper.TaskMapper;
 import by.teachmeskills.devteam.repository.ProjectRepository;
 import by.teachmeskills.devteam.repository.TaskRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
+import java.util.Optional;
 
 @Service
+@RequiredArgsConstructor
 public class TaskService {
-
-    private static final String PROJECT_NOT_FOUND_ERROR_MSG = "Project with id %s not found";
-    private static final String TASK_NOT_FOUND_ERROR_MSG = "Task with id %s not found";
 
     private final ProjectRepository projectRepository;
     private final TaskRepository taskRepository;
+    private final TaskMapper taskMapper;
 
-    @Autowired
-    public TaskService(ProjectRepository projectRepository, TaskRepository taskRepository) {
-        this.projectRepository = projectRepository;
-        this.taskRepository = taskRepository;
+    public List<TaskDto> findByProjectIdAndStatus(Long projectId, TaskStatus status) {
+        return taskRepository.findByProjectIdAndStatus(projectId, status).stream().map(taskMapper::toTaskDto).toList();
     }
 
-    public void addNewTask(Long projectId, Map<String, String> formData) {
-        String name = formData.get("name");
-        String description = formData.get("description");
-        Project project = projectRepository.findById(projectId).orElseThrow(() -> new IllegalStateException(String.format(PROJECT_NOT_FOUND_ERROR_MSG, projectId)));
+    public void addNewTask(TaskCreationDto taskCreationData) {
+        var newTask = taskMapper.toEntity(taskCreationData);
+        var projectId = taskCreationData.getProjectId();
+        var project = projectRepository.findById(projectId).orElseThrow(() -> new ProjectNotFoundException(projectId));
+        newTask.setProject(project);
+        taskRepository.save(newTask);
+    }
 
-        Task task = new Task(name, description, project);
+    public void updateTask(UpdateTaskDto updateTaskData) {
+        var task = getTaskOrThrowException(updateTaskData.getId());
+        Optional.ofNullable(updateTaskData.getStatus()).ifPresent(task::setStatus);
+        Optional.ofNullable(updateTaskData.getSubmittedTime()).ifPresent(task::submitAdditionalTime);
         taskRepository.save(task);
-    }
-
-    public List<Task> findAll(Long projectId) {
-        Iterable<Task> allTasks = taskRepository.findAll();
-        List<Task> currentProjectTasks = new ArrayList<>();
-        Project project = projectRepository.findById(projectId).orElseThrow(() -> new IllegalStateException(String.format(PROJECT_NOT_FOUND_ERROR_MSG, projectId)));
-        for (Task task : allTasks) {
-            if (task.getProject().equals(project)) {
-                currentProjectTasks.add(task);
-            }
-        }
-        return currentProjectTasks;
     }
 
     public void deleteById(Long id) {
         taskRepository.deleteById(id);
     }
 
-    public void postTask(User user, Long projectId, Map<String, String> formData) {
-        if (user.getRoles().contains(Role.MANAGER)) {
-            addNewTask(projectId, formData);
-        }
-        if (user.getRoles().contains(Role.DEVELOPER)) {
-            if (formData.containsKey("status")) {
-                updateStatus(formData);
-            }
-            if (formData.containsKey("time")) {
-                updateTime(user, formData);
-            }
-
-        }
-    }
-
-    private void updateTime(User user, Map<String, String> formData) {
-
-        long taskId = Long.parseLong(formData.get("id"));
-        Task task = taskRepository.findById(taskId)
-                .orElseThrow(() -> new IllegalStateException(String.format(TASK_NOT_FOUND_ERROR_MSG, taskId)));
-        Integer formTime = Integer.parseInt(formData.get("time"));
-        Integer time = task.getTime() + formTime;
-        task.setTime(time);
-        Integer price = task.getPrice() + formTime * user.getPrice();
-        task.setPrice(price);
-        taskRepository.save(task);
-    }
-
-    private void updateStatus(Map<String, String> formData) {
-        long taskId = Long.parseLong(formData.get("id"));
-        Task task = taskRepository.findById(taskId)
-                .orElseThrow(() -> new IllegalStateException(String.format(TASK_NOT_FOUND_ERROR_MSG, taskId)));
-        task.setStatus(formData.get("status"));
-        taskRepository.save(task);
-    }
-
-    public List<Task> findByStatus(String status) {
-        return taskRepository.findByStatus(status);
+    private Task getTaskOrThrowException(long taskId) {
+        return taskRepository.findById(taskId)
+                .orElseThrow(() -> new TaskNotFoundException(taskId));
     }
 }
