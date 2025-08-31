@@ -4,7 +4,7 @@ import by.teachmeskills.devteam.dto.project.ProjectCreationDto;
 import by.teachmeskills.devteam.dto.project.ProjectFiltersDto;
 import by.teachmeskills.devteam.dto.project.UpdateProjectDto;
 import by.teachmeskills.devteam.entity.Role;
-import by.teachmeskills.devteam.entity.project.ProjectStatus;
+import by.teachmeskills.devteam.entity.attributes.project.ProjectStatus;
 import by.teachmeskills.devteam.service.ProjectService;
 import by.teachmeskills.devteam.service.UserService;
 import lombok.RequiredArgsConstructor;

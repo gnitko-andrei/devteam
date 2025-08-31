@@ -2,7 +2,7 @@ package by.teachmeskills.devteam.mapper;
 
 import by.teachmeskills.devteam.dto.task.TaskCreationDto;
 import by.teachmeskills.devteam.dto.task.TaskDto;
-import by.teachmeskills.devteam.entity.task.Task;
+import by.teachmeskills.devteam.entity.attributes.task.Task;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 

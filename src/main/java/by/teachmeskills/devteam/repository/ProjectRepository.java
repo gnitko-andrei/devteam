@@ -1,7 +1,7 @@
 package by.teachmeskills.devteam.repository;
 
 import by.teachmeskills.devteam.dto.project.ProjectFiltersDto;
-import by.teachmeskills.devteam.entity.project.Project;
+import by.teachmeskills.devteam.entity.Project;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;

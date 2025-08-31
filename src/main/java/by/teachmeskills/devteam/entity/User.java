@@ -1,6 +1,5 @@
 package by.teachmeskills.devteam.entity;
 
-import by.teachmeskills.devteam.entity.project.Project;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;

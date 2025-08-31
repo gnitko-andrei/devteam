@@ -1,7 +1,7 @@
 package by.teachmeskills.devteam.dto.project;
 
 import by.teachmeskills.devteam.dto.user.UserDto;
-import by.teachmeskills.devteam.entity.project.ProjectStatus;
+import by.teachmeskills.devteam.entity.attributes.project.ProjectStatus;
 import lombok.Builder;
 import lombok.Data;
 

@@ -2,7 +2,7 @@ package by.teachmeskills.devteam.mapper;
 
 import by.teachmeskills.devteam.dto.project.ProjectCardDto;
 import by.teachmeskills.devteam.dto.project.ProjectDto;
-import by.teachmeskills.devteam.entity.project.Project;
+import by.teachmeskills.devteam.entity.Project;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 

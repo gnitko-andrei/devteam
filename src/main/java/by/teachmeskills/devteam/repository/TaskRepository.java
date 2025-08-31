@@ -1,7 +1,7 @@
 package by.teachmeskills.devteam.repository;
 
-import by.teachmeskills.devteam.entity.task.Task;
-import by.teachmeskills.devteam.entity.task.TaskStatus;
+import by.teachmeskills.devteam.entity.attributes.task.Task;
+import by.teachmeskills.devteam.entity.TaskStatus;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;

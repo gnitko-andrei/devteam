@@ -1,6 +1,6 @@
 package by.teachmeskills.devteam.dto.task;
 
-import by.teachmeskills.devteam.entity.task.TaskStatus;
+import by.teachmeskills.devteam.entity.TaskStatus;
 import lombok.Builder;
 import lombok.Data;
 

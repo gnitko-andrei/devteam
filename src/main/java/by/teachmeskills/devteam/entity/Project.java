@@ -1,7 +1,7 @@
-package by.teachmeskills.devteam.entity.project;
+package by.teachmeskills.devteam.entity;
 
-import by.teachmeskills.devteam.entity.User;
-import by.teachmeskills.devteam.entity.task.Task;
+import by.teachmeskills.devteam.entity.attributes.project.ProjectStatus;
+import by.teachmeskills.devteam.entity.attributes.task.Task;
 import jakarta.persistence.*;
 import lombok.*;
 
