@@ -6,41 +6,40 @@
 </head>
 <body>
 <th:block th:replace="~{fragments/common :: header}"/>
-
-<div class="container my-3 mx-7">
-    <div class="text-danger m-3" th:if="${message}" th:inline="text">
-        [[${message}]]
-    </div>
-    <form th:action="@{/user}" method="post">
-        <div class="form-group">
+<div class="alert alert-danger" role="alert" th:if="${errorMessage}">
+    <p th:text="${errorMessage}">Error message</p>
+</div>
+<div class="container my-5">
+    <form th:action="@{/user}" method="post" style="max-width: 500px;">
+        <div class="form-group my-3">
             <label for="currentPassword">Текущий пароль</label>
             <input type="password" name="currentPassword" class="form-control col-6" id="currentPassword">
         </div>
-        <div class="form-group">
+        <div class="form-group my-3">
             <label for="newPassword">Новый пароль</label>
-            <input type="password" name="password" class="form-control col-6" id="newPassword">
+            <input type="password" name="newPassword" class="form-control col-6" id="newPassword">
         </div>
-        <div class="form-group">
+        <div class="form-group my-3">
             <label for="newFirstName">Имя</label>
             <input type="text" name="firstName" class="form-control col-6" id="newFirstName"
                    th:value="${user.firstName}">
         </div>
-        <div class="form-group">
+        <div class="form-group my-3">
             <label for="newLastName">Фамилия</label>
             <input type="text" name="lastName" class="form-control col-6" id="newLastName"
                    th:value="${user.lastName}">
         </div>
-        <div class="form-group">
+        <div class="form-group my-3">
             <label for="newEmail">Электроная почта</label>
             <input type="email" name="email" class="form-control col-6" id="newEmail"
                    th:value="${user.email}">
         </div>
-        <div class="form-group">
+        <div class="form-group my-3">
             <label for="newContacts">Дополнительные контактные данные</label>
             <input type="text" name="contacts" class="form-control col-6" id="newContacts"
                    th:value="${user.contacts}">
         </div>
-        <div class="form-group">
+        <div class="form-group my-3">
             <label for="newSkills">Профессиональные навыки</label>
             <input type="text" name="skills" class="form-control col-6" id="newSkills"
                    th:value="${user.skills}">

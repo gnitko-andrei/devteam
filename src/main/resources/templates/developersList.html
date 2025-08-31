@@ -6,12 +6,13 @@
 </head>
 <body>
 <th:block th:replace="~{fragments/common :: header}"/>
-<div class="mx-3">
-    <h1 class="my-3">Список разработчиков</h1>
-    <div class="card-deck">
-        <div class="my-3" th:if="${!developers.isEmpty()}" th:each="developer : ${developers}">
-            <div class="card" style="width: 18rem;">
-                <h5 class="card-header" th:text="${developer.firstName} + ' ' + ${developer.lastName}">Developer Name</h5>
+<div class="container-fluid">
+    <h1 class="m-3">Список разработчиков</h1>
+    <div class="row row-cols-auto">
+        <div th:if="${!developers.isEmpty()}" th:each="developer : ${developers}">
+            <div class="card mx-2" style="width: 18rem;">
+                <h5 class="card-header" th:text="${developer.firstName} + ' ' + ${developer.lastName}">Developer
+                    Name</h5>
                 <div class="card-body">
                     <div class="card-text">
                         <strong>Email</strong>
@@ -25,19 +26,21 @@
                         <div th:text="${developer.price} + ' $/час'"></div>
                     </div>
                 </div>
-                <div class="card-footer text-muted">
-                    <strong>Изменить оплату</strong>
-                    <form class="form-inline" th:action="@{/developers}" method="post">
-                        <input type="text" name="price" class="form-control col-5 mx-2" id="newPrice"
-                               th:value="${developer.price}">
-                        <button class="btn btn-primary btn-sm col-5 mx-2" type="submit">Сохранить</button>
+                <div class="card-footer text-body-secondary">
+                    <form th:action="@{/developers}" method="post">
+                        <label for="newPrice">Изменить оплату</label>
+                        <div class="d-flex align-items-center justify-content-start gap-2 flex-nowrap">
+                            <input type="text" name="price" class="form-control" id="newPrice"
+                                   th:value="${developer.price}">
+                            <button class="btn btn-primary btn-sm" type="submit">Сохранить</button>
+                        </div>
                         <input type="hidden" th:name="id" th:value="${developer.id}"/>
                         <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
                     </form>
                 </div>
-                <div class="card-footer text-muted">
-                    <form class="form-inline" th:action="@{/developers}" th:method="delete">
-                        <button class="btn btn-danger btn-sm col-6 mx-2" type="submit">Удалить</button>
+                <div class="card-footer text-body-secondary d-flex">
+                    <form th:action="@{/developers}" th:method="delete">
+                        <button class="btn btn-danger btn-sm" type="submit">Удалить</button>
                         <input type="hidden" th:name="id" th:value="${developer.id}"/>
                         <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
                     </form>

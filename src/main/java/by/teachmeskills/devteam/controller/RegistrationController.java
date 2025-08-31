@@ -1,41 +1,37 @@
 package by.teachmeskills.devteam.controller;
 
-import by.teachmeskills.devteam.entity.User;
+import by.teachmeskills.devteam.dto.user.UserRegistrationDto;
+import by.teachmeskills.devteam.entity.Role;
 import by.teachmeskills.devteam.service.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-
-import java.util.Map;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
+@RequiredArgsConstructor
 public class RegistrationController {
 
     private final UserService userService;
 
-    @Autowired
-    public RegistrationController(UserService userService) {
-        this.userService = userService;
-    }
-
     @GetMapping("/registration")
-    public String registration() {
+    public String getRegistrationPage() {
         return "registration";
     }
 
     @PostMapping("/registration")
-    public String addUser(User user, @RequestParam Map<String, String> formRoles, Model model) {
-        User userFromDb = userService.findByUsername(user.getUsername());
-
-        if (userFromDb != null) {
-            model.addAttribute("message", "User already exists!");
-            return "registration";
+    public String addUser(@ModelAttribute UserRegistrationDto user,
+                          @RequestParam Role userRole,
+                          RedirectAttributes redirectAttributes) {
+        if(userService.isUserExists(user.getUsername())) {
+            redirectAttributes.addFlashAttribute("errorMessage", "User already exists!");
+            return "redirect:/registration";
+        } else {
+            userService.createNewUser(user, userRole);
+            return "redirect:/login";
         }
-        userService.saveNewUser(user, formRoles);
-
-        return "redirect:/login";
     }
 }

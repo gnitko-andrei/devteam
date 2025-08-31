@@ -1,132 +1,103 @@
 package by.teachmeskills.devteam.service;
 
-import by.teachmeskills.devteam.entity.Project;
+import by.teachmeskills.devteam.dto.project.*;
 import by.teachmeskills.devteam.entity.Role;
-import by.teachmeskills.devteam.entity.Task;
 import by.teachmeskills.devteam.entity.User;
+import by.teachmeskills.devteam.entity.project.Project;
+import by.teachmeskills.devteam.entity.project.ProjectStatus;
+import by.teachmeskills.devteam.exception.ProjectNameAlreadyInUseException;
+import by.teachmeskills.devteam.exception.ProjectNotFoundException;
+import by.teachmeskills.devteam.exception.UserNotFoundException;
+import by.teachmeskills.devteam.mapper.ProjectMapper;
 import by.teachmeskills.devteam.repository.ProjectRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import by.teachmeskills.devteam.repository.UserRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
 
 import static by.teachmeskills.devteam.util.TextUtils.replaceHyphenationOnBr;
 
 @Service
+@RequiredArgsConstructor
 public class ProjectService {
 
     private final ProjectRepository projectRepository;
-    private final UserService userService;
+    private final UserRepository userRepository;
+    private final ProjectMapper projectMapper;
 
-    @Autowired
-    public ProjectService(ProjectRepository projectRepository, UserService userService) {
-        this.projectRepository = projectRepository;
-        this.userService = userService;
+    public ProjectDto findById(Long id) {
+        return projectRepository.findById(id)
+                .map(projectMapper::toProjectDto)
+                .orElseThrow(() -> new ProjectNotFoundException(id));
     }
 
-    public Project findById(Long id) {
-        return projectRepository.findById(id).orElseThrow(() -> new IllegalStateException(String.format("Project id:%s not found", id)));
+    public List<ProjectCardDto> findUserProjects(ProjectFiltersDto searchCriteria) {
+        var roles = searchCriteria.getUserRoles();
+        List<Project> projects;
+        if (roles.contains(Role.CUSTOMER)) {
+            projects = projectRepository.findCustomerProjects(searchCriteria);
+        } else if (roles.contains(Role.MANAGER)) {
+            projects = projectRepository.findManagerProjects(searchCriteria);
+        } else if (roles.contains(Role.DEVELOPER)) {
+            projects = projectRepository.findDeveloperProjects(searchCriteria);
+        } else {
+            projects = List.of();
+        }
+        return projects.stream()
+                .map(projectMapper::toProjectCardDto)
+                .toList();
     }
 
-    public Iterable<Project> findAll() {
-        return projectRepository.findAll();
+    public boolean isProjectVisibleForUser(Long projectId, Long userId) {
+        return projectRepository.findById(projectId).map(project -> project.isVisibleForUser(userId))
+                .orElseThrow(() -> new ProjectNotFoundException(projectId));
     }
 
-    public Iterable<Project> findByName(String name) {
-        return projectRepository.findByName(name);
-    }
-
-    public void save(Project project) {
-        projectRepository.save(project);
-    }
-
-
-    public void delete(Project project) {
-        projectRepository.delete(project);
-    }
-
-    public void deleteById(Long id) {
-        projectRepository.deleteById(id);
-    }
-
-    public void addNewProject(String name, String specification, User user, Long managerId) {
-        specification = replaceHyphenationOnBr(specification);
-        User manager = userService.findById(managerId);
-        Project project = new Project(name, specification, "ожидание обработки менеджером", user, manager);
+    public void addNewProject(ProjectCreationDto newProjectData) {
+        var newProjectName = newProjectData.getNewProjectName();
+        projectRepository.findByName(newProjectName).ifPresent(project -> {
+            throw new ProjectNameAlreadyInUseException(newProjectName);
+        });
+        var customerId = newProjectData.getCustomerId();
+        var managerId = newProjectData.getManagerId();
+        var specification = replaceHyphenationOnBr(newProjectData.getNewProjectSpecification());
+        var manager = userRepository.findById(managerId)
+                .orElseThrow(() -> new UserNotFoundException(managerId));
+        var customer = userRepository.findById(customerId)
+                .orElseThrow(() -> new UserNotFoundException(customerId));
+        var project = new Project(newProjectName, specification, ProjectStatus.NEW, customer, manager);
         save(project);
     }
 
-    public void updateProject(User user, Long id, Map<String, String> formData) {
-        if (user.getRoles().contains(Role.CUSTOMER)) {
-            customerUpdateProject(id, formData);
-        } else if (user.getRoles().contains(Role.MANAGER)) {
-            managerUpdateProject(id, formData);
+    public void updateProject(Set<Role> editorRoles, UpdateProjectDto updatedProjectData) {
+        final var projectId = updatedProjectData.getId();
+        var project = projectRepository.findById(projectId)
+                .orElseThrow(() -> new ProjectNotFoundException(projectId));
+        if (editorRoles.contains(Role.CUSTOMER)) {
+            project.setName(updatedProjectData.getName());
+            project.setSpecification(replaceHyphenationOnBr(updatedProjectData.getSpecification()));
+            project.setManager(findUserByIdOrThrowException(updatedProjectData.getManagerId()));
         }
-
-    }
-
-    private void managerUpdateProject(Long id, Map<String, String> formData) {
-        Project project = findById(id);
-        Set<User> developers = new HashSet<>();
-
-        for (var entry : formData.entrySet()) {
-            if (formData.get(entry.getKey()).equals("on")) {
-                developers.add(userService.findById(Long.parseLong(entry.getKey())));
-            }
+        if (editorRoles.contains(Role.MANAGER)) {
+            project.setStatus(updatedProjectData.getStatus());
+            project.setDevelopers(new ArrayList<>(updatedProjectData.getDeveloperIds() == null ? List.of() : updatedProjectData.getDeveloperIds().stream().map(this::findUserByIdOrThrowException).toList()));
         }
-
-        for (var entry : formData.entrySet()) {
-            if (formData.get(entry.getKey()).equals("on")) {
-                developers.add(userService.findById(Long.parseLong(entry.getKey())));
-            }
-        }
-
-        project.setStatus(formData.get("status"));
-        project.setDevelopers(developers);
         projectRepository.save(project);
     }
 
-    private void customerUpdateProject(Long id, Map<String, String> formData) {
-        Project project = findById(id);
-        User manager = userService.findById(Long.parseLong(formData.get("managerId")));
+    public void deleteById(Long projectId) {
+        projectRepository.deleteById(projectId);
+    }
 
-        project.setName(formData.get("name"));
-        project.setSpecification(replaceHyphenationOnBr(formData.get("specification")));
-        project.setManager(manager);
+    private User findUserByIdOrThrowException(Long userId) {
+        return userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException(userId));
+    }
+
+    private void save(Project project) {
         projectRepository.save(project);
     }
 
-
-    public List<User> getAllManagers() {
-        return getAllUsersByRole(Role.MANAGER);
-    }
-
-    public List<User> getAllDevelopers() {
-        return getAllUsersByRole(Role.DEVELOPER);
-    }
-
-    private List<User> getAllUsersByRole(Role role) {
-        List<User> allUsers = userService.findAll();
-        List<User> usersByRole = new ArrayList<>();
-        for (User user : allUsers) {
-            if (user.getRoles().contains(role)) {
-                usersByRole.add(user);
-            }
-        }
-        return usersByRole;
-    }
-
-    public Integer getProjectPrice(Long id) {
-        Project project = findById(id);
-        List<Task> tasks = project.getTasks();
-        Integer projectPrice = 0;
-        for (Task task : tasks) {
-            projectPrice += task.getPrice();
-        }
-        return projectPrice;
-    }
-
-    public Iterable<Project> findByStatus(String status) {
-        return projectRepository.findByStatus(status);
-    }
 }

@@ -1,9 +1,17 @@
 package by.teachmeskills.devteam.service;
 
+import by.teachmeskills.devteam.dto.user.UserDto;
+import by.teachmeskills.devteam.dto.user.UserProfileUpdateDto;
+import by.teachmeskills.devteam.dto.user.UserRegistrationDto;
+import by.teachmeskills.devteam.dto.user.UserUpdateByAdminDto;
 import by.teachmeskills.devteam.entity.Role;
 import by.teachmeskills.devteam.entity.User;
+import by.teachmeskills.devteam.exception.UserNotFoundException;
+import by.teachmeskills.devteam.exception.UsernameAlreadyInUseException;
+import by.teachmeskills.devteam.exception.WrongPasswordException;
+import by.teachmeskills.devteam.mapper.UserMapper;
 import by.teachmeskills.devteam.repository.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -11,138 +19,119 @@ import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.*;
-import java.util.stream.Collectors;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
+import java.util.Set;
 
 @Service
+@RequiredArgsConstructor
 public class UserService implements UserDetailsService {
-
-    public static final String ROLE_SELECTION_FORM = "inlineRadioOptions";
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
-
-    @Autowired
-    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder) {
-        this.userRepository = userRepository;
-        this.passwordEncoder = passwordEncoder;
-    }
+    private final UserMapper userMapper;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        return userRepository.findByUsername(username);
+        return userRepository.findByUsername(username)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found. Username: %s".formatted(username)));
     }
 
-    public List<User> findAll() {
-        return userRepository.findAll();
+    public UserDto findById(Long id) {
+        return userRepository.findById(id)
+                .map(userMapper::toUserDto)
+                .orElseThrow(() -> new UserNotFoundException(id));
     }
 
-    public void saveUserByAdmin(User user, String username, Map<String, String> form) {
-        user.setUsername(username);
-
-        Set<String> roles = Arrays.stream(Role.values())
-                .map(Role::name)
-                .collect(Collectors.toSet());
-
-        user.getRoles().clear();
-
-        for (String key : form.keySet()) {
-            if (roles.contains(key)) {
-                user.getRoles().add(Role.valueOf(key));
-            }
-        }
-
-        userRepository.save(user);
+    public List<UserDto> findAll() {
+        return userRepository.findAll().stream().map(userMapper::toUserDto).toList();
     }
 
-    public User findByUsername(String username) {
-        return userRepository.findByUsername(username);
+    public List<UserDto> getAllManagers() {
+        return userRepository.findAllByRolesContainsOrderByUsernameAsc(Role.MANAGER).stream().map(userMapper::toUserDto).toList();
     }
 
-    public void save(User user) {
-        userRepository.save(user);
+    public List<UserDto> getAllDevelopers() {
+        return getAllUsersByRole(Role.DEVELOPER).stream().map(userMapper::toUserDto).toList();
     }
 
-    public void saveNewUser(User user, Map<String, String> formRoles) {
+    public boolean isUserExists(String username) {
+        return userRepository.findByUsername(username).isPresent();
+    }
+
+    public void createNewUser(UserRegistrationDto userRegistrationData, Role userRole) {
+        var user = userMapper.toEntity(userRegistrationData);
         user.setActive(true);
-        user.setPrice(3);
-        Set<Role> roles = new HashSet<>();
-        roles.add(Role.USER);
-        if (formRoles.get(ROLE_SELECTION_FORM).equals("option1")) {
-            roles.add(Role.CUSTOMER);
-        }
-        if (formRoles.get(ROLE_SELECTION_FORM).equals("option2")) {
-            roles.add(Role.MANAGER);
-        }
-        if (formRoles.get(ROLE_SELECTION_FORM).equals("option3")) {
-            roles.add(Role.DEVELOPER);
-        }
         user.setPassword(passwordEncoder.encode(user.getPassword()));
-        user.setRoles(roles);
+        user.setRoles(Set.of(Role.USER, userRole));
         save(user);
     }
 
-    public String getUserAppRoleName(User user) {
-        Set<Role> roles = user.getRoles();
-        if (roles.contains(Role.CUSTOMER)) {
-            return "Заказчик";
+    public void updateUserByAdmin(Long userId, UserUpdateByAdminDto userUpdateData) {
+        var user = getUserByIdOrThrow(userId);
+        var newUsername = userUpdateData.getUsername();
+        var currentUsername = user.getUsername();
+        if (!Objects.equals(newUsername, currentUsername) && isUserExists(newUsername)) {
+            throw new UsernameAlreadyInUseException(newUsername);
         }
-        if (roles.contains(Role.MANAGER)) {
-            return "Менеджер";
+        if (!newUsername.isBlank()) {
+            user.setUsername(newUsername);
         }
-        if (roles.contains(Role.DEVELOPER)) {
-            return "Разработчик";
-        }
-        return null;
+        var userRoles = userUpdateData.getRoles();
+        userRoles.add(Role.USER);
+        user.setRoles(userRoles);
+
+        userRepository.save(user);
     }
 
-    public boolean updateProfile(User user, Map<String, String> formData) {
-        String currentPassword = formData.get("currentPassword");
+    public void updateUserProfile(Long userId, UserProfileUpdateDto userProfileUpdateData) {
+        var user = getUserByIdOrThrow(userId);
+        var currentPassword = userProfileUpdateData.getCurrentPassword();
         if (currentPassword.isBlank() || !BCrypt.checkpw(currentPassword, user.getPassword())) {
-            return false;
+            throw new WrongPasswordException("Неверный текущий пароль!");
         }
 
-        if (formData.get("password").isBlank()) {
-            user.setPassword(passwordEncoder.encode(currentPassword));
-        } else {
-            user.setPassword(passwordEncoder.encode(formData.get("password")));
+        final var newPassword = userProfileUpdateData.getNewPassword();
+        if (!newPassword.isBlank()) {
+            user.setPassword(passwordEncoder.encode(newPassword.trim()));
         }
-        user.setFirstName(formData.get("firstName"));
-        user.setLastName(formData.get("lastName"));
-        user.setEmail(formData.get("email"));
-        user.setContacts(formData.get("contacts"));
-        user.setSkills(formData.get("skills"));
+        user.setFirstName(userProfileUpdateData.getFirstName());
+        user.setLastName(userProfileUpdateData.getLastName());
+        user.setEmail(userProfileUpdateData.getEmail());
+        user.setContacts(userProfileUpdateData.getContacts());
+        user.setSkills(userProfileUpdateData.getSkills());
         save(user);
-        return true;
-    }
-
-    public void delete(User user) {
-        userRepository.delete(user);
     }
 
     public void deleteById(Long userId) {
-        User user = findById(userId);
+        var user = getUserByIdOrThrow(userId);
         userRepository.delete(user);
     }
 
-    public User findById(Long id) {
-        return userRepository.findById(id).orElseThrow(() -> new IllegalStateException(String.format("User id:%s not found", id)));
-    }
-
-    public Set<User> getAllDevelopers() {
-        List<User> allUsers = userRepository.findAll();
-        Set<User> allDevelopers = new HashSet<>();
-        for (User user : allUsers) {
-            if (user.getRoles().contains(Role.DEVELOPER)) {
-                allDevelopers.add(user);
-            }
-        }
-        return allDevelopers;
-    }
-
-    public void updatePrice(Long id, Integer price) {
-        User user = findById(id);
+    public void updateDeveloperRate(Long id, Integer price) {
+        var user = getUserByIdOrThrow(id);
         user.setPrice(price);
         save(user);
+    }
+
+    private User getUserByIdOrThrow(Long userId) {
+        return userRepository.findById(userId)
+                .orElseThrow(() -> new UserNotFoundException(userId));
+    }
+
+    private List<User> getAllUsersByRole(Role role) {
+        List<User> allUsers = userRepository.findAllByOrderByUsernameAsc();
+        List<User> usersByRole = new ArrayList<>();
+        for (User user : allUsers) {
+            if (user.getRoles().contains(role)) {
+                usersByRole.add(user);
+            }
+        }
+        return usersByRole;
+    }
+
+    private void save(User user) {
+        userRepository.save(user);
     }
 }

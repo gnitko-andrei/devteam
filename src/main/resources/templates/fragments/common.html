@@ -9,13 +9,12 @@
     <link rel="icon" type="image/png" href="/static/favicon/favicon-96x96.png" sizes="96x96" />
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
-          integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
-    <script src="https://unpkg.com/@hotwired/turbo@8.0.4/dist/turbo.es2017-umd.js" integrity="sha384-8l7xX2NI+FCTumrdyAk7EqnMbCuq88GMHvysPAU5GJaYJK+wJV9Exx0ipiFp9Lfw" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js" integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q" crossorigin="anonymous"></script>
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
-    <script defer src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
-            integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+    <script src="https://code.jquery.com/jquery-3.7.1.slim.js"
+            integrity="sha256-UgvvN8vBkgO0luPSUl2s8TIlOSYRoGFAX4jlCIm9Adc="
             crossorigin="anonymous"></script>
     <script defer src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"
             integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49"
@@ -24,7 +23,7 @@
 <body>
 <th:block th:fragment="header">
     <nav class="navbar navbar-expand-lg  navbar-dark bg-dark">
-        <a class="navbar-brand mb-0 h1" href="/">
+        <a class="navbar-brand mb-0 ms-3 h1" href="/">
             <img src="/static/favicon/favicon.svg" width="30" height="30"
                  class="d-inline-block align-top"  alt=""/>
             DevTeam
@@ -35,7 +34,7 @@
         </button>
 
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul class="navbar-nav mr-auto">
+            <ul class="navbar-nav me-auto">
                 <li class="nav-item">
                     <a sec:authorize="hasAnyAuthority('CUSTOMER', 'MANAGER', 'DEVELOPER')" class="nav-link"
                        href="/projects">Проекты<span
@@ -52,11 +51,11 @@
                     <a sec:authorize="hasAuthority('ADMIN')" class="nav-link" href="/admin">Панель администратора</a>
                 </li>
             </ul>
-            <form sec:authorize="!isAuthenticated()" class="form-inline">
+            <form sec:authorize="!isAuthenticated()" class="form-inline d-flex align-items-center">
                 <a href="/login" class="btn btn-primary btn-sm mx-1">Войти</a>
                 <a href="/registration" class="btn btn-secondary btn-sm mx-1">Регистрация</a>
             </form>
-            <form sec:authorize="isAuthenticated()" class="form-inline" th:action="@{/logout}" method="post">
+            <form sec:authorize="isAuthenticated()" class="form-inline d-flex align-items-center" th:action="@{/logout}" method="post">
                 <div class="navbar-text text-light" th:inline="text">[[${#authentication.name}]]</div>
                 <button class="btn btn-light btn-sm mx-2" type="submit" id="logout">Выйти</button>
             </form>
