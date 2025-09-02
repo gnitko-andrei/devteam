@@ -5,10 +5,7 @@ import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -69,5 +66,17 @@ public class User implements UserDetails {
                 .filter(Objects::nonNull)
                 .collect(Collectors.joining(" "));
         return fullName.isBlank() ? username : fullName;
+    }
+
+    public String getFormattedUserInfo() {
+        return Stream.of(this.getFullName(), email, contacts)
+                .filter(Objects::nonNull)
+                .collect(Collectors.joining("\n"));
+    }
+
+    public String getRolesDescription() {
+        var stringJoiner = new StringJoiner(", ");
+        this.roles.stream().filter(role -> role != Role.USER).map(Role::getRoleName).sorted().forEach(stringJoiner::add);
+        return stringJoiner.toString();
     }
 }

@@ -16,11 +16,14 @@ public class UserMapper {
                 .username(user.getUsername())
                 .firstName(user.getFirstName())
                 .lastName(user.getLastName())
+                .fullName(user.getFullName())
                 .email(user.getEmail())
                 .price(user.getPrice())
                 .contacts(user.getContacts())
                 .skills(user.getSkills())
                 .roles(user.getRoles())
+                .formattedUserInfo(user.getFormattedUserInfo())
+                .rolesDescription(user.getRolesDescription())
                 .build();
     }
 

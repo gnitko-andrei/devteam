@@ -22,10 +22,8 @@ public class UserController {
     public String getUserInfo(@AuthenticationPrincipal(expression = "id") Long userId,
                               Model model) {
         var userData = userService.findById(userId);
-        var userAppRoles = userData.getRolesDescription();
 
         model.addAttribute("currentUser", userData);
-        model.addAttribute("appRoles", userAppRoles);
 
         return "userProfile";
     }

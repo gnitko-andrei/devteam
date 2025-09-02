@@ -7,8 +7,6 @@ import lombok.Data;
 
 import java.util.List;
 
-import static by.teachmeskills.devteam.util.TextUtils.replaceHyphenationOnBr;
-
 @Data
 @Builder
 public class ProjectDto {
@@ -20,12 +18,4 @@ public class ProjectDto {
     private UserDto manager;
     private List<UserDto> developers;
     private Integer projectPrice;
-
-    public String getCustomerInfo() {
-        return customer != null ? replaceHyphenationOnBr(customer.getFormattedUserInfo()) : "none";
-    }
-
-    public String getManagerInfo() {
-        return manager != null ? replaceHyphenationOnBr(manager.getFormattedUserInfo()) : "none";
-    }
 }
