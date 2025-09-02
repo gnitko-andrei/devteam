@@ -76,11 +76,11 @@ public class Project {
     }
 
     public String getCustomerName() {
-        return customer != null ? customer.getFirstName() + " " + customer.getLastName() : "none";
+        return customer != null ? customer.getFullName(): "none";
     }
 
     public String getManagerName() {
-        return manager != null ? manager.getFirstName() + " " + manager.getLastName() : "none";
+        return manager != null ? manager.getFullName() : "none";
     }
 
     public Integer getProjectPrice() {

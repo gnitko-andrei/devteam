@@ -7,7 +7,10 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Entity
 @Table(name = "user")
@@ -59,5 +62,12 @@ public class User implements UserDetails {
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return getRoles();
+    }
+
+    public String getFullName() {
+        var fullName = Stream.of(this.firstName, this.lastName)
+                .filter(Objects::nonNull)
+                .collect(Collectors.joining(" "));
+        return fullName.isBlank() ? username : fullName;
     }
 }
