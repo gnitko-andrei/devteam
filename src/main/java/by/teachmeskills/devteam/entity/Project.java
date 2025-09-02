@@ -10,11 +10,13 @@ import java.util.Objects;
 import java.util.Optional;
 
 @Entity
+@Table(name = "project")
+@Getter
+@Setter
 @EqualsAndHashCode
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@Data
 public class Project {
 
     @Id
@@ -47,11 +49,13 @@ public class Project {
             joinColumns = {@JoinColumn(name = "project_id")},
             inverseJoinColumns = {@JoinColumn(name = "developer_id")}
     )
+    @Builder.Default
     private List<User> developers = new ArrayList<>();
 
 
     @OneToMany(fetch = FetchType.LAZY)
     @JoinColumn(name = "project_id")
+    @Builder.Default
     private List<Task> tasks = new ArrayList<>();
 
     public Project(String name, String specification, ProjectStatus status, User customer, User manager) {

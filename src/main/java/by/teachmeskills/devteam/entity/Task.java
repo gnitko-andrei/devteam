@@ -4,13 +4,15 @@ import by.teachmeskills.devteam.entity.attributes.task.TaskStatus;
 import jakarta.persistence.*;
 import lombok.*;
 
+import static com.google.common.base.Preconditions.checkArgument;
+
 @Entity
+@Table(name = "task")
 @Getter
 @Setter
 @EqualsAndHashCode
 @AllArgsConstructor
-@NoArgsConstructor
-@Data
+@Builder
 public class Task {
 
     @Id
@@ -38,15 +40,20 @@ public class Task {
     @JoinColumn(name = "project_id")
     private Project project;
 
-    public Task(String name, String description) {
-        this.name = name;
-        this.description = description;
+    public Task() {
         this.time = 0;
         this.price = 0;
         this.status = TaskStatus.NEW;
     }
 
+    public Task(String name, String description) {
+        this();
+        this.name = name;
+        this.description = description;
+    }
+
     public void submitAdditionalTime(int hours) {
-        this.time = this.time == null ? hours : this.time + hours;
+        checkArgument(hours >= 0, "Additional task hours must be non-negative");
+        this.time = Math.addExact(this.time, hours);
     }
 }
