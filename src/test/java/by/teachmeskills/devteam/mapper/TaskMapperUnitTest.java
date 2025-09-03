@@ -53,6 +53,8 @@ class TaskMapperUnitTest {
         var expectedTaskDto = TaskDto.builder()
                 .id(ID_1)
                 .status(TaskStatus.NEW)
+                .price(0)
+                .time(0)
                 .build();
         // when
         var actual = mapper.toTaskDto(givenTaskEntity);
@@ -77,6 +79,4 @@ class TaskMapperUnitTest {
         // then
         assertThat(actual).usingRecursiveComparison().isEqualTo(expectedTaskEntity);
     }
-
-
 }
