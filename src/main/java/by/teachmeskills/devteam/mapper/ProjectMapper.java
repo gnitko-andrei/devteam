@@ -20,7 +20,7 @@ public class ProjectMapper {
                 .status(project.getStatus())
                 .customer(userMapper.toUserDto(project.getCustomer()))
                 .manager(userMapper.toUserDto(project.getManager()))
-                .developers(userMapper.toUserDtoSet(project.getDevelopers()))
+                .developers(userMapper.toUserDtoList(project.getDevelopers()))
                 .projectPrice(project.getProjectPrice())
                 .build();
     }

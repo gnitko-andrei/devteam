@@ -11,6 +11,7 @@ import static com.google.common.base.Preconditions.checkArgument;
 @Getter
 @Setter
 @EqualsAndHashCode
+@NoArgsConstructor
 @AllArgsConstructor
 @Builder
 public class Task {
@@ -27,30 +28,21 @@ public class Task {
     private String description;
 
     @Column(nullable = false)
-    private Integer time;
+    @Builder.Default
+    private Integer time = 0;
 
     @Column(nullable = false)
-    private Integer price;
+    @Builder.Default
+    private Integer price = 0;
 
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
-    private TaskStatus status;
+    @Builder.Default
+    private TaskStatus status = TaskStatus.NEW;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "project_id")
     private Project project;
-
-    public Task() {
-        this.time = 0;
-        this.price = 0;
-        this.status = TaskStatus.NEW;
-    }
-
-    public Task(String name, String description) {
-        this();
-        this.name = name;
-        this.description = description;
-    }
 
     public void submitAdditionalTime(int hours) {
         checkArgument(hours >= 0, "Additional task hours must be non-negative");

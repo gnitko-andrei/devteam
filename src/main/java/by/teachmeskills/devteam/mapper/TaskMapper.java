@@ -22,6 +22,9 @@ public class TaskMapper {
     }
 
     public Task toEntity(TaskCreationDto dto) {
-        return new Task(dto.getName(), dto.getDescription());
+        return Task.builder()
+                .name(dto.getName())
+                .description(dto.getDescription())
+                .build();
     }
 }
