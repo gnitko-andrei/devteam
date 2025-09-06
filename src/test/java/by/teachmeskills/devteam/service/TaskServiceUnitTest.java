@@ -172,7 +172,7 @@ class TaskServiceUnitTest {
         // when
         taskService.deleteById(TASK_ID);
         // then
-        taskRepositoryMock.deleteById(TASK_ID);
+        verify(taskRepositoryMock).deleteById(TASK_ID);
     }
 
 }
