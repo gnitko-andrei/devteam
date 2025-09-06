@@ -58,14 +58,6 @@ public class Project {
     @Builder.Default
     private List<Task> tasks = new ArrayList<>();
 
-    public Project(String name, String specification, ProjectStatus status, User customer, User manager) {
-        this.name = name;
-        this.specification = specification;
-        this.status = status;
-        this.customer = customer;
-        this.manager = manager;
-    }
-
     public boolean isVisibleForUser(Long userId) {
         var users = new ArrayList<User>();
         Optional.ofNullable(developers).ifPresent(users::addAll);

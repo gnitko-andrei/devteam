@@ -12,7 +12,7 @@
         <h3 class="my-2">Статус</h3>
         <p class="font-weight-normal" th:text="${project.status}"></p>
         <h3 class="my-2">Техническое задание</h3>
-        <div class="font-weight-normal" th:utext="${project.specification}"></div>
+        <div class="font-weight-normal" style="white-space: pre-line;" th:utext="${project.specification}"></div>
         <h3 class="my-2">Текущая стоимость</h3>
         <div class="font-weight-normal" th:utext="${project.projectPrice  + ' $'}"></div>
         <h3 class="my-2">Заказчик</h3>
