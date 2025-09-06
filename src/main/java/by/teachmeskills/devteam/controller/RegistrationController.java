@@ -30,7 +30,7 @@ public class RegistrationController {
             redirectAttributes.addFlashAttribute("errorMessage", "User already exists!");
             return "redirect:/registration";
         } else {
-            userService.createNewUser(user, userRole);
+            userService.createNewUser(user);
             return "redirect:/login";
         }
     }

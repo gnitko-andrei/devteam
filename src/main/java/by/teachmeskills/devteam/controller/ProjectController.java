@@ -35,7 +35,7 @@ public class ProjectController {
         filters.setUserId(userId);
         filters.setUserRoles(roles);
         var projects = projectService.findUserProjects(filters);
-        var managers = userService.getAllManagers();
+        var managers = userService.getAllUsersByRole(Role.MANAGER);
 
         model.addAttribute("projectStatuses", ProjectStatus.visibleForFiltering());
         model.addAttribute("userProjectsList", projects);
@@ -82,8 +82,8 @@ public class ProjectController {
     public String getProjectEditor(@AuthenticationPrincipal(expression = "id") Long userId, @PathVariable Long projectId, Model model) {
         var project = projectService.findById(projectId);
         var specification = replaceBrOnHyphenation(project.getSpecification());
-        var managers = userService.getAllManagers();
-        var developers = userService.getAllDevelopers();
+        var managers = userService.getAllUsersByRole(Role.MANAGER);
+        var developers = userService.getAllUsersByRole(Role.DEVELOPER);
 
         model.addAttribute("project", project);
         model.addAttribute("specification", specification);

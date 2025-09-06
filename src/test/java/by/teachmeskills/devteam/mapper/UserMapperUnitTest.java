@@ -95,7 +95,7 @@ class UserMapperUnitTest {
                 .email(EMAIL)
                 .contacts(CONTACTS)
                 .skills(SKILLS)
-                .roles(ROLES)
+                .userRole(Role.MANAGER)
                 .build();
         var expectedUserEntity = User.builder()
                 .username(USERNAME_1)
@@ -118,7 +118,7 @@ class UserMapperUnitTest {
         var mapper = new UserMapper();
         var givenUserDto = UserRegistrationDto.builder()
                 .username(USERNAME_1)
-                .roles(ROLES)
+                .userRole(Role.MANAGER)
                 .build();
         var expectedUserEntity = User.builder()
                 .username(USERNAME_1)

@@ -2,10 +2,12 @@ package by.teachmeskills.devteam.mapper;
 
 import by.teachmeskills.devteam.dto.user.UserDto;
 import by.teachmeskills.devteam.dto.user.UserRegistrationDto;
+import by.teachmeskills.devteam.entity.Role;
 import by.teachmeskills.devteam.entity.User;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.Set;
 
 @Component
 public class UserMapper {
@@ -40,7 +42,7 @@ public class UserMapper {
                 .email(dto.getEmail())
                 .contacts(dto.getContacts())
                 .skills(dto.getSkills())
-                .roles(dto.getRoles())
+                .roles(Set.of(Role.USER, dto.getUserRole()))
                 .build();
     }
 }

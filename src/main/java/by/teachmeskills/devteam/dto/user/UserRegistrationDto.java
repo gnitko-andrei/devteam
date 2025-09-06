@@ -4,8 +4,6 @@ import by.teachmeskills.devteam.entity.Role;
 import lombok.Builder;
 import lombok.Data;
 
-import java.util.Set;
-
 @Data
 @Builder
 public class UserRegistrationDto {
@@ -16,5 +14,5 @@ public class UserRegistrationDto {
     private String email;
     private String contacts;
     private String skills;
-    private Set<Role> roles;
+    private Role userRole;
 }

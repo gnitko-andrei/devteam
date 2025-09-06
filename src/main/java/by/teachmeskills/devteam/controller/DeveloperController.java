@@ -1,5 +1,6 @@
 package by.teachmeskills.devteam.controller;
 
+import by.teachmeskills.devteam.entity.Role;
 import by.teachmeskills.devteam.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -17,7 +18,7 @@ public class DeveloperController {
 
     @GetMapping
     public String getDevelopers(Model model) {
-        var developers = userService.getAllDevelopers();
+        var developers = userService.getAllUsersByRole(Role.DEVELOPER);
 
         model.addAttribute("developers", developers);
 
