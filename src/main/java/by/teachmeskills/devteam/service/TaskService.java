@@ -29,9 +29,9 @@ public class TaskService {
     }
 
     public void addNewTask(TaskCreationDto taskCreationData) {
-        var newTask = taskMapper.toEntity(taskCreationData);
         var projectId = taskCreationData.getProjectId();
         var project = projectRepository.findById(projectId).orElseThrow(() -> new ProjectNotFoundException(projectId));
+        var newTask = taskMapper.toEntity(taskCreationData);
         newTask.setProject(project);
         taskRepository.save(newTask);
     }

@@ -16,8 +16,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.Set;
 
-import static by.teachmeskills.devteam.util.TextUtils.replaceBrOnHyphenation;
-
 @Controller
 @RequestMapping("/projects")
 @PreAuthorize("hasAnyAuthority('CUSTOMER', 'DEVELOPER', 'MANAGER')")
@@ -81,7 +79,7 @@ public class ProjectController {
     @PreAuthorize("hasAnyAuthority('CUSTOMER', 'MANAGER')")
     public String getProjectEditor(@AuthenticationPrincipal(expression = "id") Long userId, @PathVariable Long projectId, Model model) {
         var project = projectService.findById(projectId);
-        var specification = replaceBrOnHyphenation(project.getSpecification());
+        var specification = project.getSpecification();
         var managers = userService.getAllUsersByRole(Role.MANAGER);
         var developers = userService.getAllUsersByRole(Role.DEVELOPER);
 
