@@ -4,13 +4,16 @@ import by.teachmeskills.devteam.entity.attributes.task.TaskStatus;
 import jakarta.persistence.*;
 import lombok.*;
 
+import static com.google.common.base.Preconditions.checkArgument;
+
 @Entity
+@Table(name = "task")
 @Getter
 @Setter
 @EqualsAndHashCode
-@AllArgsConstructor
 @NoArgsConstructor
-@Data
+@AllArgsConstructor
+@Builder
 public class Task {
 
     @Id
@@ -25,28 +28,24 @@ public class Task {
     private String description;
 
     @Column(nullable = false)
-    private Integer time;
+    @Builder.Default
+    private Integer time = 0;
 
     @Column(nullable = false)
-    private Integer price;
+    @Builder.Default
+    private Integer price = 0;
 
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
-    private TaskStatus status;
+    @Builder.Default
+    private TaskStatus status = TaskStatus.NEW;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "project_id")
     private Project project;
 
-    public Task(String name, String description) {
-        this.name = name;
-        this.description = description;
-        this.time = 0;
-        this.price = 0;
-        this.status = TaskStatus.NEW;
-    }
-
     public void submitAdditionalTime(int hours) {
-        this.time = this.time == null ? hours : this.time + hours;
+        checkArgument(hours >= 0, "Additional task hours must be non-negative");
+        this.time = Math.addExact(this.time, hours);
     }
 }

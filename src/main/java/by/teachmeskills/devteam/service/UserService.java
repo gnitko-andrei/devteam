@@ -12,17 +12,15 @@ import by.teachmeskills.devteam.exception.WrongPasswordException;
 import by.teachmeskills.devteam.mapper.UserMapper;
 import by.teachmeskills.devteam.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
@@ -48,23 +46,18 @@ public class UserService implements UserDetailsService {
         return userRepository.findAll().stream().map(userMapper::toUserDto).toList();
     }
 
-    public List<UserDto> getAllManagers() {
-        return userRepository.findAllByRolesContainsOrderByUsernameAsc(Role.MANAGER).stream().map(userMapper::toUserDto).toList();
-    }
-
-    public List<UserDto> getAllDevelopers() {
-        return getAllUsersByRole(Role.DEVELOPER).stream().map(userMapper::toUserDto).toList();
+    public List<UserDto> getAllUsersByRole(Role role) {
+        return userRepository.findAllByRolesContainsOrderByUsernameAsc(role).stream().map(userMapper::toUserDto).toList();
     }
 
     public boolean isUserExists(String username) {
         return userRepository.findByUsername(username).isPresent();
     }
 
-    public void createNewUser(UserRegistrationDto userRegistrationData, Role userRole) {
+    public void createNewUser(UserRegistrationDto userRegistrationData) {
         var user = userMapper.toEntity(userRegistrationData);
         user.setActive(true);
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
-        user.setRoles(Set.of(Role.USER, userRole));
+        user.setPassword(passwordEncoder.encode(userRegistrationData.getPassword()));
         save(user);
     }
 
@@ -72,28 +65,24 @@ public class UserService implements UserDetailsService {
         var user = getUserByIdOrThrow(userId);
         var newUsername = userUpdateData.getUsername();
         var currentUsername = user.getUsername();
-        if (!Objects.equals(newUsername, currentUsername) && isUserExists(newUsername)) {
-            throw new UsernameAlreadyInUseException(newUsername);
-        }
-        if (!newUsername.isBlank()) {
+        if (!StringUtils.isBlank(newUsername) && !Objects.equals(newUsername, currentUsername)) {
+            if (isUserExists(newUsername)) {
+                throw new UsernameAlreadyInUseException(newUsername);
+            }
             user.setUsername(newUsername);
         }
-        var userRoles = userUpdateData.getRoles();
-        userRoles.add(Role.USER);
-        user.setRoles(userRoles);
-
+        user.setRoles(userUpdateData.getRoles());
         userRepository.save(user);
     }
 
     public void updateUserProfile(Long userId, UserProfileUpdateDto userProfileUpdateData) {
         var user = getUserByIdOrThrow(userId);
         var currentPassword = userProfileUpdateData.getCurrentPassword();
-        if (currentPassword.isBlank() || !BCrypt.checkpw(currentPassword, user.getPassword())) {
-            throw new WrongPasswordException("Неверный текущий пароль!");
+        if (StringUtils.isBlank(currentPassword) || !passwordEncoder.matches(currentPassword, user.getPassword())) {
+            throw new WrongPasswordException("Wrong current password provided!");
         }
-
         final var newPassword = userProfileUpdateData.getNewPassword();
-        if (!newPassword.isBlank()) {
+        if (!StringUtils.isBlank(newPassword)) {
             user.setPassword(passwordEncoder.encode(newPassword.trim()));
         }
         user.setFirstName(userProfileUpdateData.getFirstName());
@@ -104,31 +93,20 @@ public class UserService implements UserDetailsService {
         save(user);
     }
 
-    public void deleteById(Long userId) {
-        var user = getUserByIdOrThrow(userId);
-        userRepository.delete(user);
-    }
-
     public void updateDeveloperRate(Long id, Integer price) {
         var user = getUserByIdOrThrow(id);
         user.setPrice(price);
         save(user);
     }
 
+    public void deleteById(Long userId) {
+        var user = getUserByIdOrThrow(userId);
+        userRepository.delete(user);
+    }
+
     private User getUserByIdOrThrow(Long userId) {
         return userRepository.findById(userId)
                 .orElseThrow(() -> new UserNotFoundException(userId));
-    }
-
-    private List<User> getAllUsersByRole(Role role) {
-        List<User> allUsers = userRepository.findAllByOrderByUsernameAsc();
-        List<User> usersByRole = new ArrayList<>();
-        for (User user : allUsers) {
-            if (user.getRoles().contains(role)) {
-                usersByRole.add(user);
-            }
-        }
-        return usersByRole;
     }
 
     private void save(User user) {

@@ -10,11 +10,13 @@ import java.util.Objects;
 import java.util.Optional;
 
 @Entity
+@Table(name = "project")
+@Getter
+@Setter
 @EqualsAndHashCode
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@Data
 public class Project {
 
     @Id
@@ -47,20 +49,14 @@ public class Project {
             joinColumns = {@JoinColumn(name = "project_id")},
             inverseJoinColumns = {@JoinColumn(name = "developer_id")}
     )
+    @Builder.Default
     private List<User> developers = new ArrayList<>();
 
 
     @OneToMany(fetch = FetchType.LAZY)
     @JoinColumn(name = "project_id")
+    @Builder.Default
     private List<Task> tasks = new ArrayList<>();
-
-    public Project(String name, String specification, ProjectStatus status, User customer, User manager) {
-        this.name = name;
-        this.specification = specification;
-        this.status = status;
-        this.customer = customer;
-        this.manager = manager;
-    }
 
     public boolean isVisibleForUser(Long userId) {
         var users = new ArrayList<User>();
@@ -72,11 +68,11 @@ public class Project {
     }
 
     public String getCustomerName() {
-        return customer != null ? customer.getFirstName() + " " + customer.getLastName() : "none";
+        return customer != null ? customer.getFullName(): "none";
     }
 
     public String getManagerName() {
-        return manager != null ? manager.getFirstName() + " " + manager.getLastName() : "none";
+        return manager != null ? manager.getFullName() : "none";
     }
 
     public Integer getProjectPrice() {

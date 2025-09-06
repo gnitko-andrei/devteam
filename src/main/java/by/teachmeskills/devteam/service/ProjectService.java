@@ -1,9 +1,9 @@
 package by.teachmeskills.devteam.service;
 
 import by.teachmeskills.devteam.dto.project.*;
+import by.teachmeskills.devteam.entity.Project;
 import by.teachmeskills.devteam.entity.Role;
 import by.teachmeskills.devteam.entity.User;
-import by.teachmeskills.devteam.entity.Project;
 import by.teachmeskills.devteam.entity.attributes.project.ProjectStatus;
 import by.teachmeskills.devteam.exception.ProjectNameAlreadyInUseException;
 import by.teachmeskills.devteam.exception.ProjectNotFoundException;
@@ -17,8 +17,6 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
-
-import static by.teachmeskills.devteam.util.TextUtils.replaceHyphenationOnBr;
 
 @Service
 @RequiredArgsConstructor
@@ -63,12 +61,18 @@ public class ProjectService {
         });
         var customerId = newProjectData.getCustomerId();
         var managerId = newProjectData.getManagerId();
-        var specification = replaceHyphenationOnBr(newProjectData.getNewProjectSpecification());
+        var specification = newProjectData.getNewProjectSpecification();
         var manager = userRepository.findById(managerId)
                 .orElseThrow(() -> new UserNotFoundException(managerId));
         var customer = userRepository.findById(customerId)
                 .orElseThrow(() -> new UserNotFoundException(customerId));
-        var project = new Project(newProjectName, specification, ProjectStatus.NEW, customer, manager);
+        var project = Project.builder()
+                .name(newProjectName)
+                .specification(specification)
+                .status(ProjectStatus.NEW)
+                .customer(customer)
+                .manager(manager)
+                .build();
         save(project);
     }
 
@@ -78,7 +82,7 @@ public class ProjectService {
                 .orElseThrow(() -> new ProjectNotFoundException(projectId));
         if (editorRoles.contains(Role.CUSTOMER)) {
             project.setName(updatedProjectData.getName());
-            project.setSpecification(replaceHyphenationOnBr(updatedProjectData.getSpecification()));
+            project.setSpecification(updatedProjectData.getSpecification());
             project.setManager(findUserByIdOrThrowException(updatedProjectData.getManagerId()));
         }
         if (editorRoles.contains(Role.MANAGER)) {
