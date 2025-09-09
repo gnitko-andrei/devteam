@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.context.annotation.Import;
+import org.springframework.security.test.context.support.WithAnonymousUser;
 import org.springframework.test.web.servlet.MockMvc;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -26,6 +27,7 @@ class LoginViewWebTest {
     }
 
     @Test
+    @WithAnonymousUser
     void shouldRedirectToLogin_whenGetAnyUrl_givenUnauthorisedUser() throws Exception {
         mockMvc.perform(get("/anyUrl"))
                 .andExpect(status().is3xxRedirection())

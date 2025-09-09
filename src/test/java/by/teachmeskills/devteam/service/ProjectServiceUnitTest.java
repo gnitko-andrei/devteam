@@ -31,7 +31,6 @@ import static org.mockito.Mockito.*;
 class ProjectServiceUnitTest {
 
     public static final long PROJECT_ID = 1L;
-    public static final long USER_ID = 5L;
     public static final long MANAGER_ID = 10L;
     public static final long CUSTOMER_ID = 11L;
     public static final long DEVELOPER_ID_1 = 111L;
@@ -158,43 +157,6 @@ class ProjectServiceUnitTest {
         verifyNoInteractions(projectRepositoryMock);
         verifyNoInteractions(projectMapperMock);
         assertThat(actual).isEmpty();
-    }
-
-    @Test
-    void shouldReturnTrue_whenIsProjectVisibleForUser_givenExistingProjectIdAndProjectIsVisibleForUserWithGivenId() {
-        // given
-        when(projectRepositoryMock.findById(any())).thenReturn(Optional.of(projectMock));
-        when(projectMock.isVisibleForUser(any())).thenReturn(true);
-        // when
-        var actual = projectService.isProjectVisibleForUser(PROJECT_ID, USER_ID);
-        // then
-        verify(projectRepositoryMock).findById(PROJECT_ID);
-        verify(projectMock).isVisibleForUser(USER_ID);
-        assertThat(actual).isTrue();
-    }
-
-    @Test
-    void shouldReturnFalse_whenIsProjectVisibleForUser_givenExistingProjectIdAndProjectIsNotVisibleForUserWithGivenId() {
-        // given
-        when(projectRepositoryMock.findById(any())).thenReturn(Optional.of(projectMock));
-        when(projectMock.isVisibleForUser(any())).thenReturn(false);
-        // when
-        var actual = projectService.isProjectVisibleForUser(PROJECT_ID, USER_ID);
-        // then
-        verify(projectRepositoryMock).findById(PROJECT_ID);
-        verify(projectMock).isVisibleForUser(USER_ID);
-        assertThat(actual).isFalse();
-    }
-
-    @Test
-    void shouldThrowProjectNotFoundException_whenIsProjectVisibleForUser_givenNotExistingProjectId() {
-        // given
-        when(projectRepositoryMock.findById(any())).thenReturn(Optional.empty());
-        // when / then
-        assertThatThrownBy(() -> projectService.isProjectVisibleForUser(PROJECT_ID, USER_ID))
-                .isInstanceOf(ProjectNotFoundException.class)
-                .hasMessage("Project not found. Project Id: " + PROJECT_ID);
-        verify(projectRepositoryMock).findById(PROJECT_ID);
     }
 
     @Test

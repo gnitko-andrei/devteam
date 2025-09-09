@@ -49,11 +49,6 @@ public class ProjectService {
                 .toList();
     }
 
-    public boolean isProjectVisibleForUser(Long projectId, Long userId) {
-        return projectRepository.findById(projectId).map(project -> project.isVisibleForUser(userId))
-                .orElseThrow(() -> new ProjectNotFoundException(projectId));
-    }
-
     public void addNewProject(ProjectCreationDto newProjectData) {
         var newProjectName = newProjectData.getNewProjectName();
         projectRepository.findByName(newProjectName).ifPresent(project -> {

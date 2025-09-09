@@ -5,7 +5,6 @@ import by.teachmeskills.devteam.exception.WrongPasswordException;
 import by.teachmeskills.devteam.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -38,7 +37,7 @@ public class UserController {
         return "userEditor";
     }
 
-    @PostMapping
+    @PostMapping("/userEditor")
     public String updateUserData(@AuthenticationPrincipal(expression = "id") Long userId,
                                  @ModelAttribute UserProfileUpdateDto userProfileUpdateData,
                                  RedirectAttributes redirectAttributes) {
@@ -54,8 +53,6 @@ public class UserController {
     @DeleteMapping
     public String deleteUser(@AuthenticationPrincipal(expression = "id") Long userId) {
         userService.deleteById(userId);
-        SecurityContextHolder.getContext().getAuthentication().setAuthenticated(false);
-
-        return "redirect:/login";
+        return "redirect:/logout";
     }
 }
