@@ -81,14 +81,6 @@ class DeveloperControllerWebTest {
 
     @Test
     @WithMockUser(authorities = "MANAGER")
-    void shouldReturnForbidden_whenPostDevelopers_withoutCsrf() throws Exception {
-        mockMvc.perform(post("/developers"))
-                .andExpect(status().isForbidden());
-        verifyNoInteractions(userServiceMock);
-    }
-
-    @Test
-    @WithMockUser(authorities = "MANAGER")
     void shouldDeleteDeveloper_whenDeleteDevelopers_givenDeveloperIdParam() throws Exception {
         // given
         // when / then

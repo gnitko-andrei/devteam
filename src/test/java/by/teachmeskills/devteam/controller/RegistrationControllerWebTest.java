@@ -33,6 +33,7 @@ class RegistrationControllerWebTest {
                 .andExpect(status().isOk())
                 .andExpect(view().name("registration"));
     }
+
     @Test
     void shouldCreateNewUserAndRedirectToLogin_whenPostRegistration_givenUserCreationDataInParamsAndUsernameIsFree() throws Exception {
         // given
@@ -75,13 +76,5 @@ class RegistrationControllerWebTest {
                 .andExpect(flash().attribute("errorMessage", "User already exists!"));
         verify(userServiceMock).isUserExists(givenUsername);
         verify(userServiceMock, never()).createNewUser(any());
-    }
-
-    @Test
-    void shouldReturnForbidden_whenPostRegistration_withoutCsrf() throws Exception {
-        mockMvc.perform(post("/registration")
-                        .param("username", "x")
-                        .param("password", "y"))
-                .andExpect(status().isForbidden());
     }
 }

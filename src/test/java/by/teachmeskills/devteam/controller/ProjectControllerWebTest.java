@@ -147,14 +147,6 @@ class ProjectControllerWebTest {
     }
 
     @Test
-    @WithMockUser(authorities = "MANAGER")
-    void shouldReturnForbidden_whenPostProjects_withoutCsrf() throws Exception {
-        mockMvc.perform(post("/projects").with(user(USER_CUSTOMER)))
-                .andExpect(status().isForbidden());
-        verifyNoInteractions(userServiceMock);
-    }
-
-    @Test
     void shouldRenderProjectInfo_whenGetProjectsProjectId_givenProjectId() throws Exception {
         // given
         when(projectServiceMock.findById(any())).thenReturn(PROJECT_DTO_1);

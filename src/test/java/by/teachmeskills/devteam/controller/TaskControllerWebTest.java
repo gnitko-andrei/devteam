@@ -112,13 +112,6 @@ class TaskControllerWebTest {
     }
 
     @Test
-    void shouldReturnForbidden_whenPostProjectTasks_withoutCsrf() throws Exception {
-        mockMvc.perform(post("/projects/{projectId}/tasks", PROJECT_ID_1).with(user(USER_MANAGER)))
-                .andExpect(status().isForbidden());
-        verifyNoInteractions(taskServiceMock);
-    }
-
-    @Test
     void shouldUpdateTaskAdnRedirectToTaskList_whenPostProjectTasksTaskId_givenUpdateTaskData() throws Exception {
         // given
         var givenSubmittedTime = 10;

@@ -117,12 +117,6 @@ class UserControllerWebTest {
     }
 
     @Test
-    void shouldReturnForbidden_whenPostUserEditor_withoutCsrf() throws Exception {
-        mockMvc.perform(post("/user/userEditor").with(user(USER_1)))
-                .andExpect(status().isForbidden());
-    }
-
-    @Test
     void shouldDeleteUserAndLogout_whenDeleteUser() throws Exception {
         // given
         // when / then

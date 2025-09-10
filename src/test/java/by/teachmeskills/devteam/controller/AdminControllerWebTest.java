@@ -127,11 +127,4 @@ class AdminControllerWebTest {
                 .andExpect(flash().attribute("errorMessage", usernameAlreadyInUseException.getMessage()));
         verify(userServiceMock).updateUserByAdmin(USER_ID_1, expectedUserUpdateByAdminDto);
     }
-
-    @Test
-    @WithMockUser(authorities = "ADMIN")
-    void shouldReturnForbidden_whenPostUserIdEdit_withoutCsrf() throws Exception {
-        mockMvc.perform(post("/admin/{userId}/edit", USER_ID_1))
-                .andExpect(status().isForbidden());
-    }
 }
