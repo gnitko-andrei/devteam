@@ -61,38 +61,22 @@ public class ProjectController {
 
         model.addAttribute("project", project);
 
-        if (projectService.isProjectVisibleForUser(projectId, userId)) {
-            return "projectInfo";
-        }
-        return "/error";
-    }
-
-    @DeleteMapping
-    @PreAuthorize("hasAnyAuthority('CUSTOMER', 'MANAGER')")
-    public String deleteProject(Long projectId) {
-        projectService.deleteById(projectId);
-
-        return "redirect:/projects";
+        return "projectInfo";
     }
 
     @GetMapping("/edit/{projectId}")
     @PreAuthorize("hasAnyAuthority('CUSTOMER', 'MANAGER')")
     public String getProjectEditor(@AuthenticationPrincipal(expression = "id") Long userId, @PathVariable Long projectId, Model model) {
         var project = projectService.findById(projectId);
-        var specification = project.getSpecification();
         var managers = userService.getAllUsersByRole(Role.MANAGER);
         var developers = userService.getAllUsersByRole(Role.DEVELOPER);
 
         model.addAttribute("project", project);
-        model.addAttribute("specification", specification);
         model.addAttribute("statuses", ProjectStatus.visibleForFiltering());
         model.addAttribute("managers", managers);
         model.addAttribute("developers", developers);
 
-        if (projectService.isProjectVisibleForUser(projectId, userId)) {
-            return "projectEditor";
-        }
-        return "/error";
+        return "projectEditor";
     }
 
     @PostMapping("/edit/{projectId}")
@@ -104,5 +88,13 @@ public class ProjectController {
         projectService.updateProject(roles, updatedProjectData);
 
         return "redirect:/projects/{projectId}";
+    }
+
+    @DeleteMapping
+    @PreAuthorize("hasAnyAuthority('CUSTOMER', 'MANAGER')")
+    public String deleteProject(Long projectId) {
+        projectService.deleteById(projectId);
+
+        return "redirect:/projects";
     }
 }

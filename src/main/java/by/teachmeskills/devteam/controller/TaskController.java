@@ -24,8 +24,8 @@ public class TaskController {
     @GetMapping
     @PreAuthorize("hasAnyAuthority('DEVELOPER', 'MANAGER')")
     public String getAllProjectTasks(@PathVariable Long projectId,
-            Model model,
-            TaskStatus statusFilter) {
+                                     TaskStatus statusFilter,
+                                     Model model) {
         var tasks = taskService.findByProjectIdAndStatus(projectId, statusFilter);
         var project = projectService.findById(projectId);
 

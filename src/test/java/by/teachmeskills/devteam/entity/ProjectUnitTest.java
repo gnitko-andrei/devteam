@@ -9,56 +9,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 class ProjectUnitTest {
 
     @Test
-    void shouldReturnTrue_whenIsVisibleForUser_givenUserIdAndProjectManagerWithMatchingId() {
-        // given
-        var givenProject = new Project();
-        final var givenUserId = 1L;
-        givenProject.setManager(User.builder().id(givenUserId).build());
-        // when
-        final var actual = givenProject.isVisibleForUser(givenUserId);
-        // then
-        assertThat(actual).isTrue();
-    }
-
-    @Test
-    void shouldReturnTrue_whenIsVisibleForUser_givenUserIdAndProjectCustomerWithMatchingId() {
-        // given
-        var givenProject = new Project();
-        final var givenUserId = 1L;
-        givenProject.setCustomer(User.builder().id(givenUserId).build());
-        // when
-        final var actual = givenProject.isVisibleForUser(givenUserId);
-        // then
-        assertThat(actual).isTrue();
-    }
-
-    @Test
-    void shouldReturnTrue_whenIsVisibleForUser_givenUserIdAndProjectDeveloperWithMatchingId() {
-        // given
-        var givenProject = new Project();
-        final var givenUserId = 1L;
-        givenProject.setDevelopers(List.of(User.builder().id(givenUserId).build()));
-        // when
-        final var actual = givenProject.isVisibleForUser(givenUserId);
-        // then
-        assertThat(actual).isTrue();
-    }
-
-    @Test
-    void shouldReturnFalse_whenIsVisibleForUser_givenUserIdAndNoMatchingUserIdsForProjectUsersOnDifferentRoles() {
-        // given
-        var givenProject = new Project();
-        final var givenUserId = 1L;
-        givenProject.setManager(User.builder().id(2L).build());
-        givenProject.setCustomer(User.builder().id(3L).build());
-        givenProject.setDevelopers(List.of(User.builder().id(4L).build()));
-        // when
-        final var actual = givenProject.isVisibleForUser(givenUserId);
-        // then
-        assertThat(actual).isFalse();
-    }
-
-    @Test
     void shouldReturnCustomerFullNameString_whenGetCustomerName_givenProjectCustomerSet() {
         // given
         var givenProject = new Project();

@@ -10,7 +10,7 @@
     <p th:text="${errorMessage}">Error message</p>
 </div>
 <div class="container my-5">
-    <form th:action="@{/user}" method="post" style="max-width: 500px;">
+    <form th:action="@{/user/userEditor}" method="post" style="max-width: 500px;">
         <div class="form-group my-3">
             <label for="currentPassword">Текущий пароль</label>
             <input type="password" name="currentPassword" class="form-control col-6" id="currentPassword">

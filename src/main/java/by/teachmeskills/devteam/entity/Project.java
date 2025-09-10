@@ -6,8 +6,6 @@ import lombok.*;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
 
 @Entity
 @Table(name = "project")
@@ -57,15 +55,6 @@ public class Project {
     @JoinColumn(name = "project_id")
     @Builder.Default
     private List<Task> tasks = new ArrayList<>();
-
-    public boolean isVisibleForUser(Long userId) {
-        var users = new ArrayList<User>();
-        Optional.ofNullable(developers).ifPresent(users::addAll);
-        Optional.ofNullable(manager).ifPresent(users::add);
-        Optional.ofNullable(customer).ifPresent(users::add);
-        return users.stream()
-                .anyMatch(user -> Objects.equals(user.getId(), userId));
-    }
 
     public String getCustomerName() {
         return customer != null ? customer.getFullName(): "none";
