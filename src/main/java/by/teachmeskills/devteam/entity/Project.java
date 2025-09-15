@@ -4,8 +4,9 @@ import by.teachmeskills.devteam.entity.attributes.project.ProjectStatus;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.io.Serial;
+import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.List;
 
 @Entity
 @Table(name = "project")
@@ -15,7 +16,11 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class Project {
+@SuppressWarnings("java:S1948")
+public class Project implements Serializable {
+
+    @Serial
+    private static final long serialVersionUID = 1L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "hibernate_seq")
@@ -48,13 +53,13 @@ public class Project {
             inverseJoinColumns = {@JoinColumn(name = "developer_id")}
     )
     @Builder.Default
-    private List<User> developers = new ArrayList<>();
+    private ArrayList<User> developers = new ArrayList<>();
 
 
     @OneToMany(fetch = FetchType.LAZY)
     @JoinColumn(name = "project_id")
     @Builder.Default
-    private List<Task> tasks = new ArrayList<>();
+    private ArrayList<Task> tasks = new ArrayList<>();
 
     public String getCustomerName() {
         return customer != null ? customer.getFullName(): "none";
