@@ -47,13 +47,13 @@ public class User implements UserDetails {
             inverseJoinColumns = {@JoinColumn(name = "project_id")}
     )
     @Builder.Default
-    private HashSet<Project> projects = new HashSet<>();
+    private Set<Project> projects = new HashSet<>();
 
     @ElementCollection(targetClass = Role.class, fetch = FetchType.EAGER)
     @CollectionTable(name = "user_role", joinColumns = @JoinColumn(name = "user_id"))
     @Enumerated(EnumType.STRING)
     @Builder.Default
-    private HashSet<Role> roles = new HashSet<>();
+    private Set<Role> roles = new HashSet<>();
 
     @Override
     public boolean isEnabled() {

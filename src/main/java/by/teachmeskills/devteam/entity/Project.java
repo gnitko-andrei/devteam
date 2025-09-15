@@ -7,6 +7,7 @@ import lombok.*;
 import java.io.Serial;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "project")
@@ -53,13 +54,13 @@ public class Project implements Serializable {
             inverseJoinColumns = {@JoinColumn(name = "developer_id")}
     )
     @Builder.Default
-    private ArrayList<User> developers = new ArrayList<>();
+    private List<User> developers = new ArrayList<>();
 
 
     @OneToMany(fetch = FetchType.LAZY)
     @JoinColumn(name = "project_id")
     @Builder.Default
-    private ArrayList<Task> tasks = new ArrayList<>();
+    private List<Task> tasks = new ArrayList<>();
 
     public String getCustomerName() {
         return customer != null ? customer.getFullName(): "none";
