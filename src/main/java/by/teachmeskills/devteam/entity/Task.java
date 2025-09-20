@@ -4,6 +4,9 @@ import by.teachmeskills.devteam.entity.attributes.task.TaskStatus;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.io.Serial;
+import java.io.Serializable;
+
 import static com.google.common.base.Preconditions.checkArgument;
 
 @Entity
@@ -14,7 +17,11 @@ import static com.google.common.base.Preconditions.checkArgument;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class Task {
+@SuppressWarnings("java:S1948")
+public class Task implements Serializable {
+
+    @Serial
+    private static final long serialVersionUID = 1L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "hibernate_seq")

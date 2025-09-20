@@ -5,6 +5,7 @@ import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.io.Serial;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -17,7 +18,11 @@ import java.util.stream.Stream;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@SuppressWarnings("java:S1948")
 public class User implements UserDetails {
+
+    @Serial
+    private static final long serialVersionUID = 1L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "hibernate_seq")
@@ -42,14 +47,13 @@ public class User implements UserDetails {
             inverseJoinColumns = {@JoinColumn(name = "project_id")}
     )
     @Builder.Default
-    private transient Set<Project> projects = new HashSet<>();
+    private Set<Project> projects = new HashSet<>();
 
     @ElementCollection(targetClass = Role.class, fetch = FetchType.EAGER)
     @CollectionTable(name = "user_role", joinColumns = @JoinColumn(name = "user_id"))
     @Enumerated(EnumType.STRING)
     @Builder.Default
     private Set<Role> roles = new HashSet<>();
-
 
     @Override
     public boolean isEnabled() {
@@ -80,3 +84,4 @@ public class User implements UserDetails {
         return stringJoiner.toString();
     }
 }
+

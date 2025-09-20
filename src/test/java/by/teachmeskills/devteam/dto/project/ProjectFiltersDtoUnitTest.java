@@ -27,13 +27,13 @@ class ProjectFiltersDtoUnitTest {
     }
 
     @Test
-    void shouldSetNormalizedNameFilterValue_whenSetNameFilter_givenNameFilterInput() {
+    void shouldSetNormalizedNameFilterValueAndEscapeHqlCharacters_whenSetNameFilter_givenNameFilterInput() {
         // given
         var givenDto = ProjectFiltersDto.builder().build();
         // when
-        givenDto.setNameFilter("   project NAME ");
+        givenDto.setNameFilter("   project NAME ! % _  ");
         // then
-        assertThat(givenDto.getNameFilter()).isEqualTo("project name");
+        assertThat(givenDto.getNameFilter()).isEqualTo("project name !! !% !_");
     }
 
 }

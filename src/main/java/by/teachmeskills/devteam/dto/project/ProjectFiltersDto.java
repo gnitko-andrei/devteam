@@ -28,8 +28,12 @@ public class ProjectFiltersDto {
     }
 
     public void setNameFilter(String nameFilter) {
-        this.nameFilter = (nameFilter == null || nameFilter.isBlank())
-                ? null
-                : nameFilter.trim().toLowerCase();
+        if (nameFilter == null || nameFilter.isBlank()) {
+            this.nameFilter = null;
+            return;
+        }
+        var n = nameFilter.trim().toLowerCase();
+        n = n.replace("!", "!!").replace("%", "!%").replace("_", "!_");
+        this.nameFilter = n;
     }
 }
