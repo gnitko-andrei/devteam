@@ -1,14 +1,14 @@
 package by.teachmeskills.devteam.common.jpa;
 
+import by.teachmeskills.devteam.mysql.TestMySQLContainer;
 import org.junit.jupiter.api.BeforeAll;
 import org.springframework.boot.autoconfigure.ImportAutoConfiguration;
 import org.springframework.boot.flyway.autoconfigure.FlywayAutoConfiguration;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.boot.testcontainers.service.connection.ServiceConnection;
 import org.springframework.test.context.ActiveProfiles;
-import org.testcontainers.containers.MySQLContainer;
-import org.testcontainers.junit.jupiter.Container;
+import org.springframework.test.context.DynamicPropertyRegistry;
+import org.springframework.test.context.DynamicPropertySource;
 import org.testcontainers.junit.jupiter.Testcontainers;
 
 @Testcontainers
@@ -18,15 +18,18 @@ import org.testcontainers.junit.jupiter.Testcontainers;
 @ImportAutoConfiguration(FlywayAutoConfiguration.class)
 public abstract class AbstractJpaTest {
 
-    @Container
-    @ServiceConnection
-    static final MySQLContainer<?> MYSQL = new MySQLContainer<>("mysql:8.4.5")
-            .withDatabaseName("devteam")
-            .withUsername("testuser")
-            .withPassword("1111");
+    private static final TestMySQLContainer MYSQL = TestMySQLContainer.getInstance();
+    static { MYSQL.start(); }
+
+    @DynamicPropertySource
+    static void props(DynamicPropertyRegistry r) {
+        r.add("spring.datasource.url", MYSQL::getJdbcUrl);
+        r.add("spring.datasource.username", MYSQL::getUsername);
+        r.add("spring.datasource.password", MYSQL::getPassword);
+    }
 
     @BeforeAll
-    static void logConnectionInfo() {
+    static void log() {
         System.out.println("🐳 Testcontainer JDBC URL: " + MYSQL.getJdbcUrl());
         System.out.println("User: " + MYSQL.getUsername());
         System.out.println("Pass: " + MYSQL.getPassword());
