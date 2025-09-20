@@ -23,8 +23,7 @@ public abstract class AbstractJpaTest {
     static final MySQLContainer<?> MYSQL = new MySQLContainer<>("mysql:8.4.5")
             .withDatabaseName("devteam")
             .withUsername("testuser")
-            .withPassword("1111")
-            .withReuse(true);
+            .withPassword("1111");
 
     @BeforeAll
     static void logConnectionInfo() {
