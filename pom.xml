@@ -185,7 +185,34 @@
                 <configuration>
                     <useModulePath>false</useModulePath>
                     <argLine>${argLine}</argLine>
+                    <!-- keep unit patterns; exclude ITs so they don't run here -->
+                    <excludes>
+                        <exclude>**/*IT.java</exclude>
+                        <exclude>**/*ITCase.java</exclude>
+                    </excludes>
                 </configuration>
+            </plugin>
+            <!-- Integration / E2E tests -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-failsafe-plugin</artifactId>
+                <version>3.5.4</version>
+                <configuration>
+                    <includes>
+                        <include>**/*IT.java</include>
+                        <include>**/*ITCase.java</include>
+                    </includes>
+                    <!-- Forward Surefire's JVM args if you use jacoco/argLine, etc. -->
+                    <argLine>${argLine}</argLine>
+                </configuration>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>integration-test</goal>
+                            <goal>verify</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
     </build>

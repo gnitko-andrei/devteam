@@ -57,6 +57,13 @@ jobs:
           name: Unit Tests
           path: target/surefire-reports/*.xml
           reporter: java-junit
+      - name: Report E2E / Integration test results (Failsafe)
+        if: always()
+        uses: dorny/test-reporter@v1
+        with:
+          name: E2E / Integration Tests
+          path: target/failsafe-reports/*.xml
+          reporter: java-junit
 
       # Optional: Uploads the full dependency graph to GitHub to improve the quality of Dependabot alerts this repository can receive
       - name: Update dependency graph
