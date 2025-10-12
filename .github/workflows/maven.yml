@@ -52,17 +52,17 @@ jobs:
 
       - name: Report test results
         if: always() # run even if tests fail
-        uses: dorny/test-reporter@eea8b67eb1fe9a0b1e45b603065ff41056ea5d2c
+        uses: dorny/test-reporter@v1
         with:
           name: Unit Tests
-          path: target/surefire-reports/TEST-*.xml
+          path: '**/target/surefire-reports/TEST-*.xml'
           reporter: java-junit
       - name: Report E2E / Integration test results (Failsafe)
         if: always()
-        uses: dorny/test-reporter@eea8b67eb1fe9a0b1e45b603065ff41056ea5d2c
+        uses: dorny/test-reporter@v1
         with:
           name: E2E / Integration Tests
-          path: target/failsafe-reports/TEST-*.xml
+          path: '**/target/failsafe-reports/TEST-*.xml'
           reporter: java-junit
 
       # Optional: Uploads the full dependency graph to GitHub to improve the quality of Dependabot alerts this repository can receive
