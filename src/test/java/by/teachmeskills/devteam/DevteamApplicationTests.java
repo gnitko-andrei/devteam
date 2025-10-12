@@ -1,17 +1,14 @@
 package by.teachmeskills.devteam;
 
-import org.junit.jupiter.api.Disabled;
+import by.teachmeskills.devteam.common.jpa.MySqlContainerSupport;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
-@Disabled("TODO")
 @SpringBootTest
-class DevteamApplicationTests {
+class DevteamApplicationTests extends MySqlContainerSupport {
 
-    @Disabled("TODO")
     @Test
     void contextLoads() {
-        // TODO
     }
 
 }

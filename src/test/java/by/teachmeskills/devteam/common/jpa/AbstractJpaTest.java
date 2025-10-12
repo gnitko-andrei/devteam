@@ -1,37 +1,24 @@
 package by.teachmeskills.devteam.common.jpa;
 
-import by.teachmeskills.devteam.mysql.TestMySQLContainer;
-import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.springframework.boot.autoconfigure.ImportAutoConfiguration;
 import org.springframework.boot.flyway.autoconfigure.FlywayAutoConfiguration;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.DynamicPropertyRegistry;
-import org.springframework.test.context.DynamicPropertySource;
-import org.testcontainers.junit.jupiter.Testcontainers;
 
-@Testcontainers
 @DataJpaTest
 @ActiveProfiles("test")
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 @ImportAutoConfiguration(FlywayAutoConfiguration.class)
-public abstract class AbstractJpaTest {
+public abstract class AbstractJpaTest extends MySqlContainerSupport {
 
-    private static final TestMySQLContainer MYSQL = TestMySQLContainer.getInstance();
-    static { MYSQL.start(); }
-
-    @DynamicPropertySource
-    static void props(DynamicPropertyRegistry r) {
-        r.add("spring.datasource.url", MYSQL::getJdbcUrl);
-        r.add("spring.datasource.username", MYSQL::getUsername);
-        r.add("spring.datasource.password", MYSQL::getPassword);
-    }
-
-    @BeforeAll
-    static void log() {
-        System.out.println("🐳 Testcontainer JDBC URL: " + MYSQL.getJdbcUrl());
-        System.out.println("User: " + MYSQL.getUsername());
-        System.out.println("Pass: " + MYSQL.getPassword());
+    @BeforeEach
+    void printConn() {
+        System.out.printf("🐳 mysql host=localhost port=%d db=%s user=%s password=%s%n",
+                mysql.getMappedPort(3306), mysql.getDatabaseName(), mysql.getUsername(), mysql.getPassword());
+        String url = "jdbc:mysql://localhost:" + mysql.getMappedPort(3306) + "/" + mysql.getDatabaseName();
+        System.out.println("🐳 jdbc url:            " + url);
+        System.out.println("🐳 jdbc url (no-ssl):   " + url + "?allowPublicKeyRetrieval=true&useSSL=false&serverTimezone=UTC\n");
     }
 }
