@@ -9,6 +9,7 @@ class DevteamApplicationTests extends MySqlContainerSupport {
 
     @Test
     void contextLoads() {
+        // Verifies that the Spring Boot application context starts successfully.
     }
 
 }
