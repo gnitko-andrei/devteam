@@ -1,4 +1,4 @@
-package by.teachmeskills.devteam.common.jpa;
+package by.teachmeskills.devteam.common;
 
 import org.springframework.boot.testcontainers.service.connection.ServiceConnection;
 import org.testcontainers.containers.MySQLContainer;

@@ -54,12 +54,14 @@ public class Project implements Serializable {
             inverseJoinColumns = {@JoinColumn(name = "developer_id")}
     )
     @Builder.Default
+    @EqualsAndHashCode.Exclude
     private List<User> developers = new ArrayList<>();
 
 
     @OneToMany(fetch = FetchType.LAZY)
     @JoinColumn(name = "project_id")
     @Builder.Default
+    @EqualsAndHashCode.Exclude
     private List<Task> tasks = new ArrayList<>();
 
     public String getCustomerName() {

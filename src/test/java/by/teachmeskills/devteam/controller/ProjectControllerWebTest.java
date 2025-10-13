@@ -8,6 +8,7 @@ import by.teachmeskills.devteam.entity.User;
 import by.teachmeskills.devteam.entity.attributes.project.ProjectStatus;
 import by.teachmeskills.devteam.service.ProjectService;
 import by.teachmeskills.devteam.service.UserService;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +28,7 @@ import static org.springframework.security.test.web.servlet.request.SecurityMock
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
+@Tag("web")
 @WebMvcTest(ProjectController.class)
 @Import(SecurityConfiguration.class)
 class ProjectControllerWebTest {

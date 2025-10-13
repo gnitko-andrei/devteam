@@ -4,6 +4,7 @@ import by.teachmeskills.devteam.config.SecurityConfiguration;
 import by.teachmeskills.devteam.dto.user.UserDto;
 import by.teachmeskills.devteam.entity.Role;
 import by.teachmeskills.devteam.service.UserService;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -20,6 +21,7 @@ import static org.springframework.security.test.web.servlet.request.SecurityMock
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
+@Tag("web")
 @WebMvcTest(DeveloperController.class)
 @Import(SecurityConfiguration.class)
 class DeveloperControllerWebTest {

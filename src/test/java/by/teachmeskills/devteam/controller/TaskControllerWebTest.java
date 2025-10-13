@@ -11,6 +11,7 @@ import by.teachmeskills.devteam.entity.User;
 import by.teachmeskills.devteam.entity.attributes.task.TaskStatus;
 import by.teachmeskills.devteam.service.ProjectService;
 import by.teachmeskills.devteam.service.TaskService;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -28,6 +29,7 @@ import static org.springframework.security.test.web.servlet.request.SecurityMock
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
+@Tag("web")
 @WebMvcTest(TaskController.class)
 @Import(SecurityConfiguration.class)
 class TaskControllerWebTest {

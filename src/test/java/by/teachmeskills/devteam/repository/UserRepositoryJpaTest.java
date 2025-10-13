@@ -1,6 +1,6 @@
 package by.teachmeskills.devteam.repository;
 
-import by.teachmeskills.devteam.common.jpa.AbstractJpaTest;
+import by.teachmeskills.devteam.common.AbstractJpaTest;
 import by.teachmeskills.devteam.entity.Project;
 import by.teachmeskills.devteam.entity.Role;
 import by.teachmeskills.devteam.entity.User;

@@ -47,12 +47,14 @@ public class User implements UserDetails {
             inverseJoinColumns = {@JoinColumn(name = "project_id")}
     )
     @Builder.Default
+    @EqualsAndHashCode.Exclude
     private Set<Project> projects = new HashSet<>();
 
     @ElementCollection(targetClass = Role.class, fetch = FetchType.EAGER)
     @CollectionTable(name = "user_role", joinColumns = @JoinColumn(name = "user_id"))
     @Enumerated(EnumType.STRING)
     @Builder.Default
+    @EqualsAndHashCode.Exclude
     private Set<Role> roles = new HashSet<>();
 
     @Override

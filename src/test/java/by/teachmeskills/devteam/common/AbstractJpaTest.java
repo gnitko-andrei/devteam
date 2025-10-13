@@ -1,6 +1,7 @@
-package by.teachmeskills.devteam.common.jpa;
+package by.teachmeskills.devteam.common;
 
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Tag;
 import org.springframework.boot.autoconfigure.ImportAutoConfiguration;
 import org.springframework.boot.flyway.autoconfigure.FlywayAutoConfiguration;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
@@ -9,6 +10,7 @@ import org.springframework.test.context.ActiveProfiles;
 
 @DataJpaTest
 @ActiveProfiles("test")
+@Tag("jpa")
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 @ImportAutoConfiguration(FlywayAutoConfiguration.class)
 public abstract class AbstractJpaTest extends MySqlContainerSupport {

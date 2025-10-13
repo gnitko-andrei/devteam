@@ -1,6 +1,6 @@
 package by.teachmeskills.devteam.repository;
 
-import by.teachmeskills.devteam.common.jpa.AbstractJpaTest;
+import by.teachmeskills.devteam.common.AbstractJpaTest;
 import by.teachmeskills.devteam.entity.Task;
 import by.teachmeskills.devteam.entity.attributes.task.TaskStatus;
 import org.junit.jupiter.api.Test;

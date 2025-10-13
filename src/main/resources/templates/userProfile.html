@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security" lang="ru">
 <head>
-    <title>Профиль пользователя</title>
+    <title>User Profile</title>
     <th:block th:replace="~{fragments/common :: headerfiles}"/>
 </head>
-<body>
+<body data-testid=user-profile>
 <th:block th:replace="~{fragments/common :: header}"/>
 <div class="container m-5" th:value="${currentUser}">
     <dl class="row">

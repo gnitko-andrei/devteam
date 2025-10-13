@@ -1,14 +1,14 @@
 package by.teachmeskills.devteam.e2e;
 
-import by.teachmeskills.devteam.common.jpa.AbstractE2eTest;
+import by.teachmeskills.devteam.common.AbstractE2eTest;
 import org.jsoup.Jsoup;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpStatus;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@Tag("smoke")
 class ApplicationHttpSmokeIT extends AbstractE2eTest {
 
     @Test

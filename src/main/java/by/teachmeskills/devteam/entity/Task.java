@@ -49,6 +49,7 @@ public class Task implements Serializable {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "project_id")
+    @EqualsAndHashCode.Exclude
     private Project project;
 
     public void submitAdditionalTime(int hours) {

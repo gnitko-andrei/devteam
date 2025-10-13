@@ -6,6 +6,7 @@ import by.teachmeskills.devteam.dto.user.UserUpdateByAdminDto;
 import by.teachmeskills.devteam.entity.Role;
 import by.teachmeskills.devteam.exception.UsernameAlreadyInUseException;
 import by.teachmeskills.devteam.service.UserService;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -23,6 +24,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
+@Tag("web")
 @WebMvcTest(AdminController.class)
 @Import(SecurityConfiguration.class)
 class AdminControllerWebTest {
