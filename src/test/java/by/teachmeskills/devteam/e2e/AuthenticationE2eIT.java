@@ -18,6 +18,7 @@ import static org.assertj.core.api.Assertions.assertThat;
  * 	•	Logout: POST /logout (with CSRF) → 302 /login?logout, then /admin redirects to /login.
  */
 @Sql(value = "/testdata/e2e/authenticationItTestData.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_CLASS)
+@Sql(value = "/testdata/e2e/cleanup.sql", executionPhase = Sql.ExecutionPhase.AFTER_TEST_CLASS)
 class AuthenticationE2eIT extends AbstractE2eTest {
 
     @Test

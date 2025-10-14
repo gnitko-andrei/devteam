@@ -18,6 +18,7 @@ import static org.assertj.core.api.Assertions.assertThat;
  * 	•	Logged-in non-admin → GET /admin → 403 + your 403 template marker.
  */
 @Sql(value = "/testdata/e2e/authenticationItTestData.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_CLASS)
+@Sql(value = "/testdata/e2e/cleanup.sql", executionPhase = Sql.ExecutionPhase.AFTER_TEST_CLASS)
 class ErrorPagesE2eIT extends AbstractE2eTest {
 
     @Test
