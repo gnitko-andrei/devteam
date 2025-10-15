@@ -21,7 +21,7 @@ import static org.assertj.core.api.Assertions.assertThat;
  * 	•	MANAGER/DEVELOPER/CUSTOMER → /admin → 403.
  * 	•	(Optional) Role-allowed endpoints: e.g., MANAGER → /projects → 200; CUSTOMER → /projects (view) → 200/403 per your rules.
  */
-@Sql(value = "/testdata/e2e/authenticationItTestData.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_CLASS)
+@Sql(value = "/testdata/e2e/e2eCommonTestData.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_CLASS)
 @Sql(value = "/testdata/e2e/cleanup.sql", executionPhase = Sql.ExecutionPhase.AFTER_TEST_CLASS)
 class RoleBasedAccessE2eIT extends AbstractE2eTest {
 
@@ -58,8 +58,7 @@ class RoleBasedAccessE2eIT extends AbstractE2eTest {
             assertThat(actualHtml.selectFirst(String.format("[data-testid=%s]", expectedPageTestId))).isNotNull();
         }
         if (redirectLocation != null && !redirectLocation.isBlank()) {
-            assertThat(actual.getHeaders().getLocation()).isNotNull();
-            assertThat(actual.getHeaders().getLocation().getPath()).isEqualTo(redirectLocation);
+            assertRedirect(actual, redirectLocation);
         }
     }
 }

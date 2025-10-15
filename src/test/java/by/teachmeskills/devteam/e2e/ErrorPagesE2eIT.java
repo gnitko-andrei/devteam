@@ -1,14 +1,11 @@
 package by.teachmeskills.devteam.e2e;
 
 import by.teachmeskills.devteam.common.AbstractE2eTest;
-import org.jsoup.Jsoup;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.*;
 import org.springframework.test.context.jdbc.Sql;
 
 import java.util.List;
-
-import static org.assertj.core.api.Assertions.assertThat;
 
 /**
  * Scope: custom error views render correctly.
@@ -17,7 +14,7 @@ import static org.assertj.core.api.Assertions.assertThat;
  * 	•	GET an unknown path → 404 + your 404 template marker (e.g., [data-testid=page-404]).
  * 	•	Logged-in non-admin → GET /admin → 403 + your 403 template marker.
  */
-@Sql(value = "/testdata/e2e/authenticationItTestData.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_CLASS)
+@Sql(value = "/testdata/e2e/e2eCommonTestData.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_CLASS)
 @Sql(value = "/testdata/e2e/cleanup.sql", executionPhase = Sql.ExecutionPhase.AFTER_TEST_CLASS)
 class ErrorPagesE2eIT extends AbstractE2eTest {
 
@@ -32,10 +29,7 @@ class ErrorPagesE2eIT extends AbstractE2eTest {
         // when
         var actual = rest.exchange("/unknown-path", HttpMethod.GET, entity, String.class);
         // then
-        assertThat(actual.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
-        final var actualErrorPageHtml = Jsoup.parse(actual.getBody());
-        assertThat(actualErrorPageHtml.title()).isEqualTo("Page Not Found");
-        assertThat(actualErrorPageHtml.selectFirst("[data-testid=page-not-found]")).isNotNull();
+        assertHtmlPage(actual, "page-not-found", HttpStatus.NOT_FOUND);
     }
 
     @Test
@@ -49,9 +43,6 @@ class ErrorPagesE2eIT extends AbstractE2eTest {
         // when
         var actual = rest.exchange("/admin", HttpMethod.GET, entity, String.class);
         // then
-        assertThat(actual.getStatusCode()).isEqualTo(HttpStatus.FORBIDDEN);
-        final var actualErrorPageHtml = Jsoup.parse(actual.getBody());
-        assertThat(actualErrorPageHtml.title()).isEqualTo("Error");
-        assertThat(actualErrorPageHtml.selectFirst("[data-testid=error-page]")).isNotNull();
+        assertHtmlPage(actual, "error-page", HttpStatus.FORBIDDEN);
     }
 }

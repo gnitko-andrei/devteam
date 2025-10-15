@@ -1,13 +1,9 @@
 package by.teachmeskills.devteam.e2e;
 
 import by.teachmeskills.devteam.common.AbstractE2eTest;
-import org.jsoup.Jsoup;
 import org.junit.jupiter.api.Test;
-import org.springframework.http.HttpStatus;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.util.LinkedMultiValueMap;
-
-import static org.assertj.core.api.Assertions.assertThat;
 
 /**
  * Scope: login/logout/session lifecycle.
@@ -17,60 +13,45 @@ import static org.assertj.core.api.Assertions.assertThat;
  * 	•	Good credentials: POST /login → 302 to home (or your post-login page).
  * 	•	Logout: POST /logout (with CSRF) → 302 /login?logout, then /admin redirects to /login.
  */
-@Sql(value = "/testdata/e2e/authenticationItTestData.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_CLASS)
+@Sql(value = "/testdata/e2e/e2eCommonTestData.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_CLASS)
 @Sql(value = "/testdata/e2e/cleanup.sql", executionPhase = Sql.ExecutionPhase.AFTER_TEST_CLASS)
 class AuthenticationE2eIT extends AbstractE2eTest {
 
     @Test
     void shouldAuthenticateUserAndRedirectToHome_whenPostLogin_givenExistingUserCredentials() {
         // given / when
-        var actual = loginAs("testuser", "1");
+        var actual = loginAs("user", "1");
         // then
-        assertThat(actual.getStatusCode().is3xxRedirection()).isTrue();
-        assertThat(actual.getHeaders().getLocation()).isNotNull();
-        assertThat(actual.getHeaders().getLocation().getPath()).isEqualTo("/");
+        assertRedirect(actual, "/");
     }
 
     @Test
     void shouldOpenUserProfile_whenGetUserProfile_givenAuthenticatedUser(){
         // given
-        loginAs("testuser", "1");
+        loginAs("user", "1");
         // when
         var actual = rest.getForEntity("/user", String.class);
         // then
-        assertThat(actual.getStatusCode()).isEqualTo(HttpStatus.OK);
-        final var actualUserProfileHtml = Jsoup.parse(actual.getBody());
-        assertThat(actualUserProfileHtml.title()).isEqualTo("User Profile");
-        assertThat(actualUserProfileHtml.selectFirst("[data-testid=user-profile]")).isNotNull();
+        assertHtmlPage(actual,  "user-profile");
     }
 
     @Test
     void shouldRedirectToLoginWithErrorParam_whenPostLogin_givenUserWrongPassword() {
         // given / when
-        var actual = loginAs("testuser", "wrong—password");
+        var actual = loginAs("user", "wrong—password");
         // then
-        assertThat(actual.getStatusCode().is3xxRedirection()).isTrue();
-        var loc = actual.getHeaders().getLocation();
-        assertThat(loc).isNotNull();
-        assertThat(loc.getPath()).endsWith("/login");
-        assertThat(loc.getQuery()).contains("error");
+        assertRedirect(actual, "/login", "error");
     }
 
     @Test
     void shouldRedirectToLoginWithLogoutParam_whenPostLogout_givenAuthenticatedUser() {
         // given
-        loginAs("testuser", "1");
-        // when
+        loginAs("user", "1");
+        // when / then
         var actual = postFormWithCsrf("/", "/logout", new LinkedMultiValueMap<>());
-        // then
-        assertThat(actual.getStatusCode().is3xxRedirection()).isTrue();
-        var loc = actual.getHeaders().getLocation();
-        assertThat(loc).isNotNull();
-        assertThat(loc.getPath()).endsWith("/login");
-        assertThat(loc.getQuery()).contains("logout");
+        assertRedirect(actual, "/login", "logout");
 
-        var userAfterLogout = rest.getForEntity("/user", String.class);
-        assertThat(userAfterLogout.getStatusCode().is3xxRedirection()).isTrue();
-        assertThat(userAfterLogout.getHeaders().getLocation().getPath()).endsWith("/login");
+        var responseAfterLogout = rest.getForEntity("/user", String.class);
+        assertRedirect(responseAfterLogout, "/login");
     }
 }

@@ -47,8 +47,6 @@ class CsrfE2eIT extends AbstractE2eTest {
         // when
         var actual = postFormWithCsrf("/registration", "/registration", givenForm);
         // then
-        assertThat(actual.getStatusCode().is3xxRedirection()).isTrue();
-        assertThat(actual.getHeaders().getLocation()).isNotNull();
-        assertThat(actual.getHeaders().getLocation().getPath()).isEqualTo("/login");
+        assertRedirect(actual, "/login");
     }
 }

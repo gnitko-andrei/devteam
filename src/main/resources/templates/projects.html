@@ -9,7 +9,7 @@
 <div class="container-fluid">
     <div class="row m-2">
         <div class="col col-2">
-            <h5>Список проектов</h5>
+            <h5>Projects List</h5>
             <a sec:authorize="hasAuthority('CUSTOMER')" class="btn btn-primary mb-3" data-toggle="collapse"
                href="#addProject" aria-expanded="false" aria-controls="addProject">
                 Создать новый проект
@@ -82,17 +82,17 @@
         <div class="row row-cols-auto" th:if="!${#lists.isEmpty(userProjectsList)}">
             <div th:each="project : ${userProjectsList}">
                 <div class="card my-2">
-                    <h5 class="card-header" th:text="${project.name}">Project name</h5>
+                    <h5 class="card-header" th:text="${project.name}" data-testid="project-name">Project name</h5>
                     <div class="card-body">
                         <strong>Статус:</strong>
-                        <div th:text="${project.status}"></div>
+                        <div th:text="${project.status}" data-testid="project-status"></div>
                         <div sec:authorize="hasAnyAuthority('DEVELOPER', 'MANAGER')">
                             <strong>Заказчик:</strong>
-                            <div th:text="${project.customerName}"></div>
+                            <div th:text="${project.customerName}" data-testid="customer-name"></div>
                         </div>
                         <div sec:authorize="hasAnyAuthority('CUSTOMER', 'DEVELOPER')">
                             <strong>Менеджер:</strong>
-                            <div th:text="${project.managerName}"></div>
+                            <div th:text="${project.managerName}" data-testid="manager-name"></div>
                         </div>
                         <strong>Текущая стоимость:</strong>
                         <div th:text="${project.projectPrice} + ' $'"></div>

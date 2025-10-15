@@ -4,6 +4,7 @@ import by.teachmeskills.devteam.config.TestHttpClientConfig;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
+import org.springframework.http.HttpStatus;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +20,8 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 
 import java.net.CookieManager;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 @Tag("e2e")
 @ActiveProfiles("test")
@@ -78,5 +81,55 @@ public abstract class AbstractE2eTest extends MySqlContainerSupport {
         form.add("username", username);
         form.add("password", password);
         return postFormWithCsrf("/login", "/login", form);
+    }
+
+    protected static void assertRedirect(ResponseEntity<String> actualResponse, String expectedRedirectPath, String... expectedQueryParams) {
+        assertThat(actualResponse.getStatusCode().is3xxRedirection())
+                .as("Expected 3XX REDIRECT but was %s", actualResponse.getStatusCode())
+                .isTrue();
+        final var location = actualResponse.getHeaders().getLocation();
+        assertThat(location)
+                .as("Missing Location header")
+                .isNotNull();
+        final var actualRedirectPath = location.getPath();
+        assertThat(actualRedirectPath)
+                .as("Expected redirect path to end with '%s' but was '%s'", expectedRedirectPath, actualRedirectPath)
+                .endsWith(expectedRedirectPath);
+        for (String param : expectedQueryParams) {
+            final var actualLocationQuery = location.getQuery();
+            assertThat(actualLocationQuery)
+                    .as("Expected query to contain param '%s' but was: %s", param, actualLocationQuery)
+                    .contains(param);
+        }
+    }
+
+    protected static void assertHtmlPage(ResponseEntity<String> actualResponse, String dataTestId) {
+        assertHtmlPage(actualResponse, dataTestId, HttpStatus.OK);
+    }
+
+    protected static void assertHtmlPage(ResponseEntity<String> actualResponse, String dataTestid, HttpStatus expectedStatus) {
+        var location = actualResponse.getHeaders().getLocation();
+        assertThat(actualResponse.getStatusCode())
+                .as("Expected 200 OK but was %s (Location=%s)", actualResponse.getStatusCode(), location)
+                .isEqualTo(expectedStatus);
+
+        var contentType = actualResponse.getHeaders().getContentType();
+        assertThat(contentType)
+                .as("Content-Type header should be present")
+                .isNotNull();
+        assertThat(contentType.isCompatibleWith(MediaType.TEXT_HTML))
+                .as("Expected Content-Type text/html but was %s", contentType)
+                .isTrue();
+
+        var body = actualResponse.getBody();
+        assertThat(body)
+                .as("Response body should not be empty")
+                .isNotBlank();
+
+        Document doc = Jsoup.parse(body);
+        var selector = String.format("[data-testid=\"%s\"]", dataTestid);
+        assertThat(doc.selectFirst(selector))
+                .as("Missing page marker %s", selector)
+                .isNotNull();
     }
 }
