@@ -49,7 +49,7 @@ jobs:
           path: '**/target/site/jacoco/jacoco.xml'
       - name: Report unit tests
         if: always()
-        uses: dorny/test-reporter@veea8b67eb1fe9a0b1e45b603065ff41056ea5d2c
+        uses: dorny/test-reporter@eea8b67eb1fe9a0b1e45b603065ff41056ea5d2c
         with:
           name: Unit Tests
           path: '**/target/surefire-reports/TEST-*.xml'
@@ -85,7 +85,7 @@ jobs:
           path: '**/target/site/jacoco/jacoco.xml'
       - name: Report web tests
         if: always()
-        uses: dorny/test-reporter@veea8b67eb1fe9a0b1e45b603065ff41056ea5d2c
+        uses: dorny/test-reporter@eea8b67eb1fe9a0b1e45b603065ff41056ea5d2c
         with:
           name: Web Tests
           path: '**/target/surefire-reports/TEST-*.xml'
@@ -112,7 +112,7 @@ jobs:
           path: '**/target/site/jacoco/jacoco.xml'
       - name: Report jpa tests
         if: always()
-        uses: dorny/test-reporter@veea8b67eb1fe9a0b1e45b603065ff41056ea5d2c
+        uses: dorny/test-reporter@eea8b67eb1fe9a0b1e45b603065ff41056ea5d2c
         with:
           name: JPA Tests
           path: '**/target/surefire-reports/TEST-*.xml'
@@ -139,7 +139,7 @@ jobs:
           path: '**/target/site/jacoco/jacoco.xml'
       - name: Report smoke tests
         if: always()
-        uses: dorny/test-reporter@veea8b67eb1fe9a0b1e45b603065ff41056ea5d2c
+        uses: dorny/test-reporter@eea8b67eb1fe9a0b1e45b603065ff41056ea5d2c
         with:
           name: Smoke ITs
           path: '**/target/failsafe-reports/TEST-*.xml'
@@ -167,7 +167,7 @@ jobs:
           path: '**/target/site/jacoco/jacoco.xml'
       - name: Report e2e tests
         if: always()
-        uses: dorny/test-reporter@veea8b67eb1fe9a0b1e45b603065ff41056ea5d2c
+        uses: dorny/test-reporter@eea8b67eb1fe9a0b1e45b603065ff41056ea5d2c
         with:
           name: E2E ITs
           path: '**/target/failsafe-reports/TEST-*.xml'
