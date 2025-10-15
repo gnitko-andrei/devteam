@@ -21,7 +21,7 @@ class ErrorPagesE2eIT extends AbstractE2eTest {
     @Test
     void shouldOpen404Page_whenGetUnknownPath_givenUnknownPath() {
         // given
-        loginAs("testuser", "1");
+        loginAs("user", "1");
 
         var headers = new HttpHeaders();
         headers.setAccept(List.of(MediaType.TEXT_HTML)); // force HTML
@@ -35,7 +35,7 @@ class ErrorPagesE2eIT extends AbstractE2eTest {
     @Test
     void shouldOpenErrorPage_whenGetAdminPath_givenNoAdminUserAuthenticated() {
         // given
-        loginAs("testuser", "1");
+        loginAs("user", "1");
 
         var headers = new HttpHeaders();
         headers.setAccept(List.of(MediaType.TEXT_HTML)); // force HTML

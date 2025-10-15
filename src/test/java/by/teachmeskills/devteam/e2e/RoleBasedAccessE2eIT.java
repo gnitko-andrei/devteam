@@ -29,8 +29,8 @@ class RoleBasedAccessE2eIT extends AbstractE2eTest {
         return Stream.of(
                 Arguments.of("ANONYMOUS", null, null, "/", HttpStatus.OK, "home-page", null),
                 Arguments.of("ANONYMOUS", null, null, "/user", HttpStatus.FOUND, null, "/login"),
-                Arguments.of("USER", "testuser", "1", "/user", HttpStatus.OK, "user-profile", null),
-                Arguments.of("USER", "testuser", "1", "/admin", HttpStatus.FORBIDDEN, null, null),
+                Arguments.of("USER", "user", "1", "/user", HttpStatus.OK, "user-profile", null),
+                Arguments.of("USER", "user", "1", "/admin", HttpStatus.FORBIDDEN, null, null),
                 Arguments.of("ADMIN", "admin", "1", "/admin", HttpStatus.OK, "admin-panel", null),
                 Arguments.of("ADMIN", "admin", "1", "/projects", HttpStatus.FORBIDDEN, null, null),
                 Arguments.of("MANAGER", "manager", "1", "/projects", HttpStatus.OK, "projects-list", null),
