@@ -190,6 +190,11 @@
                         <exclude>**/*IT.java</exclude>
                         <exclude>**/*ITCase.java</exclude>
                     </excludes>
+                    <properties>
+                        <!-- run “pure unit” by default -->
+                        <junit.jupiter.tags></junit.jupiter.tags>
+                        <junit.jupiter.excludeTags>web,jpa,smoke,e2e</junit.jupiter.excludeTags>
+                    </properties>
                 </configuration>
             </plugin>
             <!-- Integration / E2E tests -->
@@ -254,6 +259,87 @@
             </releases>
         </pluginRepository>
     </pluginRepositories>
+
+    <profiles>
+        <!-- run only unit tests (default behavior) -->
+        <profile>
+            <id>unit</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <properties>
+                <junit.jupiter.excludeTags>web,jpa,smoke,e2e</junit.jupiter.excludeTags>
+            </properties>
+        </profile>
+
+        <!-- run only web slice tests -->
+        <profile>
+            <id>web</id>
+            <properties>
+                <junit.jupiter.tags>web</junit.jupiter.tags>
+                <junit.jupiter.excludeTags></junit.jupiter.excludeTags>
+            </properties>
+        </profile>
+
+        <!-- run only jpa slice tests -->
+        <profile>
+            <id>jpa</id>
+            <properties>
+                <junit.jupiter.tags>jpa</junit.jupiter.tags>
+                <junit.jupiter.excludeTags></junit.jupiter.excludeTags>
+            </properties>
+        </profile>
+
+        <!-- run only smoke tests (integration-style), via Failsafe -->
+        <profile>
+            <id>smoke</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-failsafe-plugin</artifactId>
+                        <configuration>
+                            <includes>
+                                <!-- if your smokes are IT classes -->
+                                <include>**/*IT.java</include>
+                                <include>**/*ITCase.java</include>
+                            </includes>
+                            <properties>
+                                <!-- filter by @Tag("smoke") -->
+                                <junit.jupiter.tags>smoke</junit.jupiter.tags>
+                            </properties>
+                            <argLine>${argLine}</argLine>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+
+        <!-- full E2E (all ITs) -->
+        <profile>
+            <id>e2e</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-failsafe-plugin</artifactId>
+                        <configuration>
+                            <!-- run every *IT / *ITCase (optionally also tag-filter if you want) -->
+                            <includes>
+                                <include>**/*IT.java</include>
+                                <include>**/*ITCase.java</include>
+                            </includes>
+                            <properties>
+                                <!-- filter by @Tag("e2e") -->
+                                <junit.jupiter.tags>e2e</junit.jupiter.tags>
+                            </properties>
+                            <argLine>${argLine}</argLine>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
 
 </project>
 
