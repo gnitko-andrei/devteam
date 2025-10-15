@@ -185,6 +185,7 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
                 <configuration>
+                    <failIfNoTests>false</failIfNoTests>
                     <useModulePath>false</useModulePath>
                     <argLine>${argLine}</argLine>
                     <!-- keep unit patterns; exclude ITs so they don't run here -->
@@ -192,10 +193,8 @@
                         <exclude>**/*IT.java</exclude>
                         <exclude>**/*ITCase.java</exclude>
                     </excludes>
-                    <systemPropertyVariables>
-                        <junit.jupiter.tags>${junit.jupiter.tags}</junit.jupiter.tags>
-                        <junit.jupiter.excludeTags>${junit.jupiter.excludeTags}</junit.jupiter.excludeTags>
-                    </systemPropertyVariables>
+                    <groups>${junit.jupiter.tags}</groups>
+                    <excludedGroups>${junit.jupiter.excludeTags}</excludedGroups>
                 </configuration>
             </plugin>
             <!-- Integration / E2E tests -->
@@ -204,16 +203,15 @@
                 <artifactId>maven-failsafe-plugin</artifactId>
                 <version>3.5.4</version>
                 <configuration>
+                    <failIfNoTests>false</failIfNoTests>
                     <includes>
                         <include>**/*IT.java</include>
                         <include>**/*ITCase.java</include>
                     </includes>
                     <!-- Forward Surefire's JVM args if you use jacoco/argLine, etc. -->
                     <argLine>${argLine}</argLine>
-                    <systemPropertyVariables>
-                        <junit.jupiter.tags>${junit.jupiter.tags}</junit.jupiter.tags>
-                        <junit.jupiter.excludeTags>${junit.jupiter.excludeTags}</junit.jupiter.excludeTags>
-                    </systemPropertyVariables>
+                    <groups>${junit.jupiter.tags}</groups>
+                    <excludedGroups>${junit.jupiter.excludeTags}</excludedGroups>
                 </configuration>
                 <executions>
                     <execution>
@@ -269,8 +267,8 @@
             <id>unit</id>
             <activation><activeByDefault>true</activeByDefault></activation>
             <properties>
-                <junit.jupiter.tags></junit.jupiter.tags>
-                <junit.jupiter.excludeTags>web,jpa,smoke,e2e</junit.jupiter.excludeTags>
+                <junit.jupiter.tags>none()</junit.jupiter.tags>
+                <junit.jupiter.excludeTags></junit.jupiter.excludeTags>
             </properties>
         </profile>
 
