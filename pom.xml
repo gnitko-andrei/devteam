@@ -21,6 +21,8 @@
         <sonar.coverage.exclusions>**/config/**</sonar.coverage.exclusions>
         <sonar.coverage.jacoco.xmlReportPaths>${project.reporting.outputDirectory}/jacoco/jacoco.xml
         </sonar.coverage.jacoco.xmlReportPaths>
+        <junit.jupiter.tags></junit.jupiter.tags>
+        <junit.jupiter.excludeTags>web,jpa,smoke,e2e</junit.jupiter.excludeTags>
     </properties>
 
     <dependencies>
@@ -192,8 +194,8 @@
                     </excludes>
                     <properties>
                         <!-- run “pure unit” by default -->
-                        <junit.jupiter.tags></junit.jupiter.tags>
-                        <junit.jupiter.excludeTags>web,jpa,smoke,e2e</junit.jupiter.excludeTags>
+                        <junit.jupiter.tags>${junit.jupiter.tags}</junit.jupiter.tags>
+                        <junit.jupiter.excludeTags>${junit.jupiter.excludeTags}</junit.jupiter.excludeTags>
                     </properties>
                 </configuration>
             </plugin>
@@ -209,6 +211,10 @@
                     </includes>
                     <!-- Forward Surefire's JVM args if you use jacoco/argLine, etc. -->
                     <argLine>${argLine}</argLine>
+                    <properties>
+                        <junit.jupiter.tags>${junit.jupiter.tags}</junit.jupiter.tags>
+                        <junit.jupiter.excludeTags>${junit.jupiter.excludeTags}</junit.jupiter.excludeTags>
+                    </properties>
                 </configuration>
                 <executions>
                     <execution>
@@ -221,7 +227,6 @@
             </plugin>
         </plugins>
     </build>
-
 
     <repositories>
         <repository>
@@ -261,18 +266,15 @@
     </pluginRepositories>
 
     <profiles>
-        <!-- run only unit tests (default behavior) -->
         <profile>
             <id>unit</id>
-            <activation>
-                <activeByDefault>true</activeByDefault>
-            </activation>
+            <activation><activeByDefault>true</activeByDefault></activation>
             <properties>
+                <junit.jupiter.tags></junit.jupiter.tags>
                 <junit.jupiter.excludeTags>web,jpa,smoke,e2e</junit.jupiter.excludeTags>
             </properties>
         </profile>
 
-        <!-- run only web slice tests -->
         <profile>
             <id>web</id>
             <properties>
@@ -281,7 +283,6 @@
             </properties>
         </profile>
 
-        <!-- run only jpa slice tests -->
         <profile>
             <id>jpa</id>
             <properties>
@@ -290,54 +291,20 @@
             </properties>
         </profile>
 
-        <!-- run only smoke tests (integration-style), via Failsafe -->
         <profile>
             <id>smoke</id>
-            <build>
-                <plugins>
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-failsafe-plugin</artifactId>
-                        <configuration>
-                            <includes>
-                                <!-- if your smokes are IT classes -->
-                                <include>**/*IT.java</include>
-                                <include>**/*ITCase.java</include>
-                            </includes>
-                            <properties>
-                                <!-- filter by @Tag("smoke") -->
-                                <junit.jupiter.tags>smoke</junit.jupiter.tags>
-                            </properties>
-                            <argLine>${argLine}</argLine>
-                        </configuration>
-                    </plugin>
-                </plugins>
-            </build>
+            <properties>
+                <junit.jupiter.tags>smoke</junit.jupiter.tags>
+                <junit.jupiter.excludeTags></junit.jupiter.excludeTags>
+            </properties>
         </profile>
 
-        <!-- full E2E (all ITs) -->
         <profile>
             <id>e2e</id>
-            <build>
-                <plugins>
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-failsafe-plugin</artifactId>
-                        <configuration>
-                            <!-- run every *IT / *ITCase (optionally also tag-filter if you want) -->
-                            <includes>
-                                <include>**/*IT.java</include>
-                                <include>**/*ITCase.java</include>
-                            </includes>
-                            <properties>
-                                <!-- filter by @Tag("e2e") -->
-                                <junit.jupiter.tags>e2e</junit.jupiter.tags>
-                            </properties>
-                            <argLine>${argLine}</argLine>
-                        </configuration>
-                    </plugin>
-                </plugins>
-            </build>
+            <properties>
+                <junit.jupiter.tags>e2e</junit.jupiter.tags>
+                <junit.jupiter.excludeTags></junit.jupiter.excludeTags>
+            </properties>
         </profile>
     </profiles>
 
