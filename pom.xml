@@ -192,11 +192,10 @@
                         <exclude>**/*IT.java</exclude>
                         <exclude>**/*ITCase.java</exclude>
                     </excludes>
-                    <properties>
-                        <!-- run “pure unit” by default -->
+                    <systemPropertyVariables>
                         <junit.jupiter.tags>${junit.jupiter.tags}</junit.jupiter.tags>
                         <junit.jupiter.excludeTags>${junit.jupiter.excludeTags}</junit.jupiter.excludeTags>
-                    </properties>
+                    </systemPropertyVariables>
                 </configuration>
             </plugin>
             <!-- Integration / E2E tests -->
@@ -211,10 +210,10 @@
                     </includes>
                     <!-- Forward Surefire's JVM args if you use jacoco/argLine, etc. -->
                     <argLine>${argLine}</argLine>
-                    <properties>
+                    <systemPropertyVariables>
                         <junit.jupiter.tags>${junit.jupiter.tags}</junit.jupiter.tags>
                         <junit.jupiter.excludeTags>${junit.jupiter.excludeTags}</junit.jupiter.excludeTags>
-                    </properties>
+                    </systemPropertyVariables>
                 </configuration>
                 <executions>
                     <execution>
