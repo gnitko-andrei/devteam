@@ -188,17 +188,8 @@
                     <failIfNoTests>false</failIfNoTests>
                     <useModulePath>false</useModulePath>
                     <argLine>${argLine}</argLine>
-                    <!-- keep unit patterns; exclude ITs so they don't run here -->
-                    <excludes>
-                        <exclude>**/*IT.java</exclude>
-                        <exclude>**/*ITCase.java</exclude>
-                    </excludes>
-                    <properties>
-                        <configurationParameters>
-                            junit.jupiter.tags=${junit.jupiter.tags}
-                            junit.jupiter.excludeTags=${junit.jupiter.excludeTags}
-                        </configurationParameters>
-                    </properties>
+                    <groups>${junit.jupiter.tags}</groups>
+                    <excludedGroups>${junit.jupiter.excludeTags}</excludedGroups>
                 </configuration>
             </plugin>
             <!-- Integration / E2E tests -->
@@ -208,18 +199,9 @@
                 <version>3.5.4</version>
                 <configuration>
                     <failIfNoTests>false</failIfNoTests>
-                    <includes>
-                        <include>**/*IT.java</include>
-                        <include>**/*ITCase.java</include>
-                    </includes>
-                    <!-- Forward Surefire's JVM args if you use jacoco/argLine, etc. -->
                     <argLine>${argLine}</argLine>
-                    <properties>
-                        <configurationParameters>
-                            junit.jupiter.tags=${junit.jupiter.tags}
-                            junit.jupiter.excludeTags=${junit.jupiter.excludeTags}
-                        </configurationParameters>
-                    </properties>
+                    <groups>${junit.jupiter.tags}</groups>
+                    <excludedGroups>${junit.jupiter.excludeTags}</excludedGroups>
                 </configuration>
                 <executions>
                     <execution>
