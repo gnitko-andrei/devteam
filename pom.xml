@@ -188,8 +188,8 @@
                     <failIfNoTests>false</failIfNoTests>
                     <useModulePath>false</useModulePath>
                     <argLine>${argLine}</argLine>
-                    <groups>${junit.jupiter.tags}</groups>
-                    <excludedGroups>${junit.jupiter.excludeTags}</excludedGroups>
+                    <includeTags>${junit.jupiter.tags}</includeTags>
+                    <excludeTags>${junit.jupiter.excludeTags}</excludeTags>
                 </configuration>
             </plugin>
             <!-- Integration / E2E tests -->
@@ -200,8 +200,8 @@
                 <configuration>
                     <failIfNoTests>false</failIfNoTests>
                     <argLine>${argLine}</argLine>
-                    <groups>${junit.jupiter.tags}</groups>
-                    <excludedGroups>${junit.jupiter.excludeTags}</excludedGroups>
+                    <includeTags>${junit.jupiter.tags}</includeTags>
+                    <excludeTags>${junit.jupiter.excludeTags}</excludeTags>
                 </configuration>
                 <executions>
                     <execution>
@@ -257,7 +257,7 @@
             <id>unit</id>
             <activation><activeByDefault>true</activeByDefault></activation>
             <properties>
-                <junit.jupiter.tags>none()</junit.jupiter.tags>
+                <junit.jupiter.tags></junit.jupiter.tags>
                 <junit.jupiter.excludeTags></junit.jupiter.excludeTags>
             </properties>
         </profile>
