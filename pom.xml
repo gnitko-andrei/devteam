@@ -193,8 +193,12 @@
                         <exclude>**/*IT.java</exclude>
                         <exclude>**/*ITCase.java</exclude>
                     </excludes>
-                    <groups>${junit.jupiter.tags}</groups>
-                    <excludedGroups>${junit.jupiter.excludeTags}</excludedGroups>
+                    <properties>
+                        <configurationParameters>
+                            junit.jupiter.tags=${junit.jupiter.tags}
+                            junit.jupiter.excludeTags=${junit.jupiter.excludeTags}
+                        </configurationParameters>
+                    </properties>
                 </configuration>
             </plugin>
             <!-- Integration / E2E tests -->
@@ -210,8 +214,12 @@
                     </includes>
                     <!-- Forward Surefire's JVM args if you use jacoco/argLine, etc. -->
                     <argLine>${argLine}</argLine>
-                    <groups>${junit.jupiter.tags}</groups>
-                    <excludedGroups>${junit.jupiter.excludeTags}</excludedGroups>
+                    <properties>
+                        <configurationParameters>
+                            junit.jupiter.tags=${junit.jupiter.tags}
+                            junit.jupiter.excludeTags=${junit.jupiter.excludeTags}
+                        </configurationParameters>
+                    </properties>
                 </configuration>
                 <executions>
                     <execution>
