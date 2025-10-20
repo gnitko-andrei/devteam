@@ -12,12 +12,14 @@ import by.teachmeskills.devteam.repository.ProjectRepository;
 import by.teachmeskills.devteam.repository.TaskRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class TaskService {
 
     private final ProjectRepository projectRepository;
@@ -28,6 +30,7 @@ public class TaskService {
         return taskRepository.findByProjectIdAndStatus(projectId, status).stream().map(taskMapper::toTaskDto).toList();
     }
 
+    @Transactional
     public void addNewTask(TaskCreationDto taskCreationData) {
         var projectId = taskCreationData.getProjectId();
         var project = projectRepository.findById(projectId).orElseThrow(() -> new ProjectNotFoundException(projectId));
@@ -36,6 +39,7 @@ public class TaskService {
         taskRepository.save(newTask);
     }
 
+    @Transactional
     public void updateTask(UpdateTaskDto updateTaskData) {
         var task = getTaskOrThrowException(updateTaskData.getId());
         Optional.ofNullable(updateTaskData.getStatus()).ifPresent(task::setStatus);
@@ -43,6 +47,7 @@ public class TaskService {
         taskRepository.save(task);
     }
 
+    @Transactional
     public void deleteById(Long id) {
         taskRepository.deleteById(id);
     }

@@ -6,7 +6,7 @@
 </head>
 <body>
 
-<div class="form-group" th:fragment="login (path, button_value)">
+<div class="form-group" th:fragment="login (path, button_value)" data-testid="login-form">
     <form th:action="${path}" method="post">
         <div class="form-group row mb-3">
             <label for="username-input" class="col-sm-2 col-form-label">Логин :</label>

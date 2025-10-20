@@ -5,7 +5,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>4.0.0-M2</version>
+        <version>4.0.0-M3</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>by.teachmeskills</groupId>
@@ -21,6 +21,8 @@
         <sonar.coverage.exclusions>**/config/**</sonar.coverage.exclusions>
         <sonar.coverage.jacoco.xmlReportPaths>${project.reporting.outputDirectory}/jacoco/jacoco.xml
         </sonar.coverage.jacoco.xmlReportPaths>
+        <junit.jupiter.tags></junit.jupiter.tags>
+        <junit.jupiter.excludeTags>web,jpa,smoke,e2e</junit.jupiter.excludeTags>
     </properties>
 
     <dependencies>
@@ -120,6 +122,17 @@
             <artifactId>mysql</artifactId>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-restclient</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.jsoup</groupId>
+            <artifactId>jsoup</artifactId>
+            <version>1.21.2</version>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
 
 
@@ -172,13 +185,35 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
                 <configuration>
+                    <failIfNoTests>false</failIfNoTests>
                     <useModulePath>false</useModulePath>
                     <argLine>${argLine}</argLine>
+                    <groups>${junit.jupiter.tags}</groups>
+                    <excludedGroups>${junit.jupiter.excludeTags}</excludedGroups>
                 </configuration>
+            </plugin>
+            <!-- Integration / E2E tests -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-failsafe-plugin</artifactId>
+                <version>3.5.4</version>
+                <configuration>
+                    <failIfNoTests>false</failIfNoTests>
+                    <argLine>${argLine}</argLine>
+                    <groups>${junit.jupiter.tags}</groups>
+                    <excludedGroups>${junit.jupiter.excludeTags}</excludedGroups>
+                </configuration>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>integration-test</goal>
+                            <goal>verify</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
     </build>
-
 
     <repositories>
         <repository>
@@ -216,6 +251,49 @@
             </releases>
         </pluginRepository>
     </pluginRepositories>
+
+    <profiles>
+        <profile>
+            <id>unit</id>
+            <activation><activeByDefault>true</activeByDefault></activation>
+            <properties>
+                <junit.jupiter.tags>none()</junit.jupiter.tags>
+                <junit.jupiter.excludeTags></junit.jupiter.excludeTags>
+            </properties>
+        </profile>
+
+        <profile>
+            <id>web</id>
+            <properties>
+                <junit.jupiter.tags>web</junit.jupiter.tags>
+                <junit.jupiter.excludeTags></junit.jupiter.excludeTags>
+            </properties>
+        </profile>
+
+        <profile>
+            <id>jpa</id>
+            <properties>
+                <junit.jupiter.tags>jpa</junit.jupiter.tags>
+                <junit.jupiter.excludeTags></junit.jupiter.excludeTags>
+            </properties>
+        </profile>
+
+        <profile>
+            <id>smoke</id>
+            <properties>
+                <junit.jupiter.tags>smoke</junit.jupiter.tags>
+                <junit.jupiter.excludeTags></junit.jupiter.excludeTags>
+            </properties>
+        </profile>
+
+        <profile>
+            <id>e2e</id>
+            <properties>
+                <junit.jupiter.tags>e2e</junit.jupiter.tags>
+                <junit.jupiter.excludeTags></junit.jupiter.excludeTags>
+            </properties>
+        </profile>
+    </profiles>
 
 </project>
 

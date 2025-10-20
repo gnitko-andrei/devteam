@@ -4,7 +4,7 @@
     <title th:inline="text">[[${project.name}]] задачи</title>
     <th:block th:replace="~{fragments/common :: headerfiles}"/>
 </head>
-<body>
+<body data-testid="tasks-list">
 <th:block th:replace="~{fragments/common :: header}"/>
 <div class="container-fluid">
     <div class="ms-2 mt-2">
@@ -26,11 +26,11 @@
                         <form th:action="@{'/projects/' + ${project.id} + '/tasks'}" method="post">
                             <div class="form-group my-2">
                                 <input type="text" class="form-control" name="name"
-                                       placeholder="Введите название задачи"/>
+                                       placeholder="Введите название задачи" data-testid="new-task-name"/>
                             </div>
                             <div class="form-group my-2">
                                 <label for="description">Описание</label>
-                                <textarea class="form-control" name="description" id="description"
+                                <textarea class="form-control" name="description" id="description" data-testid="new-task-description"
                                           rows="5"> </textarea>
                             </div>
                             <button type="submit" class="btn btn-primary mt-3">Добавить</button>
@@ -64,12 +64,12 @@
         <div class="row row-cols-auto" th:if="!${#lists.isEmpty(tasks)}">
             <div th:each="task : ${tasks}">
                 <div class="card my-2" style="max-width: 60ch;">
-                    <h5 class="card-header" th:text="${task.name}">Task name</h5>
+                    <h5 class="card-header" th:text="${task.name}" data-testid="task-name">Task name</h5>
                     <div class="card-body">
                         <strong>Описание:</strong>
-                        <div class="text-wrap" th:text="${task.description}"></div>
+                        <div class="text-wrap" th:text="${task.description}" data-testid="task-description"></div>
                         <strong>Статус:</strong>
-                        <div th:text="${task.status}"></div>
+                        <div th:text="${task.status}" data-testid="task-status"></div>
                         <strong>Времени затрачено:</strong>
                         <div th:text="${task.time}"></div>
                     </div>

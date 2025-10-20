@@ -18,12 +18,14 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class UserService implements UserDetailsService {
 
     private final UserRepository userRepository;
@@ -54,6 +56,7 @@ public class UserService implements UserDetailsService {
         return userRepository.findByUsername(username).isPresent();
     }
 
+    @Transactional
     public void createNewUser(UserRegistrationDto userRegistrationData) {
         var user = userMapper.toEntity(userRegistrationData);
         user.setActive(true);
@@ -61,6 +64,7 @@ public class UserService implements UserDetailsService {
         save(user);
     }
 
+    @Transactional
     public void updateUserByAdmin(Long userId, UserUpdateByAdminDto userUpdateData) {
         var user = getUserByIdOrThrow(userId);
         var newUsername = userUpdateData.getUsername();
@@ -75,6 +79,7 @@ public class UserService implements UserDetailsService {
         userRepository.save(user);
     }
 
+    @Transactional
     public void updateUserProfile(Long userId, UserProfileUpdateDto userProfileUpdateData) {
         var user = getUserByIdOrThrow(userId);
         var currentPassword = userProfileUpdateData.getCurrentPassword();
@@ -93,12 +98,14 @@ public class UserService implements UserDetailsService {
         save(user);
     }
 
+    @Transactional
     public void updateDeveloperRate(Long id, Integer price) {
         var user = getUserByIdOrThrow(id);
         user.setPrice(price);
         save(user);
     }
 
+    @Transactional
     public void deleteById(Long userId) {
         var user = getUserByIdOrThrow(userId);
         userRepository.delete(user);

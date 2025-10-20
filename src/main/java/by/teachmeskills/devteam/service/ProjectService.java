@@ -13,6 +13,7 @@ import by.teachmeskills.devteam.repository.ProjectRepository;
 import by.teachmeskills.devteam.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,6 +21,7 @@ import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class ProjectService {
 
     private final ProjectRepository projectRepository;
@@ -49,6 +51,7 @@ public class ProjectService {
                 .toList();
     }
 
+    @Transactional
     public void addNewProject(ProjectCreationDto newProjectData) {
         var newProjectName = newProjectData.getNewProjectName();
         projectRepository.findByName(newProjectName).ifPresent(project -> {
@@ -71,6 +74,7 @@ public class ProjectService {
         save(project);
     }
 
+    @Transactional
     public void updateProject(Set<Role> editorRoles, UpdateProjectDto updatedProjectData) {
         final var projectId = updatedProjectData.getId();
         var project = projectRepository.findById(projectId)
@@ -87,6 +91,7 @@ public class ProjectService {
         projectRepository.save(project);
     }
 
+    @Transactional
     public void deleteById(Long projectId) {
         projectRepository.deleteById(projectId);
     }

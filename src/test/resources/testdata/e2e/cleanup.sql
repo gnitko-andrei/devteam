@@ -1,0 +1,11 @@
+SET FOREIGN_KEY_CHECKS = 0;
+
+TRUNCATE TABLE developer_project;
+TRUNCATE TABLE task;
+TRUNCATE TABLE project;
+TRUNCATE TABLE user_role;
+TRUNCATE TABLE user;
+
+UPDATE hibernate_sequence SET next_val = 1;
+
+SET FOREIGN_KEY_CHECKS = 1;

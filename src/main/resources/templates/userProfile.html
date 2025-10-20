@@ -1,39 +1,39 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security" lang="ru">
 <head>
-    <title>Профиль пользователя</title>
+    <title>User Profile</title>
     <th:block th:replace="~{fragments/common :: headerfiles}"/>
 </head>
-<body>
+<body data-testid="user-profile">
 <th:block th:replace="~{fragments/common :: header}"/>
 <div class="container m-5" th:value="${currentUser}">
     <dl class="row">
         <dt class="col-sm-3">Логин</dt>
-        <dd class="col-sm-9" th:text="${currentUser.username}"></dd>
+        <dd class="col-sm-9" th:text="${currentUser.username}" data-testid="username"></dd>
     </dl>
     <dl class="row">
         <dt class="col-sm-3">Роль</dt>
-        <dd class="col-sm-9" th:text="${currentUser.rolesDescription}"></dd>
+        <dd class="col-sm-9" th:text="${currentUser.rolesDescription}" data-testid="user-roles"></dd>
     </dl>
     <dl class="row">
         <dt class="col-sm-3">Имя</dt>
-        <dd class="col-sm-9" th:text="${currentUser.firstName}"></dd>
+        <dd class="col-sm-9" th:text="${currentUser.firstName}" data-testid="user-firstname"></dd>
     </dl>
     <dl class="row">
         <dt class="col-sm-3">Фамилия</dt>
-        <dd class="col-sm-9" th:text="${currentUser.lastName}"></dd>
+        <dd class="col-sm-9" th:text="${currentUser.lastName}" data-testid="user-lastname"></dd>
     </dl>
     <dl class="row">
         <dt class="col-sm-3">Электроная почта</dt>
-        <dd class="col-sm-9" th:text="${currentUser.email}"></dd>
+        <dd class="col-sm-9" th:text="${currentUser.email}" data-testid="user-email"></dd>
     </dl>
     <dl class="row">
         <dt class="col-sm-3">Дополнительные контактные данные</dt>
-        <dd class="col-sm-9" th:text="${currentUser.contacts}"></dd>
+        <dd class="col-sm-9" th:text="${currentUser.contacts}" data-testid="user-contacts"></dd>
     </dl>
     <dl class="row">
         <dt class="col-sm-3">Профессиональные навыки</dt>
-        <dd class="col-sm-9" th:if="${currentUser.skills} != null" th:text="${currentUser.skills}"></dd>
+        <dd class="col-sm-9" th:if="${currentUser.skills} != null" th:text="${currentUser.skills}" data-testid="user-skills"></dd>
         <dd class="col-sm-9" th:unless="${currentUser.skills} != null" th:text="не + ' ' + заполнены"></dd>
     </dl>
     <dl class="row" sec:authorize="hasAuthority('DEVELOPER')">
