@@ -1,6 +1,7 @@
 package by.teachmeskills.devteam.e2e;
 
 import by.teachmeskills.devteam.common.AbstractE2eTest;
+import by.teachmeskills.devteam.entity.attributes.task.TaskStatus;
 import lombok.extern.slf4j.Slf4j;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -28,7 +29,7 @@ class DomainHappyPathE2eIT extends AbstractE2eTest {
     public static final String NEW_PROJECT_NAME = "new_project";
     public static final String NEW_PROJECT_SPECIFICATION = "New project specification";
     public static final String MANAGER_4_NAME = "Maria Wiśniewska";
-    public static final String PROJECT_STATUS_NEW = "NEW";
+    public static final String PROJECT_STATUS_NEW = "New";
     public static final String CUSTOMER_USERNAME = "customer";
     public static final String CUSTOMER_PASSWORD = "1";
     public static final String TESTUSER_USERNAME = "testuser";
@@ -44,11 +45,11 @@ class DomainHappyPathE2eIT extends AbstractE2eTest {
     public static final String MANAGER_PASSWORD = "1";
     public static final String NEW_TASK_NAME = "New Task";
     public static final String NEW_TASK_DESCRIPTION = "New Task Description";
-    public static final String TASK_STATUS_NEW = "NEW";
+    public static final String TASK_STATUS_NEW = "New";
     public static final String DEVELOPER_USERNAME = "developer";
     public static final String DEVELOPER_PASSWORD = "1";
     public static final String TASK_2000_NAME = "Gather requirements";
-    public static final String STATUS_IN_PROGRESS = "IN_PROGRESS";
+    public static final String STATUS_IN_PROGRESS = "In progress";
 
     @Test
     void shouldCreateNewUser_whenNewUserRegistration_givenRegistrationFormData() {
@@ -136,7 +137,7 @@ class DomainHappyPathE2eIT extends AbstractE2eTest {
         // given
         loginAs(DEVELOPER_USERNAME, DEVELOPER_PASSWORD);
         MultiValueMap<String, String> givenForm = new LinkedMultiValueMap<>();
-        givenForm.add("status", STATUS_IN_PROGRESS);
+        givenForm.add("status", TaskStatus.IN_PROGRESS.name());
         // when / then
         var actualGetTasks = rest.getForEntity("/projects/100/tasks", String.class);
         assertHtmlPage(actualGetTasks, "tasks-list");
