@@ -26,7 +26,7 @@
                 <div th:if="${param.error}" class="alert alert-danger py-2" role="alert">
                     Invalid username or password.
                 </div>
-                <form class="needs-validation mb-5" th:action="@{/login}" method="post" novalidate>
+                <form class="needs-validation mb-5" th:action="@{/login}" method="post" data-testid="login-form" novalidate>
                     <div class="form-floating mb-1">
                         <input type="text" id="username-input" name="username" class="form-control"
                                placeholder="Login"
