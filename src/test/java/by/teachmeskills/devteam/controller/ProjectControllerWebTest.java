@@ -56,12 +56,13 @@ class ProjectControllerWebTest {
     private static final UserDto USER_DTO_2 = UserDto.builder().id(2L).build();
     private static final UserDto USER_DTO_3 = UserDto.builder().id(3L).build();
     private static final long PROJECT_ID_1 = 1L;
-    private static final ProjectCardDto PROJECT_CARD_DTO_1 = ProjectCardDto.builder().id(PROJECT_ID_1).build();
-    private static final ProjectCardDto PROJECT_CARD_DTO_2 = ProjectCardDto.builder().id(2L).build();
-    private static final ProjectCardDto PROJECT_CARD_DTO_3 = ProjectCardDto.builder().id(3L).build();
+    private static final ProjectCardDto PROJECT_CARD_DTO_1 = ProjectCardDto.builder().id(PROJECT_ID_1).status(ProjectStatus.NEW).build();
+    private static final ProjectCardDto PROJECT_CARD_DTO_2 = ProjectCardDto.builder().id(2L).status(ProjectStatus.NEW).build();
+    private static final ProjectCardDto PROJECT_CARD_DTO_3 = ProjectCardDto.builder().id(3L).status(ProjectStatus.NEW).build();
     private static final ProjectDto PROJECT_DTO_1 = ProjectDto.builder()
             .id(PROJECT_ID_1)
             .name("project1")
+            .status(ProjectStatus.NEW)
             .specification("specification")
             .customer(USER_DTO_1)
             .manager(USER_DTO_2)

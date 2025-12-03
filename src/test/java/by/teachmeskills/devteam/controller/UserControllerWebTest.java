@@ -124,7 +124,7 @@ class UserControllerWebTest {
         // when / then
         mockMvc.perform(delete("/user").with(csrf()).with(user(USER_1)))
                 .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrl("/logout"));
+                .andExpect(redirectedUrl("/login"));
         verify(userServiceMock).deleteById(USER_ID_1);
     }
 }

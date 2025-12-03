@@ -35,9 +35,9 @@ class MainControllerWebTest {
     }
 
     @Test
-    void shouldRenderStackMoreInfo_whenGetInfoStack() throws Exception {
+    void shouldRenderTechnicalSpecification_whenGetInfoStack() throws Exception {
         mockMvc.perform(get("/info/stack"))
                 .andExpect(status().isOk())
-                .andExpect(view().name("stackMoreInfo"));
+                .andExpect(view().name("technicalSpecification"));
     }
 }
