@@ -114,7 +114,7 @@ class UserControllerWebTest {
                 )
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/user/userEditor"))
-                .andExpect(flash().attribute("errorMessage", "Неверный текущий пароль!"));
+                .andExpect(flash().attribute("errorMessage", "Wrong current password!"));
         verify(userServiceMock).updateUserProfile(USER_ID_1, expectedUserProfileUpdateDto);
     }
 

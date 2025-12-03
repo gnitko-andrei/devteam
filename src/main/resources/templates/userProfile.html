@@ -1,51 +1,49 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security" lang="ru">
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
 <head>
     <title>User Profile</title>
     <th:block th:replace="~{fragments/common :: headerfiles}"/>
 </head>
 <body data-testid="user-profile">
 <th:block th:replace="~{fragments/common :: header}"/>
-<div class="container m-5" th:value="${currentUser}">
-    <dl class="row">
-        <dt class="col-sm-3">Логин</dt>
-        <dd class="col-sm-9" th:text="${currentUser.username}" data-testid="username"></dd>
-    </dl>
-    <dl class="row">
-        <dt class="col-sm-3">Роль</dt>
-        <dd class="col-sm-9" th:text="${currentUser.rolesDescription}" data-testid="user-roles"></dd>
-    </dl>
-    <dl class="row">
-        <dt class="col-sm-3">Имя</dt>
-        <dd class="col-sm-9" th:text="${currentUser.firstName}" data-testid="user-firstname"></dd>
-    </dl>
-    <dl class="row">
-        <dt class="col-sm-3">Фамилия</dt>
-        <dd class="col-sm-9" th:text="${currentUser.lastName}" data-testid="user-lastname"></dd>
-    </dl>
-    <dl class="row">
-        <dt class="col-sm-3">Электроная почта</dt>
-        <dd class="col-sm-9" th:text="${currentUser.email}" data-testid="user-email"></dd>
-    </dl>
-    <dl class="row">
-        <dt class="col-sm-3">Дополнительные контактные данные</dt>
-        <dd class="col-sm-9" th:text="${currentUser.contacts}" data-testid="user-contacts"></dd>
-    </dl>
-    <dl class="row">
-        <dt class="col-sm-3">Профессиональные навыки</dt>
-        <dd class="col-sm-9" th:if="${currentUser.skills} != null" th:text="${currentUser.skills}" data-testid="user-skills"></dd>
-        <dd class="col-sm-9" th:unless="${currentUser.skills} != null" th:text="не + ' ' + заполнены"></dd>
-    </dl>
-    <dl class="row" sec:authorize="hasAuthority('DEVELOPER')">
-        <dt class="col-sm-3">Оплата</dt>
-        <dd class="col-sm-9" th:text="${currentUser.price} + ' $/час'"></dd>
-    </dl>
-    <a href="/user/userEditor" class="btn btn-primary btn-sm">Редактировать профиль</a>
-    <form class="form-inline my-2" th:action="@{/user}" method="post">
-        <input type="hidden" name="_method" value="delete"/>
-        <button class="btn btn-danger btn-sm" type="submit" id="deleteUser">Удалить аккаунт</button>
-    </form>
-</div>
+<main>
+    <div class="container">
+        <div class="card shadow-sm my-5">
+            <h1 class="card-header h4">User Data</h1>
+            <div class="card-body fs-5">
+                <h2 class="h5 card-title" th:if="${!#strings.isEmpty(currentUser.firstName)}">
+                    <span th:text="${currentUser.firstName}" data-testid="user-firstname"></span>
+                    <span th:if="${!#strings.isEmpty(currentUser.lastName)}">
+                        <span> </span>
+                        <span th:text="${currentUser.lastName}" data-testid="user-lastname"></span>
+                    </span>
+                </h2>
+                <div class="d-flex align-items-center gap-2 mt-2">
+                    <span class="text-body-tertiary" th:text="|@${currentUser.username}|"
+                          data-testid="username"></span>
+                    <span class="badge text-bg-dark" th:text="${currentUser.rolesDescription}"
+                          data-testid="user-roles"></span>
+                </div>
+                <div class="mt-2" th:if="${!#strings.isEmpty(currentUser.email)}"
+                     data-testid="user-email">
+                    <i class="bi bi-envelope-at"></i>
+                    <span th:text="${currentUser.email}"></span>
+                </div>
+                <div class="mt-2" th:if="${!#strings.isEmpty(currentUser.contacts)}"
+                     data-testid="user-contacts">
+                    <i class="bi bi-chat-left-dots"></i>
+                    <span th:text="${currentUser.contacts}"></span>
+                </div>
+                <div class="mt-2" th:if="${!#strings.isEmpty(currentUser.skills)}"
+                     data-testid="user-skills">
+                    <i class="bi bi-tools"></i>
+                    <span th:text="${currentUser.skills}"></span>
+                </div>
+                <a href="/user/userEditor" class="btn btn-primary mt-3">Edit profile</a>
+            </div>
+        </div>
+    </div>
+</main>
 <th:block th:replace="~{fragments/common :: footer}"/>
 <th:block th:replace="~{fragments/common :: imports}"/>
 </body>

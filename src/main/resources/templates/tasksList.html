@@ -1,124 +1,177 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security" lang="ru">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security" lang="en">
 <head>
-    <title th:inline="text">[[${project.name}]] задачи</title>
+    <title th:inline="text">[[${project.name}]] tasks</title>
     <th:block th:replace="~{fragments/common :: headerfiles}"/>
 </head>
 <body data-testid="tasks-list">
 <th:block th:replace="~{fragments/common :: header}"/>
-<div class="container-fluid">
-    <div class="ms-2 mt-2">
-        <h1 th:inline="text">
-            Проект [[${project.name}]]
-        </h1>
-        <h2>Список задач</h2>
-    </div>
-    <div class="ms-2 row">
-        <div class="col-4">
-            <a sec:authorize="hasAuthority('MANAGER')" class="btn btn-primary mb-3" data-toggle="collapse"
-               href="#addTask"
-               aria-expanded="false" aria-controls="addTask">
-                Создать новую задачу
-            </a>
-            <div class="collapse" id="addTask">
-                <div class="card card-body">
-                    <div class="form-group">
-                        <form th:action="@{'/projects/' + ${project.id} + '/tasks'}" method="post">
-                            <div class="form-group my-2">
-                                <input type="text" class="form-control" name="name"
-                                       placeholder="Введите название задачи" data-testid="new-task-name"/>
-                            </div>
-                            <div class="form-group my-2">
-                                <label for="description">Описание</label>
-                                <textarea class="form-control" name="description" id="description" data-testid="new-task-description"
-                                          rows="5"> </textarea>
-                            </div>
-                            <button type="submit" class="btn btn-primary mt-3">Добавить</button>
-                            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
-                        </form>
+<main>
+    <section>
+        <div class="container mt-5 mb-3">
+            <h1 class="h4" th:text="${project.name}">Project name</h1>
+        </div>
+    </section>
+    <section>
+        <div class="container">
+            <div class="d-flex justify-content-between">
+                <h2 class="h5">Tasks List</h2>
+                <button class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#addTask"
+                        aria-expanded="false" aria-controls="addTask">
+                    New task
+                </button>
+            </div>
+            <div class="collapse border rounded shadow-sm p-3 mt-2" id="addTask">
+                <p class="form-text mb-2">Fields marked with * are required.</p>
+                <form th:action="@{|/projects/${project.id}/tasks|}" class="needs-validation" method="post"
+                      novalidate>
+                    <div class="form-floating mb-2">
+                        <input type="text" class="form-control" id="task-name-input" name="name"
+                               placeholder="Task Name" data-testid="new-task-name"
+                               required/>
+                        <label for="task-name-input">Task name *</label>
+                        <div class="invalid-feedback">
+                            Please provide the task name.
+                        </div>
                     </div>
-                </div>
+                    <div class="form-floating mb-2">
+                        <textarea class="form-control" id="task-description-input" name="description"
+                                  placeholder="Task Description" style="height: 150px"></textarea>
+                        <label for="task-description-input">Description</label>
+                    </div>
+                    <button type="submit" class="btn btn-success mt-3">Create</button>
+                    <button type="reset" class="btn btn-secondary mt-3" data-bs-toggle="collapse"
+                            data-bs-target="#addTask" aria-expanded="false" aria-controls="addTask">Cancel
+                    </button>
+                    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+                </form>
             </div>
         </div>
-    </div>
-    <div class="row ms-2">
-        <form method="get" th:action="@{'/projects/' + ${project.id} + '/tasks'}">
-            <fieldset class="btn-group" role="group" aria-label="filter">
-                <button class="btn btn-secondary"
-                        th:classappend="${statusFilter} == null ? ' active' : ''"
-                        type="submit" name="statusFilter" value="">Все задания
-                </button>
-                <th:block th:each="st : ${taskStatuses}">
+    </section>
+    <section>
+        <div class="container mt-3">
+            <form method="get" th:action="@{|/projects/${project.id}/tasks|}">
+                <div class="d-flex flex-wrap gap-1">
                     <button class="btn btn-secondary"
-                            th:classappend="${statusFilter != null and statusFilter == st} ? ' active' : ''"
-                            type="submit"
-                            name="statusFilter"
-                            th:value="${st.name()}">
-                        <span th:text="${st.displayName}"></span>
+                            th:classappend="${statusFilter} == null ? ' active' : ''"
+                            type="submit" name="statusFilter" value="">All tasks
                     </button>
-                </th:block>
-            </fieldset>
-        </form>
-    </div>
-    <div class="ms-2 mt-2">
-        <div class="row row-cols-auto" th:if="!${#lists.isEmpty(tasks)}">
-            <div th:each="task : ${tasks}">
-                <div class="card my-2" style="max-width: 60ch;">
-                    <h5 class="card-header" th:text="${task.name}" data-testid="task-name">Task name</h5>
-                    <div class="card-body">
-                        <strong>Описание:</strong>
-                        <div class="text-wrap" th:text="${task.description}" data-testid="task-description"></div>
-                        <strong>Статус:</strong>
-                        <div th:text="${task.status}" data-testid="task-status"></div>
-                        <strong>Времени затрачено:</strong>
-                        <div th:text="${task.time}"></div>
-                    </div>
-                    <div class="card-footer text-muted" th:if="${task.status.name == 'IN_PROGRESS' || task.status.name == 'NEW'}">
-                        <div sec:authorize="hasAuthority('DEVELOPER')">
-                            <div class="row" th:if="${task.status.name == 'NEW'}">
-                                <form th:action="@{'/projects/' + ${project.id} + '/tasks/' + ${task.id}}" method="post">
-                                    <button class="btn btn-primary btn-sm mx-2" type="submit">Приступить к задаче</button>
+                    <th:block th:each="st : ${taskStatuses}">
+                        <button class="btn btn-secondary"
+                                th:classappend="${statusFilter != null and statusFilter == st} ? ' active' : ''"
+                                type="submit"
+                                name="statusFilter"
+                                th:value="${st.name()}">
+                            <span th:text="${st.displayName}"></span>
+                        </button>
+                    </th:block>
+                </div>
+            </form>
+        </div>
+    </section>
+    <section>
+        <div class="container mt-3">
+            <div class="row row-cols-sm-1 row-cols-md-2 row-cols-lg-3 g-2" th:if="${!#lists.isEmpty(tasks)}">
+                <div class="col" th:each="task : ${tasks}">
+                    <div class="card h-100">
+                        <h5 class="card-header" th:text="${task.name}" data-testid="task-name">Task
+                            name</h5>
+                        <div class="card-body">
+                            <div class="mb-2">
+                                <strong>Description</strong>
+                                <p class="text-wrap" th:text="${task.description}" data-testid="task-description"></p>
+                            </div>
+                            <div class="mb-2">
+                                <strong>Status</strong>
+                                <span class="badge text-bg-success" th:text="${task.status.displayName}"
+                                      data-testid="task-status"></span>
+                            </div>
+                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                <div>
+                                    <strong>Time spent</strong>
+                                    <span class="badge text-bg-dark" th:text="${task.time}"></span>
+                                </div>
+                                <button class="btn btn-outline-primary btn-sm"
+                                        type="button"
+                                        data-bs-toggle="collapse"
+                                        th:data-bs-target="'#logWorkTimeCollapse_' + ${task.id}"
+                                        aria-expanded="false"
+                                        th:aria-controls="'logWorkTimeCollapse_' + ${task.id}"
+                                        sec:authorize="hasAuthority('DEVELOPER')"
+                                        th:if="${task.status.name == 'IN_PROGRESS'}">Log work time
+                                </button>
+                            </div>
+                            <div class="collapse" th:id="'logWorkTimeCollapse_' + ${task.id}"
+                                 sec:authorize="hasAuthority('DEVELOPER')"
+                                 th:if="${task.status.name() == 'IN_PROGRESS'}">
+                                <form th:action="@{|/projects/${project.id}/tasks/${task.id}|}" method="post"
+                                      novalidate class="border-top pt-3 mt-2 needs-validation">
+                                    <div class="input-group">
+                                        <div class="form-floating">
+                                            <input type="number" min="0"
+                                                   name="submittedTime"
+                                                   class="form-control"
+                                                   th:id="'submittedTime_' + ${task.id}"
+                                                   placeholder="0"
+                                                   required>
+                                            <label th:for="'submittedTime_' + ${task.id}">Work Time</label>
+                                            <div class="invalid-feedback">
+                                                Please provide work time.
+                                            </div>
+                                        </div>
+                                        <span class="input-group-text">h</span>
+                                        <button class="btn btn-primary btn-sm" type="submit">Submit</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                        <div class="card-footer">
+                            <div sec:authorize="hasAuthority('DEVELOPER')"
+                                 th:if="${task.status.name() == 'NEW'}">
+                                <form th:action="@{|/projects/${project.id}/tasks/${task.id}|}"
+                                      method="post">
+                                    <div class="d-grid gap-2 my-1">
+                                        <button class="btn btn-primary btn-sm" type="submit">In progress
+                                        </button>
+                                    </div>
                                     <input type="hidden" th:name="status" th:value="IN_PROGRESS"/>
                                     <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
                                 </form>
                             </div>
-                            <div class="row" th:if="${task.status.name == 'IN_PROGRESS'}">
-                                <form th:action="@{'/projects/' + ${project.id} + '/tasks/' + ${task.id}}" method="post">
-                                    <label for="submittedTime">Отметить затраченное время(ч)</label>
-                                    <div class="d-flex align-items-center justify-content-start gap-2 flex-nowrap">
-                                        <input type="number" min="0" max="8" name="submittedTime" class="form-control" id="submittedTime" value="0">
-                                        <button class="btn btn-primary btn-sm ms-2" type="submit">Сохранить</button>
-                                    </div>
-                                    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
-                                </form>
-                            </div>
-                            <div class="my-3 row" th:if="${task.status.name == 'IN_PROGRESS'}">
-                                <form th:action="@{'/projects/' + ${project.id} + '/tasks/' + ${task.id}}"
+                            <div sec:authorize="hasAuthority('DEVELOPER')"
+                                 th:if="${task.status.name() == 'IN_PROGRESS'}">
+                                <form th:action="@{|/projects/${project.id}/tasks/${task.id}|}"
                                       method="post">
-                                    <button class="btn btn-primary btn-sm" type="submit">Завершить задачу</button>
+                                    <div class="d-grid gap-2 my-1">
+                                        <button class="btn btn-success btn-sm" type="submit">Done</button>
+                                    </div>
                                     <input type="hidden" th:name="status" th:value="DONE"/>
                                     <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
                                 </form>
                             </div>
-                        </div>
-                        <div sec:authorize="hasAuthority('MANAGER')">
-                            <form class="form-inline" th:action="@{'/projects/' + ${project.id} + '/tasks'}"
-                                  th:method="post">
-                                <button class="btn btn-danger btn-sm mx-2" type="submit">Удалить</button>
-                                <input type="hidden" name="_method" value="delete"/>
-                                <input type="hidden" th:name="id" th:value="${task.id}"/>
-                                <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
-                            </form>
+                            <div sec:authorize="hasAnyAuthority('DEVELOPER', 'MANAGER')">
+                                <form th:action="@{|/projects/${project.id}/tasks|}"
+                                      th:method="post">
+                                    <div class="d-grid gap-2 my-1">
+                                        <button class="btn btn-danger btn-sm" type="submit">Delete</button>
+                                    </div>
+                                    <input type="hidden" name="_method" value="delete"/>
+                                    <input type="hidden" th:name="id" th:value="${task.id}"/>
+                                    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+                                </form>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
+            <div th:if="${#lists.isEmpty(tasks)}">
+                <div class="alert alert-primary" role="alert">
+                    No tasks found.
+                </div>
+            </div>
         </div>
-        <div th:if="${#lists.isEmpty(tasks)}">
-            Нет задач
-        </div>
-    </div>
-</div>
+    </section>
+</main>
 <th:block th:replace="~{fragments/common :: footer}"/>
 <th:block th:replace="~{fragments/common :: imports}"/>
 </body>

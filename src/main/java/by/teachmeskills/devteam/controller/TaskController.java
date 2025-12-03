@@ -22,7 +22,7 @@ public class TaskController {
     private final ProjectService projectService;
 
     @GetMapping
-    @PreAuthorize("hasAnyAuthority('DEVELOPER', 'MANAGER')")
+    @PreAuthorize("hasAnyAuthority('DEVELOPER', 'MANAGER', 'CUSTOMER')")
     public String getAllProjectTasks(@PathVariable Long projectId,
                                      TaskStatus statusFilter,
                                      Model model) {
@@ -55,7 +55,7 @@ public class TaskController {
     }
 
     @DeleteMapping
-    @PreAuthorize("hasAnyAuthority('MANAGER')")
+    @PreAuthorize("hasAnyAuthority('MANAGER', 'DEVELOPER')")
     public String deleteTask(@RequestParam Long id) {
         taskService.deleteById(id);
         return REDIRECT_PROJECTS_PROJECT_ID_TASKS;

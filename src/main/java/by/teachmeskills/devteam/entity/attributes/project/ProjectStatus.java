@@ -10,10 +10,10 @@ import java.util.Set;
 @Getter
 public enum ProjectStatus {
 
-    NEW("Новый"),
-    PENDING_MANAGER("Oжидание обработки менеджером"),
-    IN_PROGRESS("B разработке"),
-    COMPLETED("Завершён");
+    NEW("New"),
+    PENDING_MANAGER("Waiting for approval"),
+    IN_PROGRESS("In progress"),
+    COMPLETED("Done");
 
     private final String displayName;
 

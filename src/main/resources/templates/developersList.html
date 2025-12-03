@@ -1,54 +1,123 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" lang="ru">
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
 <head>
-    <title>Разработчики</title>
+    <title>Developers</title>
     <th:block th:replace="~{fragments/common :: headerfiles}"/>
 </head>
 <body>
 <th:block th:replace="~{fragments/common :: header}"/>
-<div class="container-fluid">
-    <h1 class="m-3">Список разработчиков</h1>
-    <div class="row row-cols-auto">
-        <div th:if="${!developers.isEmpty()}" th:each="developer : ${developers}">
-            <div class="card mx-2" style="width: 18rem;">
-                <h5 class="card-header" th:text="${developer.firstName} + ' ' + ${developer.lastName}">Developer
-                    Name</h5>
-                <div class="card-body">
-                    <div class="card-text">
-                        <strong>Email</strong>
-                        <div th:text="${developer.email}"></div>
-                        <strong>Контактные данные</strong>
-                        <div th:text="${developer.contacts}"></div>
-                        <strong>Профессиональные навыки</strong>
-                        <div th:if="${developer.skills} != null" th:text="${developer.skills}"></div>
-                        <div th:unless="${developer.skills} != null">не заполнены</div>
-                        <strong>Оплата</strong>
-                        <div th:text="${developer.price} + ' $/час'"></div>
-                    </div>
-                </div>
-                <div class="card-footer text-body-secondary">
-                    <form th:action="@{/developers}" method="post">
-                        <label for="newPrice">Изменить оплату</label>
-                        <div class="d-flex align-items-center justify-content-start gap-2 flex-nowrap">
-                            <input type="text" name="price" class="form-control" id="newPrice"
-                                   th:value="${developer.price}">
-                            <button class="btn btn-primary btn-sm" type="submit">Сохранить</button>
+<main>
+    <div class="container mt-5">
+        <h1 class="h4">Developers list</h1>
+    </div>
+
+    <section>
+        <div class="container mt-3">
+            <div class="row row-cols-sm-1 row-cols-md-2 row-cols-lg-3 row-cols-xl-4 g-2"
+                 th:if="${!developers.isEmpty()}">
+                <div class="col" th:each="developer : ${developers}">
+                    <div class="card h-100">
+                        <h5 class="card-header" th:text="${developer.firstName + ' ' + developer.lastName}">Developer
+                            Name</h5>
+                        <div class="card-body">
+                            <div class="mb-2">
+                                <strong>Email</strong>
+                                <span class="badge bg-light text-dark border" th:text="${developer.email}"></span>
+                            </div>
+                            <div class="mb-2">
+                                <strong>Contacts</strong>
+                                <span class="badge bg-light text-dark border" th:text="${developer.contacts}"></span>
+                            </div>
+                            <div th:if="${!#strings.isEmpty(developer.skills)}" class="mb-2">
+                                <strong> Skills</strong>
+                                <span class="badge text-bg-success" th:text="${developer.skills}"></span>
+                            </div>
+                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                <div>
+                                    <strong>Salary</strong>
+                                    <span class="badge text-bg-primary"
+                                          th:text="${developer.price} + ' $/h'"></span>
+                                </div>
+                                <button class="btn btn-outline-primary btn-sm"
+                                        type="button"
+                                        data-bs-toggle="collapse"
+                                        th:data-bs-target="'#editSalaryCollapse_' + ${developer.id}"
+                                        aria-expanded="false"
+                                        th:aria-controls="'editSalaryCollapse_' + ${developer.id}">
+                                    Edit
+                                </button>
+                            </div>
+                            <div class="collapse"
+                                 th:id="'editSalaryCollapse_' + ${developer.id}">
+                                <form th:action="@{/developers}" method="post" novalidate
+                                      class="border-top pt-3 mt-2">
+                                    <div class="input-group">
+                                        <div class="form-floating">
+                                            <input type="number"
+                                                   name="price"
+                                                   class="form-control"
+                                                   th:id="'newPrice_' + ${developer.id}"
+                                                   th:value="${developer.price}"
+                                                   placeholder="0"
+                                                   required>
+                                            <label th:for="'newPrice_' + ${developer.id}">Salary</label>
+                                            <div class="invalid-feedback">
+                                                Please provide salary value.
+                                            </div>
+                                        </div>
+                                        <span class="input-group-text">$ / h</span>
+                                        <button class="btn btn-primary btn-sm" type="submit">Save</button>
+                                    </div>
+                                    <input type="hidden" th:name="id" th:value="${developer.id}"/>
+                                    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+                                </form>
+                            </div>
                         </div>
-                        <input type="hidden" th:name="id" th:value="${developer.id}"/>
-                        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
-                    </form>
-                </div>
-                <div class="card-footer text-body-secondary d-flex">
-                    <form th:action="@{/developers}" th:method="delete">
-                        <button class="btn btn-danger btn-sm" type="submit">Удалить</button>
-                        <input type="hidden" th:name="id" th:value="${developer.id}"/>
-                        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
-                    </form>
+                        <div class="card-footer">
+                            <div class="d-grid">
+                                <button class="btn btn-danger btn-sm" data-bs-toggle="modal" th:data-bs-target="'#deleteConfirmationModal_' + ${developer.id}">Delete</button>
+                                <!-- Modal -->
+                                <div class="modal fade" th:id="'deleteConfirmationModal_' + ${developer.id}" tabindex="-1"
+                                     th:aria-labelledby="'deleteConfirmationLabel_' + ${developer.id}"
+                                     aria-hidden="true">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h1 class="modal-title fs-5" th:id="'deleteConfirmationLabel_' + ${developer.id}">Delete account?</h1>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                        aria-label="Close"></button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <p>Please confirm the account deletion. This action cannot be undone.</p>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                                <form th:action="@{/developers}" method="post">
+                                                    <input type="hidden" name="_method" value="delete"/>
+                                                    <input type="hidden" th:name="id" th:value="${developer.id}"/>
+                                                    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+                                                    <button class="btn btn-danger" type="submit">Confirm deletion
+                                                    </button>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
-</div>
+    </section>
+    <section>
+        <div class="container mt-3" th:if="${developers.isEmpty()}">
+            <div class="alert alert-primary" role="alert">
+                No developers found.
+            </div>
+        </div>
+    </section>
+</main>
 <th:block th:replace="~{fragments/common :: footer}"/>
 <th:block th:replace="~{fragments/common :: imports}"/>
 </body>

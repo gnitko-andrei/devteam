@@ -1,47 +1,105 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security" lang="ru">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security" lang="en">
 <head>
     <title th:inline="text">[[${project.name}]]</title>
     <th:block th:replace="~{fragments/common :: headerfiles}"/>
 </head>
 <body>
 <th:block th:replace="~{fragments/common :: header}"/>
-<div class="container m-5">
-    <div class="row">
-        <h1 class="my-2" th:text="${project.name}">Project name</h1>
-        <h3 class="my-2">Статус</h3>
-        <p class="font-weight-normal" th:text="${project.status}"></p>
-        <h3 class="my-2">Техническое задание</h3>
-        <div class="font-weight-normal" style="white-space: pre-line;" th:utext="${project.specification}"></div>
-        <h3 class="my-2">Текущая стоимость</h3>
-        <div class="font-weight-normal" th:utext="${project.projectPrice  + ' $'}"></div>
-        <h3 class="my-2">Заказчик</h3>
-        <div class="font-weight-normal" style="white-space: pre-line;" th:utext="${project.customer.formattedUserInfo}"></div>
-        <h3 class="my-2">Менеджер</h3>
-        <div class="font-weight-normal" style="white-space: pre-line;" th:utext="${project.manager.formattedUserInfo}"></div>
-        <h3 class="my-2" th:if="${!project.developers.isEmpty()}">Разработчики</h3>
-        <h3 th:unless="${!project.developers.isEmpty()}">Разработчики не назначены</h3>
-        <div th:each="developer : ${project.developers}">
-            <div class="font-weight-normal my-3" style="white-space: pre-line;" th:utext="${developer.formattedUserInfo}"></div>
+<main>
+    <div class="container">
+        <div class="card shadow-sm my-5">
+            <div class="card-header">
+                <h1 class="h4 my-3" th:text="${project.name}">Project name</h1>
+                <ul class="nav nav-tabs card-header-tabs" id="projectTabs" role="tablist"
+                    style="--bs-nav-link-color: var(--bs-secondary);">
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link active" id="projectInfoTab" data-bs-toggle="tab"
+                                data-bs-target="#projectInfo" role="tab" aria-controls="projectInfo"
+                                aria-selected="true">Main info
+                        </button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="projectSpecificationTab" data-bs-toggle="tab"
+                                data-bs-target="#projectSpecification" role="tab" aria-controls="projectSpecification"
+                                aria-selected="false">Specification
+                        </button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="projectDevelopersTab" data-bs-toggle="tab"
+                                data-bs-target="#projectDevelopers" role="tab" aria-controls="projectDevelopers"
+                                aria-selected="false">Developers
+                        </button>
+                    </li>
+                </ul>
+            </div>
+            <div class="card-body tab-content">
+                <div class="tab-pane fade show active fs-6" id="projectInfo" role="tabpanel"
+                     aria-labelledby="projectInfoTab" tabindex="0">
+                    <div class="mb-3">
+                        <strong>Status</strong>
+                        <span class="badge text-bg-success" th:text="${project.status.displayName}"></span>
+                    </div>
+                    <div class="mb-3">
+                        <strong>Current budget spent:</strong>
+                        <span class="badge text-bg-primary" th:text="${project.projectPrice  + ' $'}"></span>
+                    </div>
+                    <div class="mb-3">
+                        <strong class="d-block">Customer:</strong>
+                        <div class="card shadow-sm d-sm-inline-block">
+                            <div class="card-body">
+                                <p style="white-space: pre-line;" th:utext="${project.customer.formattedUserInfo}"></p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <strong class="d-block">Manager:</strong>
+                        <div class="card shadow-sm d-sm-inline-block">
+                            <div class="card-body">
+                                <p style="white-space: pre-line;" th:utext="${project.manager.formattedUserInfo}"></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="tab-pane fade fs-6" id="projectSpecification" role="tabpanel"
+                     aria-labelledby="projectSpecificationTab" tabindex="0">
+                    <div class="my-2">
+                        <p style="white-space: pre-line;" th:utext="${project.specification}" th:if="${!project.specification.isEmpty()}"></p>
+                        <p class="text-secondary" th:if="${project.specification.isEmpty()}">No specification provided</p>
+                    </div>
+                </div>
+                <div class="tab-pane fade" id="projectDevelopers" role="tabpanel" aria-labelledby="projectDevelopersTab"
+                     tabindex="0">
+                    <div class="row g-2 text-center">
+                        <th:block th:if="${!project.developers.isEmpty()}">
+                            <div class="col" th:each="developer : ${project.developers}">
+                                <div class="card h-100 shadow-sm">
+                                    <div class="card-body">
+                                        <p style="white-space: pre-line;" th:utext="${developer.formattedUserInfo}"></p>
+                                    </div>
+                                </div>
+                            </div>
+                        </th:block>
+                        <div class="col my-5 text-secondary" th:if="${project.developers.isEmpty()}">
+                            <p>No developers assigned to the project</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card-footer">
+                <div class="d-grid d-md-inline my-1 my-md-0">
+                    <a th:href="@{'/projects/' + ${project.id} + '/tasks'}"
+                       class="btn btn-primary">Tasks list</a>
+                </div>
+                <div class="d-grid d-md-inline my-1 my-md-0">
+                    <a sec:authorize="hasAnyAuthority('CUSTOMER', 'MANAGER')"
+                       th:href="@{'/projects/edit/' + ${project.id}}"
+                       class="btn btn-info">Edit project</a>
+                </div>
+            </div>
         </div>
     </div>
-    <div class="row">
-        <div class="d-flex justify-content-start">
-            <a sec:authorize="hasAnyAuthority('DEVELOPER', 'MANAGER')"
-               th:href="@{'/projects/' + ${project.id} + '/tasks'}"
-               class="btn btn-info btn-sm me-1">Список задач</a>
-            <a sec:authorize="hasAnyAuthority('CUSTOMER', 'MANAGER')"
-               th:href="@{'/projects/edit/' + ${project.id}}"
-               class="btn btn-primary btn-sm mx-1">Редактировать</a>
-            <form sec:authorize="hasAnyAuthority('CUSTOMER', 'MANAGER')" class="form-inline col-4"
-                  th:action="@{/projects}" th:method="post">
-                <input type="hidden" name="_method" value="delete"/>
-                <input type="hidden" th:name="projectId" th:value="${project.id}"/>
-                <button class="btn btn-danger btn-sm mx-1" type="submit" id="deleteProject">Удалить</button>
-            </form>
-        </div>
-    </div>
-</div>
+</main>
 <th:block th:replace="~{fragments/common :: footer}"/>
 <th:block th:replace="~{fragments/common :: imports}"/>
 </body>

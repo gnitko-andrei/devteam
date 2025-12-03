@@ -1,5 +1,5 @@
 <!DOCTYPE HTML>
-<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security" lang="ru">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security" lang="en">
 <head>
     <title>Common blocks</title>
 </head>
@@ -7,66 +7,166 @@
     <!-- data-testid: headerfiles -->
     <meta charset="UTF-8"/>
     <link rel="stylesheet" href="/static/style.css">
-    <link rel="icon" type="image/png" href="/static/favicon/favicon-96x96.png" sizes="96x96" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0&icon_names=orbit" />
+    <link rel="icon" type="image/png" href="/static/favicon/favicon-96x96.png" sizes="96x96"/>
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <!-- Bootstrap CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
 </th:block>
 <body>
 <th:block th:fragment="header">
     <header data-testid="page-header">
-        <nav class="navbar navbar-expand-lg  navbar-dark bg-dark">
-            <a class="navbar-brand mb-0 ms-3 h1" href="/">
-                <img src="/static/favicon/favicon.svg" width="30" height="30"
-                     class="d-inline-block align-top"  alt=""/>
-                DevTeam
-            </a>
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
-                    aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-
-            <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                <ul class="navbar-nav me-auto">
-                    <li class="nav-item">
+        <nav class="navbar navbar-expand-lg bg-dark sticky-top bg-gradient" data-bs-theme="dark">
+            <div class="container-fluid">
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                        data-bs-target="#navbarToggler" aria-controls="navbarToggler" aria-expanded="false"
+                        aria-label="Toggle navigation"
+                        sec:authorize="hasAnyAuthority('CUSTOMER','MANAGER','DEVELOPER','ADMIN')">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <a class="navbar-brand h1 d-flex align-items-center m-0 me-lg-2 order-lg-0" href="/">
+                    <img src="/static/favicon/favicon.svg" width="30" height="30"
+                         alt="Logo" class="d-inline-block me-1"/>
+                    DevTeam
+                </a>
+                <div class="dropdown order-lg-2">
+                    <button class="btn btn-secondary" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="bi bi-person-circle"></i>
+                    </button>
+                    <div class="dropdown-menu dropdown-menu-end">
+                        <a class="dropdown-item" href="/login" sec:authorize="!isAuthenticated()">Sign in</a>
+                        <a class="dropdown-item" href="/registration" sec:authorize="!isAuthenticated()">Sign up</a>
+                        <div sec:authorize="hasAuthority('USER')" class="px-2 py-1 small text-muted">
+                            <i class="bi bi-person-check me-2" style="font-size: 1.5rem; color: green;"></i>
+                            <span th:inline="text">[[${#authentication.name}]]</span>
+                        </div>
+                        <div sec:authorize="hasAuthority('USER')" class="dropdown-divider"></div>
+                        <a sec:authorize="hasAuthority('USER')" class="dropdown-item" href="/user">Profile</a>
+                        <form sec:authorize="isAuthenticated()" class="" th:action="@{/logout}" method="post">
+                            <button class="dropdown-item" type="submit" id="logout">Sign out</button>
+                            <input type="hidden" th:if="${_csrf != null}" th:name="${_csrf.parameterName}"
+                                   th:value="${_csrf.token}"/>
+                        </form>
+                    </div>
+                </div>
+                <div class="collapse navbar-collapse mt-2 mt-lg-0 order-lg-1" id="navbarToggler">
+                    <div class="navbar-nav text-nowrap">
                         <a sec:authorize="hasAnyAuthority('CUSTOMER', 'MANAGER', 'DEVELOPER')" class="nav-link"
-                           href="/projects">Проекты<span
-                                class="sr-only">(current)</span></a>
-                    </li>
-                    <li class="nav-item">
-                        <a sec:authorize="hasAuthority('MANAGER')" class="nav-link" href="/developers">Разработчики</a>
-                    </li>
-                    <li class="nav-item">
-                        <a sec:authorize="hasAuthority('USER')" class="nav-link" href="/user">Профиль пользователя<span
-                                class="sr-only">(current)</span></a>
-                    </li>
-                    <li class="nav-item">
-                        <a sec:authorize="hasAuthority('ADMIN')" class="nav-link" href="/admin">Панель администратора</a>
-                    </li>
-                </ul>
-                <form sec:authorize="!isAuthenticated()" class="form-inline d-flex align-items-center">
-                    <a href="/login" class="btn btn-primary btn-sm mx-1">Войти</a>
-                    <a href="/registration" class="btn btn-secondary btn-sm mx-1">Регистрация</a>
-                </form>
-                <form sec:authorize="isAuthenticated()" class="form-inline d-flex align-items-center" th:action="@{/logout}" method="post">
-                    <div class="navbar-text text-light" th:inline="text">[[${#authentication.name}]]</div>
-                    <button class="btn btn-light btn-sm mx-2" type="submit" id="logout">Выйти</button>
-                    <input type="hidden" th:if="${_csrf != null}" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
-                </form>
+                           href="/projects">Projects</a>
+                        <a sec:authorize="hasAuthority('MANAGER')" class="nav-link" href="/developers">Developers</a>
+                        <a sec:authorize="hasAuthority('ADMIN')" class="nav-link" href="/admin">Admin Panel</a>
+                    </div>
+                </div>
             </div>
         </nav>
     </header>
 </th:block>
 <th:block th:fragment="footer">
-    <footer class="p-2 bg-dark text-white" data-testid="page-footer">
-        <div>
-            <div class="container">&copy; Все права защищены 2019</div>
+    <footer class="p-3 bg-dark bg-gradient text-white mt-auto" data-testid="page-footer">
+        <div class="container">
+            <div class="row gy-3 my-3">
+                <div class="col-sm-6 text-center text-sm-start">
+                    <h5>Contact</h5>
+                    <div class="d-flex flex-wrap justify-content-center justify-content-sm-start gap-3 fs-3">
+                        <a href="mailto:gnitkoandrei17@gmail.com" class="link-light link-opacity-75-hover"
+                           data-bs-toggle="tooltip" data-bs-title="Sent Email" data-bs-placement="bottom"
+                           target="_blank" rel="noopener noreferrer">
+                            <i class="bi bi-envelope"></i>
+                        </a>
+                        <a href="https://www.linkedin.com/in/hnitsko-andrei" class="link-light link-opacity-75-hover"
+                           data-bs-toggle="tooltip" data-bs-title="LinkedIn" data-bs-placement="bottom"
+                           target="_blank" rel="noopener noreferrer">
+                            <i class="bi bi-linkedin"></i>
+                        </a>
+                        <a href="https://github.com/gnitko-andrei" class="link-light link-opacity-75-hover"
+                           data-bs-toggle="tooltip" data-bs-title="GitHub" data-bs-placement="bottom"
+                           target="_blank" rel="noopener noreferrer">
+                            <i class="bi bi-github"></i>
+                        </a>
+                        <a href="TODO" class="link-light link-opacity-75-hover"
+                           data-bs-toggle="tooltip" data-bs-title="CV (not published yet 😉)" data-bs-placement="bottom"
+                           target="_blank" rel="noopener noreferrer">
+                            <i class="bi bi-file-earmark-person"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="col-sm-6 text-center text-sm-start">
+                    <h5>Links</h5>
+                    <ul class="list-unstyled">
+                        <li><a href="/info/project"
+                               class="text-light link-underline-light link-underline-opacity-0 link-underline-opacity-75-hover">
+                            About DevTeam
+                        </a></li>
+                        <li><a href="/info/stack"
+                               class="text-light link-underline-light link-underline-opacity-0 link-underline-opacity-75-hover">
+                            Technical Stack
+                        </a></li>
+                        <li><a href="https://github.com/gnitko-andrei/devteam"
+                               class="text-light link-underline-light link-underline-opacity-0 link-underline-opacity-75-hover"
+                               target="_blank" rel="noopener noreferrer">
+                            Source code
+                        </a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="row text-center small text-white-50">
+                <div class="col-12">
+                    &copy; 2019 DevTeam — Built by Andrei Hnitsko
+                </div>
+            </div>
         </div>
     </footer>
 </th:block>
 <th:block th:fragment="imports">
     <!-- data-testid: page-imports -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"
+            crossorigin="anonymous"></script>
+    <script>
+        const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
+        const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
+    </script>
+    <script>
+        (() => {
+          'use strict'
+
+          // Fetch all the forms we want to apply custom Bootstrap validation styles to
+          const forms = document.querySelectorAll('.needs-validation')
+
+          // Loop over them and prevent submission
+          Array.from(forms).forEach(form => {
+            form.addEventListener('submit', event => {
+              if (!form.checkValidity()) {
+                event.preventDefault()
+                event.stopPropagation()
+              }
+
+              form.classList.add('was-validated')
+            }, false)
+          })
+        })()
+    </script>
+    <script>
+        (function () {
+            'use strict';
+
+            const forms = document.querySelectorAll('.needs-validation');
+
+            Array.prototype.slice.call(forms)
+                .forEach(function (form) {
+                    form.addEventListener('submit', function (event) {
+                        if (!form.checkValidity()) {
+                            event.preventDefault();
+                            event.stopPropagation();
+                        }
+
+                        form.classList.add('was-validated');
+                    }, false);
+                });
+        })();
+    </script>
 </th:block>
 </body>
 </html>

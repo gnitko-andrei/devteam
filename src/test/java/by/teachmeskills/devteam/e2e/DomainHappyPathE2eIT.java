@@ -34,7 +34,7 @@ class DomainHappyPathE2eIT extends AbstractE2eTest {
     public static final String TESTUSER_USERNAME = "testuser";
     public static final String TESTUSER_PASSWORD = "secret123";
     public static final String DEVELOPER_ROLE = "DEVELOPER";
-    public static final String DEVELOPER_ROLE_NAME = "Разработчик";
+    public static final String DEVELOPER_ROLE_NAME = "Developer";
     public static final String TESTUSER_FIRST_NAME = "Filip";
     public static final String TESTUSER_LAST_NAME = "Kaczmarek";
     public static final String TESTUSER_EMAIL = "filip.kaczmarek@example.com";
@@ -70,7 +70,7 @@ class DomainHappyPathE2eIT extends AbstractE2eTest {
         var actualGetUserProfile = rest.getForEntity("/user", String.class);
         assertHtmlPage(actualGetUserProfile, "user-profile");
         Document doc = Jsoup.parse(actualGetUserProfile.getBody());
-        assertThat(doc.selectFirst("[data-testid=username]").text()).isEqualTo(TESTUSER_USERNAME);
+        assertThat(doc.selectFirst("[data-testid=username]").text()).contains(TESTUSER_USERNAME);
         assertThat(doc.selectFirst("[data-testid=user-roles]").text()).isEqualTo(DEVELOPER_ROLE_NAME);
         assertThat(doc.selectFirst("[data-testid=user-firstname]").text()).isEqualTo(TESTUSER_FIRST_NAME);
         assertThat(doc.selectFirst("[data-testid=user-lastname]").text()).isEqualTo(TESTUSER_LAST_NAME);

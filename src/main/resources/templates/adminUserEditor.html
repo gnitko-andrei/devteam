@@ -1,48 +1,64 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" lang="ru">
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
 <head>
-    <title>Редактор пользователя</title>
+    <title>Admin user editor</title>
     <th:block th:replace="~{fragments/common :: headerfiles}"/>
 </head>
 <body>
 <th:block th:replace="~{fragments/common :: header}"/>
-<div class="alert alert-danger" role="alert" th:if="${errorMessage}">
-    <p th:text="${errorMessage}">Error message</p>
-</div>
-<div class="container mt-5">
-    <h1>Изменение настроек пользователя</h1>
-    <div class="container mt-3">
-        <form th:action="@{'/admin/' + ${user.id} + '/edit'}" method="post">
-            <div class="form-group row mb-3">
-                <label class="col-sm-2 col-form-label" for="changeUsername">Новый логин</label>
-                <div class="col-sm-6">
-                    <input type="text" name="username" class="form-control" id="changeUsername"
-                           th:value="${user.username}" required>
+<main>
+    <div class="container my-5">
+        <div class="row justify-content-center">
+            <div class="col-sm-10 col-md-6 col-lg-4">
+                <h1 class="h4 mb-3">Manage user data and permissions</h1>
+                <div class="alert alert-danger alert-dismissible fade show" role="alert" th:if="${errorMessage}">
+                    <i class="bi bi-exclamation-triangle me-1"></i>
+                    <span th:text="${errorMessage}">Error message</span>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                 </div>
-            </div>
-            <div class="form-group row mb-3">
-                <div id="roleGroupLabel" class="col-sm-2 col-form-label">Роли</div>
-                <div class="col-sm-6 d-flex flex-wrap">
-                    <td th:each="role : ${roles}">
-                        <div class="m-1">
-                            <input class="btn-check" type="checkbox" th:id="'roleCheckbox_' + ${role}" name="roles" th:value="${role.name()}"
-                                   th:checked="${user.roles.contains(role)}" th:disabled="${role.name() == 'USER'}">
-                            <label th:text="${role}" class="btn btn-outline-primary" th:for="'roleCheckbox_' + ${role}">
-                                Role name
-                            </label>
+                <form class="needs-validation" th:action="@{/admin/{id}/edit(id=${user.id})}" method="post" novalidate>
+                    <p class="text-muted small mb-3">Fields marked with * are required.</p>
+                    <div class="form-floating mb-2">
+                        <input type="text" name="username" class="form-control" id="changeUsername"
+                               th:value="${user.username}"
+                               placeholder="Username" autocomplete="username" required>
+                        <label for="changeUsername">Username *</label>
+                        <div class="invalid-feedback">
+                            Please provide a username.
                         </div>
-                    </td>
-                </div>
-            </div>
-            <!-- Always include USER in the submitted roles; disabled checkboxes are not sent by browsers -->
-            <input type="hidden" name="roles" value="USER">
-            <button class="btn btn-primary" type="submit">Сохранить</button>
-            <input type="hidden" name="userId" th:value="${user.id}">
-            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
-        </form>
-    </div>
-</div>
+                    </div>
+                    <fieldset class="mt-3 border rounded p-2 " aria-labelledby="roleGroupLabel">
+                        <legend id="roleGroupLabel" class="fs-6 mb-2">Roles *</legend>
+                        <div class="row row-cols-auto g-1">
+                            <div class="col" th:each="role : ${roles}">
+                                <input class="btn-check" type="checkbox" th:id="'roleCheckbox_' + ${role}" name="roles"
+                                       th:value="${role.name()}" th:checked="${user.roles.contains(role)}"
+                                       th:disabled="${role.name() == 'USER'}">
+                                <label class="btn btn-outline-primary" th:for="'roleCheckbox_' + ${role}"
+                                       th:text="${role}">
+                                    Role name
+                                </label>
+                            </div>
+                        </div>
+                        <!-- Always submit USER role because disabled checkbox is not sent -->
+                        <input type="hidden" name="roles" value="USER">
+                    </fieldset>
+                    <input type="hidden" name="userId" th:value="${user.id}">
+                    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+                    <div class="row g-1 mt-3">
+                        <div class="col-lg-6 d-grid">
+                            <button class="btn btn-success" type="submit">Save</button>
+                        </div>
+                        <div class="col-lg-6 d-grid">
+                            <button class="btn btn-secondary" type="reset">Reset</button>
+                        </div>
+                    </div>
+                </form>
 
+            </div>
+        </div>
+    </div>
+</main>
 <th:block th:replace="~{fragments/common :: footer}"/>
 <th:block th:replace="~{fragments/common :: imports}"/>
 </body>

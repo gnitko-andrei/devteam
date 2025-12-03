@@ -3,8 +3,11 @@ package by.teachmeskills.devteam.controller;
 import by.teachmeskills.devteam.dto.user.UserProfileUpdateDto;
 import by.teachmeskills.devteam.exception.WrongPasswordException;
 import by.teachmeskills.devteam.service.UserService;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -45,14 +48,25 @@ public class UserController {
             userService.updateUserProfile(userId, userProfileUpdateData);
             return "redirect:/user";
         } catch (WrongPasswordException e) {
-            redirectAttributes.addFlashAttribute("errorMessage", "Неверный текущий пароль!");
+            redirectAttributes.addFlashAttribute("errorMessage", "Wrong current password!");
             return "redirect:/user/userEditor";
         }
     }
 
     @DeleteMapping
-    public String deleteUser(@AuthenticationPrincipal(expression = "id") Long userId) {
+    public String deleteUser(@AuthenticationPrincipal(expression = "id") Long userId,
+                             RedirectAttributes redirectAttributes,
+                             HttpServletRequest request) {
         userService.deleteById(userId);
-        return "redirect:/logout";
+
+        HttpSession session = request.getSession(false);
+        if (session != null) {
+            session.invalidate();
+        }
+        SecurityContextHolder.clearContext();
+
+        redirectAttributes.addFlashAttribute("accountDeleted", true);
+
+        return "redirect:/login";
     }
 }

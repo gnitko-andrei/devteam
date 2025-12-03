@@ -16,7 +16,7 @@ public class MainController {
     }
 
     @GetMapping("/info/stack")
-    public String getProjectStackInfo() {
-        return "stackMoreInfo";
+    public String getProjectTechnicalSpecification() {
+        return "technicalSpecification";
     }
 }

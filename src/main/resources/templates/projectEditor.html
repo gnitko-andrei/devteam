@@ -1,71 +1,120 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security" lang="ru">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security" lang="en">
 <head>
     <title th:inline="text">[[${project.name}]] edit</title>
     <th:block th:replace="~{fragments/common :: headerfiles}"/>
 </head>
 <body>
 <th:block th:replace="~{fragments/common :: header}"/>
-<div class="container-fluid ms-3 mt-3">
-    <form th:action="@{'/projects/edit/' + ${project.id}}" method="post">
-        <div sec:authorize="hasAuthority('CUSTOMER')" class="row">
-            <div class="col-6">
-                <div class="d-flex flex-column my-2">
-                    <label class="fs-4" for="newName">Название</label>
-                    <input type="text" name="name" class="form-control col-8" id="newName"
-                           th:value="${project.name}">
-                </div>
-                <div class="d-flex flex-column my-2">
-                    <label class="fs-4" for="newSpecification">Техническое задание</label>
-                    <textarea name="specification" class="form-control col-8" id="newSpecification" rows="5"
-                              th:text="${project.specification}"></textarea>
-                </div>
-                <div class="d-flex flex-column my-2">
-                    <label class="fs-4" for="manager">Менеджер</label>
-                    <select class="form-control" id="manager" th:name="managerId">
-                        <option th:each="manager : ${managers}"
-                                th:text="${manager.firstName} + ' ' + ${manager.lastName}"
-                                th:value="${manager.id}"
-                                th:selected="${manager.id}==${project.manager.id}"></option>
-                    </select>
-                </div>
-            </div>
-        </div>
-        <div sec:authorize="hasAuthority('MANAGER')" class="row">
-            <div class="col-6">
-                <div class="d-flex flex-column my-2">
-                    <label class="fs-4 form-label" for="status">Статус</label>
-                    <select class="form-control" id="status" th:name="status">
-                        <th:block th:each="st : ${statuses}">
-                            <option th:value="${st.name()}"
-                            th:text="${st.displayName}"
-                            th:selected="${st}==${project.status}">
-                            </option>
-                        </th:block>
-                    </select>
-                </div>
-                <div class="d-flex flex-column my-2">
-                    <label class="fs-4 form-label" for="developers">Разработчики</label>
-                    <fieldset class="btn-group-vertical my-2" role="group" id="developers">
-                        <div th:each="dev : ${developers}">
-                            <input class="btn-check" type="checkbox"
-                                   th:id="'developerCheckbox_' + ${dev.id}"
-                                   th:name="developerIds"
-                                   th:value="${dev.id}"
-                                   th:checked="${project.developers.contains(dev)}">
-                            <label th:inline="text" class="btn btn-outline-primary"
-                                   th:for="'developerCheckbox_' + ${dev.id}"
-                                   th:text="${dev.fullName}">
-                            </label>
+<main>
+    <div class="container my-5">
+        <div class="row justify-content-center">
+            <div class="col">
+                <h1 class="h4 mb-2">Edit project</h1>
+                <form class="needs-validation" th:action="@{'/projects/edit/' + ${project.id}}" method="post"
+                      novalidate>
+                    <div sec:authorize="hasAuthority('CUSTOMER')">
+                        <div class="form-floating mb-2">
+                            <input type="text" class="form-control" name="name" id="project-name-input"
+                                   th:value="${project.name}" placeholder="Project Name"
+                                   required/>
+                            <label for="project-name-input">Project name *</label>
+                            <div class="invalid-feedback">
+                                Please provide the project name.
+                            </div>
                         </div>
-                    </fieldset>
+                        <div class="form-floating mb-2">
+                        <textarea class="form-control" id="project-specification-input" name="specification"
+                                  th:text="${project.specification}" placeholder="Project Specification"
+                                  style="height: 150px"></textarea>
+                            <label for="project-specification-input">Project specification</label>
+                        </div>
+                        <div class="form-floating mb-2">
+                            <select class="form-select" required id="project-manager-input" th:name="managerId">
+                                <option th:each="manager : ${managers}"
+                                        th:text="${manager.firstName + ' ' + manager.lastName}"
+                                        th:value="${manager.id}"
+                                        th:selected="${manager.id == project.manager.id}"></option>
+                            </select>
+                            <label for="project-manager-input">Project manager *</label>
+                        </div>
+                    </div>
+                    <div sec:authorize="hasAuthority('MANAGER')">
+                        <div class="form-floating mb-2">
+                            <select class="form-select" required id="project-status-input" th:name="status">
+                                <th:block th:each="st : ${statuses}">
+                                    <option th:value="${st.name()}"
+                                            th:text="${st.displayName}"
+                                            th:selected="${st == project.status}">
+                                    </option>
+                                </th:block>
+                            </select>
+                            <label for="project-status-input">Project status *</label>
+                        </div>
+                        <fieldset class="my-3" id="project-developers-input">
+                            <legend class="h6">Developers</legend>
+                            <th:block th:each="dev : ${developers}">
+                                <input class="btn-check" type="checkbox"
+                                       th:id="'developerCheckbox_' + ${dev.id}"
+                                       th:name="developerIds"
+                                       th:value="${dev.id}"
+                                       th:checked="${project.developers.contains(dev)}">
+                                <label th:inline="text" class="btn btn-outline-dark my-1"
+                                       th:for="'developerCheckbox_' + ${dev.id}"
+                                       th:text="${dev.fullName}">
+                                </label>
+                            </th:block>
+                        </fieldset>
+                    </div>
+                    <div class="row g-2 mt-3">
+                        <div class="col-6 col-lg-auto d-grid">
+                            <button class="btn btn-success" type="submit">Save</button>
+                        </div>
+                        <div class="col-6 col-lg-auto d-grid">
+                            <button class="btn btn-secondary" type="reset">Reset</button>
+                        </div>
+                        <div class="col-12 col-lg-auto d-grid"
+                             sec:authorize="hasAnyAuthority('CUSTOMER', 'MANAGER')">
+                            <button class="btn btn-danger" type="button"
+                                    data-bs-toggle="modal"
+                                    data-bs-target="#deleteConfirmationModal">
+                                Delete project
+                            </button>
+                        </div>
+                    </div>
+                    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+                </form>
+                <!-- Modal -->
+                <div class="modal fade" id="deleteConfirmationModal" tabindex="-1"
+                     aria-labelledby="deleteConfirmationLabel"
+                     aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h1 class="modal-title fs-5" id="deleteConfirmationLabel">Delete project?</h1>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                        aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <p>Please confirm the project deletion. This action cannot be undone.</p>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                <form th:action="@{/projects}" th:method="post">
+                                    <input type="hidden" name="_method" value="delete"/>
+                                    <input type="hidden" th:name="projectId" th:value="${project.id}"/>
+                                    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+                                    <button class="btn btn-danger" type="submit" id="deleteUser">Confirm deletion
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
-        <button class="btn btn-primary my-2" type="submit">Сохранить</button>
-        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
-    </form>
-</div>
+    </div>
+</main>
 <th:block th:replace="~{fragments/common :: footer}"/>
 <th:block th:replace="~{fragments/common :: imports}"/>
 </body>
