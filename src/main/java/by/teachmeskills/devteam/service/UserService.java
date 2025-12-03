@@ -83,11 +83,11 @@ public class UserService implements UserDetailsService {
     public void updateUserProfile(Long userId, UserProfileUpdateDto userProfileUpdateData) {
         var user = getUserByIdOrThrow(userId);
         var currentPassword = userProfileUpdateData.getCurrentPassword();
-        if (StringUtils.isBlank(currentPassword) || !passwordEncoder.matches(currentPassword, user.getPassword())) {
-            throw new WrongPasswordException("Wrong current password provided!");
-        }
         final var newPassword = userProfileUpdateData.getNewPassword();
         if (!StringUtils.isBlank(newPassword)) {
+            if (StringUtils.isBlank(currentPassword) || !passwordEncoder.matches(currentPassword, user.getPassword())) {
+                throw new WrongPasswordException("Wrong current password provided!");
+            }
             user.setPassword(passwordEncoder.encode(newPassword.trim()));
         }
         user.setFirstName(userProfileUpdateData.getFirstName());

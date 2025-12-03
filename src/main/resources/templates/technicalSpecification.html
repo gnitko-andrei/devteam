@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <title>Technical specification</title>
+    <th:block th:replace="~{fragments/common :: headerfiles}"/>
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css"
+          integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
+</head>
+<body>
+<th:block th:replace="~{fragments/common :: header}"/>
+<main>
+    <div class="container my-5">
+        <h1 class="h3">Technical specification</h1>
+        <div class="row mb-3">
+            <div class="col-12">
+                <div class="card shadow-sm h-100">
+                    <div class="card-header">
+                        <h2 class="h4"><i class="bi bi-diagram-3 me-1"></i> Architecture Overview</h2>
+                    </div>
+                    <div class="card-body">
+                        <h6>DevTeam is a classical multi-layered Spring Boot web application following:</h6>
+                        <ul>
+                            <li>MVC architecture</li>
+                            <li>Role-based access control (RBAC)</li>
+                            <li>Server-side rendering via Thymeleaf</li>
+                            <li>Relational storage with Flyway migrations</li>
+                            <li>MySQL running in Docker via docker-compose (Spring Boot Docker Compose integration)</li>
+                        </ul>
+                        <h6>The system is built with clean separation of concerns:</h6>
+                        <ul>
+                            <li>Presentation layer: HTML templates + controllers</li>
+                            <li>Application layer: services, business logic</li>
+                            <li>Persistence layer: JPA entities + repositories</li>
+                            <li>Database layer: MySQL schema managed through versioned migrations</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row mb-3">
+            <div class="col-12 col-lg-6 mb-3 mb-lg-0">
+
+                <div class="card shadow-sm h-100">
+                    <div class="card-header">
+                        <h2 class="h4"><i class="bi bi-filetype-html me-1"></i> Frontend Technologies</h2>
+                    </div>
+                    <div class="card-body">
+                        <h5>Core</h5>
+                        <ul>
+                            <li>HTML5</li>
+                            <li>CSS3</li>
+                            <li>Bootstrap 5.3</li>
+                            <li>Thymeleaf 3</li>
+                            <li>Thymeleaf Spring Security Extras</li>
+                        </ul>
+                        <h5>UI/UX</h5>
+                        <ul>
+                            <li>Bootstrap form-floating API</li>
+                            <li>Bootstrap components (modals, collapse, inputs, alerts, toasts, accordions, tabs)</li>
+                            <li>Responsive layout using container/grid system</li>
+                            <li>Bootstrap Icons</li>
+                        </ul>
+                        <h5>Client-side Behavior</h5>
+                        <ul>
+                            <li>Minimal JS used only for Bootstrap behavior (toasts, client-side validation helpers)
+                            </li>
+                        </ul>
+                        <p>No heavy SPA frameworks — intentionally lightweight frontend.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 col-lg-6">
+                <div class="card shadow-sm h-100">
+                    <div class="card-header">
+                        <h2 class="h4"><i class="bi bi-hdd-stack me-1"></i> Backend Technologies</h2>
+                    </div>
+                    <div class="card-body">
+                        <h5>Core Framework</h5>
+                        <ul>
+                            <li>Java 21</li>
+                            <li>Spring Boot 3.x</li>
+                            <li>Spring MVC</li>
+                            <li>Spring Security 6</li>
+                            <li>Spring Data JPA</li>
+                        </ul>
+                        <h5>Security</h5>
+                        <ul>
+                            <li>Role hierarchy: USER, CUSTOMER, MANAGER, DEVELOPER, ADMIN</li>
+                            <li>CSRF protection enabled</li>
+                            <li>BCrypt password encoding</li>
+                            <li>Annotation-based authorization:
+                                <ul>
+                                    <li>@PreAuthorize</li>
+                                    <li>sec:authorize in templates</li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12 col-lg-4 mb-3 mb-lg-0">
+                <div class="card shadow-sm h-100">
+                    <div class="card-header">
+                        <h2 class="h4"><i class="bi bi-database me-1"></i> Persistence Layer</h2>
+                    </div>
+                    <div class="card-body">
+                        <h5>ORM & Data Access</h5>
+                        <ul>
+                            <li>Spring Data JPA</li>
+                            <li>Hibernate</li>
+                        </ul>
+                        <h5>Migrations</h5>
+                        <ul>
+                            <li>Flyway versioned migrations</li>
+                        </ul>
+                        <h5>Database</h5>
+                        <ul>
+                            <li>MySQL 8.4</li>
+                            <li>Running in Docker via:
+                                <ul>
+                                    <li>docker-compose.yml</li>
+                                    <li>spring-boot-docker-compose integration</li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 col-lg-4 mb-3 mb-lg-0">
+                <div class="card shadow-sm h-100">
+                    <div class="card-header">
+                        <h2 class="h4"><i class="bi bi-tools me-1"></i> Infrastructure & Build</h2>
+                    </div>
+                    <div class="card-body">
+
+                        <h5>Build Tools</h5>
+                        <ul>
+                            <li>Maven 3.x</li>
+                            <li>
+                                <ul>
+                                    <li>spring-boot-maven-plugin (including support for build-image via buildpacks)</li>
+                                    <li>maven-surefire-plugin for tests</li>
+                                    <li>maven-failsafe-plugin for integration tests</li>
+                                </ul>
+                            </li>
+                        </ul>
+
+                        <h5>CI/CD</h5>
+                        <ul>
+                            <li>GitHub Actions as primary CI environment</li>
+                            <li>On each push / pull request:
+                                <ul>
+                                    <li><code>mvn verify</code> with all automated tests</li>
+                                    <li>Publishing JUnit test reports</li>
+                                    <li>Static code analysis &amp; quality gate via Sonar</li>
+                                </ul>
+                            </li>
+                            <li>Build artifacts:
+                                <ul>
+                                    <li>Executable Spring Boot JAR for local / demo runs</li>
+                                    <li>(Optional) Docker image build step for containerized deployment</li>
+                                </ul>
+                            </li>
+                        </ul>
+
+                        <h5>Dockerization</h5>
+                        <ul>
+                            <li>App runs as Spring Boot JAR (no dedicated runtime image yet)</li>
+                            <li>MySQL provided by Docker Compose for local development</li>
+                        </ul>
+
+                        <h5>Hot Reload (Dev Mode)</h5>
+                        <ul>
+                            <li>Spring DevTools for auto-restart on classpath changes</li>
+                        </ul>
+
+                        <h5>Testing</h5>
+                        <ul>
+                            <li>JUnit 5</li>
+                            <li>Mockito</li>
+                            <li>Testcontainers (MySQL) for JPA slice and repository testing</li>
+                            <li>Multi-phase test pyramid:
+                                <ul>
+                                    <li>Unit tests</li>
+                                    <li>Web slice tests</li>
+                                    <li>JPA tests</li>
+                                    <li>Smoke tests</li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 col-lg-4 mb-3 mb-lg-0">
+                <div class="card shadow-sm h-100">
+                    <div class="card-header">
+                        <h2 class="h4"><i class="bi bi-rocket-takeoff me-1"></i> Deployment Environment</h2>
+                    </div>
+                    <div class="card-body">
+                        <h5>Local Development</h5>
+                        <ul>
+                            <li>Docker Compose starts MySQL database</li>
+                            <li>Spring Boot runs on the host JVM (IDE / CLI)</li>
+                            <li>Flyway migrations execute automatically on application startup</li>
+                            <li>Spring DevTools provides hot reload in local development</li>
+                        </ul>
+                        <h5>Prod-like Deployment</h5>
+                        <ul>
+                            <li>Application packaged as executable Spring Boot JAR</li>
+                            <li>Optional container image via Spring Boot buildpacks (<code>spring-boot:build-image</code>)</li>
+                            <li>No external web server required (embedded Tomcat)</li>
+                            <li>Configuration via <code>application.properties</code> and environment variables</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+<th:block th:replace="~{fragments/common :: footer}"/>
+<th:block th:replace="~{fragments/common :: imports}"/>
+</body>
+</html>

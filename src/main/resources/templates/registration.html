@@ -1,80 +1,93 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" lang="ru">
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
 <head>
     <title>Registration page</title>
     <th:block th:replace="~{fragments/common :: headerfiles}"/>
 </head>
 <body>
 <th:block th:replace="~{fragments/common :: header}"/>
-<div class="alert alert-danger" role="alert" th:if="${errorMessage}">
-    <p th:text="${errorMessage}">Error message</p>
-</div>
-<div class="container mt-5">
-    <h5>Регистрация</h5>
-    <div class="form-group">
-        <form th:action="@{/registration}" method="post">
-            <div class="form-group row mb-3">
-                <label for="username-input" class="col-sm-2 col-form-label">Логин</label>
-                <div class="col-sm-6">
-                    <input type="text" id="username-input" name="username" class="form-control" placeholder="Логин" required/>
+<main>
+    <div class="container my-5">
+        <div class="row justify-content-center">
+            <div class="col-sm-10 col-md-6 col-lg-4">
+                <h5>Sign up for DevTeam</h5>
+                <div class="alert alert-danger alert-dismissible fade show mb-3" role="alert" th:if="${errorMessage}">
+                    <i class="bi bi-exclamation-triangle me-1"></i>
+                    <span th:text="${errorMessage}">Error message</span>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                 </div>
+                <p class="text-muted small mb-3">Fields marked with * are required.</p>
+                <form class="needs-validation" th:action="@{/registration}" method="post" novalidate>
+                    <div class="form-floating mb-2">
+                        <input type="text" id="username-input" name="username" class="form-control"
+                               placeholder="Username" autocomplete="username"
+                               required/>
+                        <label for="username-input" >Username *</label>
+                        <div class="invalid-feedback">
+                            Please provide the username.
+                        </div>
+                    </div>
+                    <div class="form-floating mb-2">
+                        <input type="password" id="password-input" name="password" class="form-control"
+                               placeholder="Password" autocomplete="new-password"
+                               required/>
+                        <label for="password-input">Password *</label>
+                        <div class="invalid-feedback">
+                            Please provide the password.
+                        </div>
+                    </div>
+                    <div class="form-floating mb-2">
+                        <select class="form-select" id="role-select" name="userRole" required>
+                            <option selected disabled value="">—</option>
+                            <option value="CUSTOMER">Customer</option>
+                            <option value="MANAGER">Manager</option>
+                            <option value="DEVELOPER">Developer</option>
+                        </select>
+                        <label for="role-select">Role *</label>
+                        <div class="invalid-feedback">
+                            Please choose the role.
+                        </div>
+                    </div>
+                    <div class="form-floating mb-2">
+                        <input type="text" id="first-name-input" name="firstName" class="form-control"
+                               placeholder="First Name" autocomplete="given-name"/>
+                        <label for="first-name-input">First Name</label>
+                    </div>
+                    <div class="form-floating mb-2">
+                        <input type="text" id="last-name-input" name="lastName" class="form-control"
+                               placeholder="Last Name" autocomplete="family-name"/>
+                        <label for="last-name-input">Last Name</label>
+                    </div>
+                    <div class="form-floating mb-2">
+                        <input type="email" id="email-input" name="email" class="form-control" placeholder="Email"
+                               autocomplete="email"/>
+                        <label for="email-input">Email</label>
+                    </div>
+                    <div class="mb-1">
+                        <div class="form-floating">
+                            <input type="text" id="contacts-input" name="contacts" class="form-control"
+                                   placeholder="Contacts" aria-describedby="contacts-addon" autocomplete="tel"/>
+                            <label for="contacts-input">Contacts</label>
+                        </div>
+                        <div class="form-text" id="contacts-addon">Phone number or social media link</div>
+                    </div>
+                    <div class="mb-3">
+                        <div class="form-floating">
+                            <textarea id="skills-input" name="skills" class="form-control"
+                                   placeholder="Skills" aria-describedby="skills-addon" style="height: 120px"></textarea>
+                            <label for="skills-input">Skills</label>
+                        </div>
+                        <div class="form-text" id="skills-addon">Required for developers</div>
+                    </div>
+                    <div class="d-grid gap-2">
+                        <button class="btn btn-success" type="submit">Create Account &raquo;</button>
+                        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+                    </div>
+                </form>
             </div>
-            <div class="form-group row mb-3">
-                <label for="password-input" class="col-sm-2 col-form-label">Пароль</label>
-                <div class="col-sm-6">
-                    <input type="password" id="password-input" name="password" class="form-control" placeholder="Пароль" required/>
-                </div>
-            </div>
-            <div class="form-group row mb-3">
-                <div id="roleGroupLabel" class="col-sm-2 col-form-label">Роль</div>
-                <div class="col-sm-6">
-                    <fieldset class="btn-group mb-3" role="group" aria-labelledby="roleGroupLabel">
-                        <input type="radio" class="btn-check" name="userRole" id="roleCustomer" value="CUSTOMER" autocomplete="off" required>
-                        <label class="btn btn-outline-primary" for="roleCustomer">Заказчик</label>
-                        <input type="radio" class="btn-check" name="userRole" id="roleManager" value="MANAGER" autocomplete="off">
-                        <label class="btn btn-outline-primary" for="roleManager">Менеджер</label>
-                        <input type="radio" class="btn-check" name="userRole" id="roleDeveloper" value="DEVELOPER" autocomplete="off">
-                        <label class="btn btn-outline-primary" for="roleDeveloper">Разработчик</label>
-                    </fieldset>
-                </div>
-            </div>
-            <div class="form-group row mb-3">
-                <label for="first-name-input" class="col-sm-2 col-form-label">Имя</label>
-                <div class="col-sm-6">
-                    <input type="text" id="first-name-input" name="firstName" class="form-control" placeholder="Имя"/>
-                </div>
-            </div>
-            <div class="form-group row mb-3">
-                <label for="last-name-input" class="col-sm-2 col-form-label">Фамилия</label>
-                <div class="col-sm-6">
-                    <input type="text" id="last-name-input" name="lastName" class="form-control" placeholder="Фамилия"/>
-                </div>
-            </div>
-            <div class="form-group row mb-3">
-                <label for="email-input" class="col-sm-2 col-form-label">Электронная почта</label>
-                <div class="col-sm-6">
-                    <input type="email" id="email-input" name="email" class="form-control" placeholder="Email"/>
-                </div>
-            </div>
-            <div class="form-group row mb-3">
-                <label for="contacts-input" class="col-sm-2 col-form-label">Дополнительные контактные данные</label>
-                <div class="col-sm-6">
-                    <input type="text" id="contacts-input" name="contacts" class="form-control" placeholder="Контактные данные"/>
-                </div>
-            </div>
-            <div class="form-group row mb-3">
-                <label for="skills-input" class="col-sm-2 col-form-label">Профессиональные навыки (обязательно для разработчиков)</label>
-                <div class="col-sm-6">
-                    <input type="text" id="skills-input" name="skills" class="form-control" placeholder="Профессиональные навыки"/>
-                </div>
-            </div>
-            <div class="mb-3">
-                <button class="btn btn-primary" type="submit">Зарегистрироваться</button>
-            </div>
-            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
-        </form>
+        </div>
     </div>
-</div>
+</main>
 <th:block th:replace="~{fragments/common :: footer}"/>
 <th:block th:replace="~{fragments/common :: imports}"/>
 </body>

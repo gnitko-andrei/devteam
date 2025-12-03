@@ -114,7 +114,7 @@ class UserControllerWebTest {
                 )
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/user/userEditor"))
-                .andExpect(flash().attribute("errorMessage", "Неверный текущий пароль!"));
+                .andExpect(flash().attribute("errorMessage", "Wrong current password!"));
         verify(userServiceMock).updateUserProfile(USER_ID_1, expectedUserProfileUpdateDto);
     }
 
@@ -124,7 +124,7 @@ class UserControllerWebTest {
         // when / then
         mockMvc.perform(delete("/user").with(csrf()).with(user(USER_1)))
                 .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrl("/logout"));
+                .andExpect(redirectedUrl("/login"));
         verify(userServiceMock).deleteById(USER_ID_1);
     }
 }

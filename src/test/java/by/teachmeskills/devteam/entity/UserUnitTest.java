@@ -78,7 +78,7 @@ class UserUnitTest {
         var givenUser = User.builder()
                 .roles(Set.of(Role.USER, Role.MANAGER, Role.ADMIN))
                 .build();
-        var expectedRolesDescription = "Администратор, Менеджер";
+        var expectedRolesDescription = "Administrator, Manager";
         // when
         var actual = givenUser.getRolesDescription();
         // then

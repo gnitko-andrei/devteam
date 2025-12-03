@@ -326,10 +326,9 @@ class UserServiceUnitTest {
     }
 
     @Test
-    void shouldUpdateUserDataWithoutPassword_whenUpdateUserProfile_givenUserProfileUpdateDtoWithCorrectCurrentPasswordAndBlankNewPassword() {
+    void shouldUpdateUserDataWithoutPassword_whenUpdateUserProfile_givenUserProfileUpdateDtoWithBlankNewPasswordAndWithoutCurrentPassword() {
         // given
         var givenUserUpdateDto = UserProfileUpdateDto.builder()
-                .currentPassword(PASSWORD_1)
                 .firstName(FIRST_NAME)
                 .lastName(LAST_NAME)
                 .email(EMAIL)
@@ -337,14 +336,10 @@ class UserServiceUnitTest {
                 .skills(SKILLS)
                 .build();
         when(userRepositoryMock.findById(any())).thenReturn(Optional.of(userMock));
-        when(userMock.getPassword()).thenReturn(PASSWORD_1);
-        when(passwordEncoderMock.matches(any(), any())).thenReturn(true);
         // when
         userService.updateUserProfile(ID_1, givenUserUpdateDto);
         // then
         verify(userRepositoryMock).findById(ID_1);
-        verify(passwordEncoderMock).matches(givenUserUpdateDto.getCurrentPassword(), userMock.getPassword());
-        verify(passwordEncoderMock, never()).encode(any());
         verify(userMock, never()).setPassword(any());
         verify(userMock).setFirstName(FIRST_NAME);
         verify(userMock).setLastName(LAST_NAME);
@@ -355,10 +350,11 @@ class UserServiceUnitTest {
     }
 
     @Test
-    void shouldThrowWrongPasswordException_whenUpdateUserProfile_givenUserProfileUpdateDtoWithWrongCurrentPassword() {
+    void shouldThrowWrongPasswordException_whenUpdateUserProfile_givenUserProfileUpdateDtoWithWrongCurrentPasswordAndNotBlankNewPassword() {
         // given
         var givenUserUpdateDto = UserProfileUpdateDto.builder()
                 .currentPassword(PASSWORD_1)
+                .newPassword("newPassword")
                 .firstName(FIRST_NAME)
                 .lastName(LAST_NAME)
                 .email(EMAIL)
@@ -377,9 +373,10 @@ class UserServiceUnitTest {
     }
 
     @Test
-    void shouldThrowWrongPasswordException_whenUpdateUserProfile_givenUserProfileUpdateDtoWithBlankCurrentPassword() {
+    void shouldThrowWrongPasswordException_whenUpdateUserProfile_givenUserProfileUpdateDtoWithBlankCurrentPasswordAndNotBlankNewPassword() {
         // given
         var givenUserUpdateDto = UserProfileUpdateDto.builder()
+                .newPassword("newPassword")
                 .build();
         when(userRepositoryMock.findById(any())).thenReturn(Optional.of(userMock));
         // when / then

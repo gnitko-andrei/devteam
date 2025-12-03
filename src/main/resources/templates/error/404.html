@@ -1,13 +1,30 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" lang="ru">
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
 <head>
     <title>Page Not Found</title>
     <th:block th:replace="~{fragments/common :: headerfiles}"/>
 </head>
 <body data-testid="page-not-found">
 <th:block th:replace="~{fragments/common :: header}"/>
-<h1 class="text-center mt-5">Такой страницы не существует, вернитесь на <a
-        href="/">главную</a></h1>
+<main class="flex-fill d-flex justify-content-center align-items-center my-5">
+    <div class="text-center px-3">
+        <div class="row justify-content-center mb-4">
+            <div class="col-12 text-center">
+                <img src="/static/404.png"
+                     class="img-fluid"
+                     style="max-width: 300px; image-rendering: pixelated;"
+                     alt="Page not found illustration">
+            </div>
+        </div>
+        <p class="text-muted mb-1">Error 404</p>
+        <h1 class="display-6 mb-3">Page not found</h1>
+        <p class="text-muted mb-4">
+            The page you are looking for doesn't exist or was moved.
+            Check the address or return to the homepage.
+        </p>
+        <a href="/" class="btn btn-primary">Go to homepage</a>
+    </div>
+</main>
 <th:block th:replace="~{fragments/common :: footer}"/>
 <th:block th:replace="~{fragments/common :: imports}"/>
 </body>

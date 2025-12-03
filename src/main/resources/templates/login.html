@@ -1,15 +1,73 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" lang="ru">
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
 <head>
     <title>Login</title>
     <th:block th:replace="~{fragments/common :: headerfiles}"/>
 </head>
-<body>
+<body class="d-flex flex-column min-vh-100">
 <th:block th:replace="~{fragments/common :: header}"/>
-<div class="container mt-5">
-    <th:block th:replace="~{fragments/login :: login(path='/login', button_value='Войти')}"></th:block>
+<div th:if="${accountDeleted}">
+    <div class="toast-container position-fixed end-0 p-3" style="top: 64px;">
+        <div id="accountDeletedToast" class="toast align-items-center text-bg-success border-0" role="alert"
+             aria-live="polite" aria-atomic="true">
+            <div class="d-flex">
+                <div class="toast-body">
+                    Your account has been deleted successfully.
+                </div>
+                <button class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button>
+            </div>
+        </div>
+    </div>
 </div>
+<main class="flex-fill d-flex justify-content-center align-items-center">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-sm-10 col-md-6 col-lg-4">
+                <div th:if="${param.error}" class="alert alert-danger py-2" role="alert">
+                    Invalid username or password.
+                </div>
+                <form class="needs-validation mb-5" th:action="@{/login}" method="post" data-testid="login-form" novalidate>
+                    <div class="form-floating mb-1">
+                        <input type="text" id="username-input" name="username" class="form-control"
+                               placeholder="Login"
+                               autocomplete="username"
+                               autofocus required/>
+                        <label for="username-input">Login</label>
+                        <div class="invalid-feedback">
+                            Please provide your username.
+                        </div>
+                    </div>
+                    <div class="form-floating mb-2">
+                        <input type="password" id="password-input" name="password" class="form-control"
+                               placeholder="Password"
+                               autocomplete="current-password"
+                               required/>
+                        <label for="password-input">Password</label>
+                        <div class="invalid-feedback">
+                            Please provide your password.
+                        </div>
+                    </div>
+                    <div class="d-grid gap-2 mb-2">
+                        <button class="btn btn-success" type="submit">Sign in</button>
+                        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+                    </div>
+                    <small class="text-body-secondary">New to DevTeam? <a href="/registration">Create an
+                        account</a></small>
+                </form>
+            </div>
+        </div>
+    </div>
+</main>
 <th:block th:replace="~{fragments/common :: footer}"/>
 <th:block th:replace="~{fragments/common :: imports}"/>
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const toastElement = document.getElementById('accountDeletedToast');
+        if (toastElement) {
+            const toast = new bootstrap.Toast(toastElement);
+            toast.show();
+        }
+    });
+</script>
 </body>
 </html>

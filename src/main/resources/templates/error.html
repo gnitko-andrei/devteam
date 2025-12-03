@@ -1,12 +1,26 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" lang="ru">
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
 <head>
     <title>Error</title>
     <th:block th:replace="~{fragments/common :: headerfiles}"/>
 </head>
 <body data-testid="error-page">
 <th:block th:replace="~{fragments/common :: header}"/>
-<h1 class="text-center mt-5">Что-то пошло не так</h1>
+<main class="flex-fill d-flex justify-content-center align-items-center my-5">
+    <div class="text-center px-3">
+        <div class="row justify-content-center mb-4">
+            <div class="col-12 text-center">
+                <img src="/static/error.png" class="img-fluid" style="max-width: 300px; image-rendering: pixelated;"
+                     alt="...">
+            </div>
+        </div>
+        <h1 class="display-6 mb-3">Something went wrong</h1>
+        <p class="text-muted mb-4">
+            We couldn't process your request. Please try again or return to the homepage.
+        </p>
+        <a href="/" class="btn btn-primary">Go to homepage</a>
+    </div>
+</main>
 <th:block th:replace="~{fragments/common :: footer}"/>
 <th:block th:replace="~{fragments/common :: imports}"/>
 </body>

@@ -7,9 +7,9 @@ import lombok.RequiredArgsConstructor;
 @Getter
 public enum TaskStatus {
 
-    NEW("Новая"),
-    IN_PROGRESS("B разработке"),
-    DONE("Завершена");
+    NEW("New"),
+    IN_PROGRESS("In progress"),
+    DONE("Done");
 
     private final String displayName;
 }
