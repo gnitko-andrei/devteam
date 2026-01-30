@@ -2,10 +2,11 @@ package by.teachmeskills.devteam.controller;
 
 import by.teachmeskills.devteam.config.MvcConfig;
 import by.teachmeskills.devteam.config.SecurityConfiguration;
+import by.teachmeskills.devteam.config.SecurityMockMvcConfig;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.webmvc.test.autoconfigure.WebMvcTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.security.test.context.support.WithAnonymousUser;
 import org.springframework.security.test.context.support.WithMockUser;
@@ -22,7 +23,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @Tag("web")
 @WebMvcTest(controllers = SecurityFilterChainWebTest.TestPostController.class)
-@Import({MvcConfig.class, SecurityConfiguration.class, SecurityFilterChainWebTest.TestPostController.class})
+@Import({MvcConfig.class, SecurityConfiguration.class, SecurityMockMvcConfig.class, SecurityFilterChainWebTest.TestPostController.class})
 class SecurityFilterChainWebTest {
 
     @Controller
@@ -47,7 +48,7 @@ class SecurityFilterChainWebTest {
     void shouldRedirectToLogin_whenGetAnyUrl_givenUnauthorisedUser() throws Exception {
         mockMvc.perform(get("/anyUrl"))
                 .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrlPattern("**/login"));
+                .andExpect(redirectedUrl("/login"));
     }
 
     @Test
