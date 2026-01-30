@@ -1,6 +1,7 @@
 package by.teachmeskills.devteam.controller;
 
 import by.teachmeskills.devteam.config.SecurityConfiguration;
+import by.teachmeskills.devteam.config.SecurityMockMvcConfig;
 import by.teachmeskills.devteam.dto.project.*;
 import by.teachmeskills.devteam.dto.user.UserDto;
 import by.teachmeskills.devteam.entity.Role;
@@ -30,7 +31,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @Tag("web")
 @WebMvcTest(ProjectController.class)
-@Import(SecurityConfiguration.class)
+@Import({SecurityConfiguration.class, SecurityMockMvcConfig.class})
 class ProjectControllerWebTest {
 
     private static final long USER_CUSTOMER_ID = 1L;

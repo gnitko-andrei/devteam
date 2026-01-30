@@ -1,6 +1,7 @@
 package by.teachmeskills.devteam.controller;
 
 import by.teachmeskills.devteam.config.SecurityConfiguration;
+import by.teachmeskills.devteam.config.SecurityMockMvcConfig;
 import by.teachmeskills.devteam.dto.user.UserRegistrationDto;
 import by.teachmeskills.devteam.service.UserService;
 import org.junit.jupiter.api.Tag;
@@ -20,7 +21,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @Tag("web")
 @WebMvcTest(RegistrationController.class)
-@Import(SecurityConfiguration.class)
+@Import({SecurityConfiguration.class, SecurityMockMvcConfig.class})
 class RegistrationControllerWebTest {
 
     @MockitoBean

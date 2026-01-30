@@ -1,6 +1,7 @@
 package by.teachmeskills.devteam.controller;
 
 import by.teachmeskills.devteam.config.SecurityConfiguration;
+import by.teachmeskills.devteam.config.SecurityMockMvcConfig;
 import by.teachmeskills.devteam.dto.user.UserDto;
 import by.teachmeskills.devteam.dto.user.UserUpdateByAdminDto;
 import by.teachmeskills.devteam.entity.Role;
@@ -26,7 +27,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @Tag("web")
 @WebMvcTest(AdminController.class)
-@Import(SecurityConfiguration.class)
+@Import({SecurityConfiguration.class, SecurityMockMvcConfig.class})
 class AdminControllerWebTest {
 
     public static final long USER_ID_1 = 1L;

@@ -2,6 +2,7 @@ package by.teachmeskills.devteam.controller;
 
 
 import by.teachmeskills.devteam.config.SecurityConfiguration;
+import by.teachmeskills.devteam.config.SecurityMockMvcConfig;
 import by.teachmeskills.devteam.dto.project.ProjectDto;
 import by.teachmeskills.devteam.dto.task.TaskCreationDto;
 import by.teachmeskills.devteam.dto.task.TaskDto;
@@ -31,7 +32,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @Tag("web")
 @WebMvcTest(TaskController.class)
-@Import(SecurityConfiguration.class)
+@Import({SecurityConfiguration.class, SecurityMockMvcConfig.class})
 class TaskControllerWebTest {
 
     private static final long PROJECT_ID_1 = 1L;
