@@ -202,4 +202,5 @@ jobs:
           mvn -B -DskipTests \
             -Dsonar.coverage.jacoco.xmlReportPaths=coverage/**/jacoco.xml \
             org.sonarsource.scanner.maven:sonar-maven-plugin:sonar \
+            -Dsonar.organization=andrei-hnitsko \
             -Dsonar.projectKey=gnitko-andrei_devteam
