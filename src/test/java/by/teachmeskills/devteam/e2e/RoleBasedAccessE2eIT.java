@@ -7,7 +7,6 @@ import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.springframework.http.HttpStatus;
 import org.springframework.test.context.jdbc.Sql;
-import org.springframework.test.context.jdbc.SqlGroup;
 
 import java.util.stream.Stream;
 
@@ -22,11 +21,9 @@ import static org.assertj.core.api.Assertions.assertThat;
  * 	•	MANAGER/DEVELOPER/CUSTOMER → /admin → 403.
  * 	•	(Optional) Role-allowed endpoints: e.g., MANAGER → /projects → 200; CUSTOMER → /projects (view) → 200/403 per your rules.
  */
-@SqlGroup({
-        @Sql(value = "/testdata/e2e/cleanup.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_CLASS),
-        @Sql(value = "/testdata/e2e/e2eCommonTestData.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_CLASS),
-        @Sql(value = "/testdata/e2e/cleanup.sql", executionPhase = Sql.ExecutionPhase.AFTER_TEST_CLASS)
-})
+@Sql(value = "/testdata/e2e/cleanup.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_CLASS)
+@Sql(value = "/testdata/e2e/e2eCommonTestData.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_CLASS)
+@Sql(value = "/testdata/e2e/cleanup.sql", executionPhase = Sql.ExecutionPhase.AFTER_TEST_CLASS)
 class RoleBasedAccessE2eIT extends AbstractE2eTest {
 
     static Stream<Arguments> params() {
