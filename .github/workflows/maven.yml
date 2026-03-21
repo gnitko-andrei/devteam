@@ -96,6 +96,8 @@ jobs:
           java-version: 21
           distribution: 'temurin'
           cache: maven
+      - name: Set up Docker
+        uses: docker/setup-docker-action@v4
       - name: Run jpa tests
         run: mvn -B -Pjpa verify
       - name: Upload coverage
@@ -123,6 +125,8 @@ jobs:
           java-version: 21
           distribution: 'temurin'
           cache: maven
+      - name: Set up Docker
+        uses: docker/setup-docker-action@v4
       - name: Run smoke ITs
         run: mvn -B -Psmoke verify
       - name: Upload coverage
@@ -150,7 +154,8 @@ jobs:
           java-version: 21
           distribution: 'temurin'
           cache: maven
-      # Testcontainers works out-of-the-box on GitHub runners (Docker is preinstalled)
+      - name: Set up Docker
+        uses: docker/setup-docker-action@v4
       - name: Run E2E ITs
         run: mvn -B -Pe2e verify
       - name: Upload coverage
