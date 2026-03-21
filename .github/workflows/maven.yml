@@ -98,6 +98,18 @@ jobs:
           cache: maven
       - name: Set up Docker
         uses: docker/setup-docker-action@v4
+      - name: Wait for Docker daemon
+        run: |
+          for i in {1..30}; do
+            if docker info > /dev/null 2>&1; then
+              echo "Docker daemon is ready."
+              exit 0
+            fi
+            sleep 1
+          done
+          echo "Docker daemon failed to become ready in time." >&2
+          docker version || true
+          exit 1
       - name: Run jpa tests
         run: mvn -B -Pjpa verify
       - name: Upload coverage
@@ -127,6 +139,18 @@ jobs:
           cache: maven
       - name: Set up Docker
         uses: docker/setup-docker-action@v4
+      - name: Wait for Docker daemon
+        run: |
+          for i in {1..30}; do
+            if docker info > /dev/null 2>&1; then
+              echo "Docker daemon is ready."
+              exit 0
+            fi
+            sleep 1
+          done
+          echo "Docker daemon failed to become ready in time." >&2
+          docker version || true
+          exit 1
       - name: Run smoke ITs
         run: mvn -B -Psmoke verify
       - name: Upload coverage
@@ -156,6 +180,18 @@ jobs:
           cache: maven
       - name: Set up Docker
         uses: docker/setup-docker-action@v4
+      - name: Wait for Docker daemon
+        run: |
+          for i in {1..30}; do
+            if docker info > /dev/null 2>&1; then
+              echo "Docker daemon is ready."
+              exit 0
+            fi
+            sleep 1
+          done
+          echo "Docker daemon failed to become ready in time." >&2
+          docker version || true
+          exit 1
       - name: Run E2E ITs
         run: mvn -B -Pe2e verify
       - name: Upload coverage
