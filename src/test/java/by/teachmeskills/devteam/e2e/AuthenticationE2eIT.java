@@ -3,7 +3,6 @@ package by.teachmeskills.devteam.e2e;
 import by.teachmeskills.devteam.common.AbstractE2eTest;
 import org.junit.jupiter.api.Test;
 import org.springframework.test.context.jdbc.Sql;
-import org.springframework.test.context.jdbc.SqlGroup;
 import org.springframework.util.LinkedMultiValueMap;
 
 /**
@@ -14,11 +13,9 @@ import org.springframework.util.LinkedMultiValueMap;
  * 	•	Good credentials: POST /login → 302 to home (or your post-login page).
  * 	•	Logout: POST /logout (with CSRF) → 302 /login?logout, then /admin redirects to /login.
  */
-@SqlGroup({
-        @Sql(value = "/testdata/e2e/cleanup.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_CLASS),
-        @Sql(value = "/testdata/e2e/e2eCommonTestData.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_CLASS),
-        @Sql(value = "/testdata/e2e/cleanup.sql", executionPhase = Sql.ExecutionPhase.AFTER_TEST_CLASS)
-})
+@Sql(value = "/testdata/e2e/cleanup.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_CLASS)
+@Sql(value = "/testdata/e2e/e2eCommonTestData.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_CLASS)
+@Sql(value = "/testdata/e2e/cleanup.sql", executionPhase = Sql.ExecutionPhase.AFTER_TEST_CLASS)
 class AuthenticationE2eIT extends AbstractE2eTest {
 
     @Test
