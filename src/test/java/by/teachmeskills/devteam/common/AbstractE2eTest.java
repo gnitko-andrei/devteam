@@ -17,7 +17,6 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.jdbc.Sql;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 
@@ -30,7 +29,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 @Import(TestHttpClientConfig.class)
 @AutoConfigureTestRestTemplate
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@Sql(value = "/testdata/e2e/cleanup.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_CLASS)
 public abstract class AbstractE2eTest extends MySqlContainerSupport {
 
     @Autowired
