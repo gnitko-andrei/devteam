@@ -4,6 +4,7 @@ import by.teachmeskills.devteam.common.AbstractE2eTest;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.*;
 import org.springframework.test.context.jdbc.Sql;
+import org.springframework.test.context.jdbc.SqlGroup;
 
 import java.util.List;
 
@@ -14,8 +15,11 @@ import java.util.List;
  * 	•	GET an unknown path → 404 + your 404 template marker (e.g., [data-testid=page-404]).
  * 	•	Logged-in non-admin → GET /admin → 403 + your 403 template marker.
  */
-@Sql(value = "/testdata/e2e/e2eCommonTestData.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_CLASS)
-@Sql(value = "/testdata/e2e/cleanup.sql", executionPhase = Sql.ExecutionPhase.AFTER_TEST_CLASS)
+@SqlGroup({
+        @Sql(value = "/testdata/e2e/cleanup.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_CLASS),
+        @Sql(value = "/testdata/e2e/e2eCommonTestData.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_CLASS),
+        @Sql(value = "/testdata/e2e/cleanup.sql", executionPhase = Sql.ExecutionPhase.AFTER_TEST_CLASS)
+})
 class ErrorPagesE2eIT extends AbstractE2eTest {
 
     @Test
